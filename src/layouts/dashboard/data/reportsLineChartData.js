@@ -14,12 +14,8 @@ Coded by www.creative-tim.com
 */
 
 export default {
-  sales: {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: { label: "Mobile apps", data: [50, 40, 300, 320, 500, 350, 200, 230, 500] },
-  },
   tasks: {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: { label: "Desktop apps", data: [50, 40, 300, 220, 500, 250, 400, 230, 500] },
+    labels: ["8월", "9월", "10월", "11월", "12월", "1월", "2월", "3월", "4월"],
+    datasets: { label: "해결한 작업", data: [20, 30, 10, 15, 23, 21, 7, 8, 14, 15, 20, 30] },
   },
 };
