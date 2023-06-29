@@ -25,7 +25,7 @@ const projects = [
     },
     status: "running",
     date: "23/04/18",
-    compoletion: 100,
+    completion: 100,
   },
   {
     project: {
@@ -34,16 +34,16 @@ const projects = [
     },
     status: "running",
     date: "23/04/18",
-    compoletion: 80,
+    completion: 80,
   },
   {
     project: {
       image: logoGithub,
       name: "John Michael",
     },
-    status: "running",
+    status: "cancled",
     date: "23/04/18",
-    compoletion: 70,
+    completion: 0,
   },
 ];
 
@@ -86,7 +86,7 @@ export default function data() {
         {project.date}
       </MDTypography>
     ),
-    completion: <Progress color="success" value={project.compoletion} />,
+    completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
   }));
   return {
     columns,
