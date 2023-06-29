@@ -64,7 +64,7 @@ const routes = [
     key: "myTeam",
     icon: <Icon fontSize="small">groups</Icon>,
     route: "/my-team",
-    component: <Tables />,
+    component: <Myteam />,
   },
   {
     type: "collapse",
