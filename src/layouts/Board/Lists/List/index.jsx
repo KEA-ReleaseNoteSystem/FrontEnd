@@ -36,7 +36,6 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
           <Issues
             {...provided.droppableProps}
             ref={provided.innerRef}
-            data-testid={`board-list:${status}`}
           >
             {filteredListIssues.map((issue, index) => (
               <Issue key={issue.id} projectUsers={project.users} issue={issue} index={index} />

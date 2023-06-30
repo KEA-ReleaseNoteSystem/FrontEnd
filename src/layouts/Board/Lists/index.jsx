@@ -26,6 +26,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     if (!isPositionChanged(source, destination)) return;
 
     const issueId = Number(draggableId);
+    fields => updateLocalProjectIssues(issueId, fields);
 
   //   api.optimisticUpdate(`/issues/${issueId}`, {
   //     updatedFields: {

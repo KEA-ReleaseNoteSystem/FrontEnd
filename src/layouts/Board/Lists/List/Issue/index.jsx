@@ -20,37 +20,36 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
   
   return (
     <Draggable draggableId={issue.id.toString()} index={index}>
-      {(provided, snapshot) => (
-        // <IssueLink
-        //   to={`${match.url}/issues/${issue.id}`}
-        //   ref={provided.innerRef}
-        //   data-testid="list-issue"
-        //   {...provided.draggableProps}
-        //   {...provided.dragHandleProps}
-        // >
-          <Issue isBeingDragged={snapshot.isDragging && !snapshot.isDropAnimating}>
-            <Title>{issue.title}</Title>
-            {console.log("issue",issue)}
-            <Bottom>
-              <div>
-                <IssueTypeIcon type={issue.type} />
-                <IssuePriorityIcon priority={issue.priority} top={-1} left={4} />
-              </div>
-              <Assignees>
-                {assignees.map(user => (
-                  <AssigneeAvatar
-                    key={user.id}
-                    size={24}
-                    avatarUrl={user.avatarUrl}
-                    name={user.name}
-                  />
-                ))}
-              </Assignees>
-            </Bottom>
-          </Issue>
-   
-      )}
-    </Draggable>
+    {(provided, snapshot) => (
+      <IssueLink
+        //to={`$/issues/${issue.id}`}
+        ref={provided.innerRef}
+        data-testid="list-issue"
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+      >
+        <Issue isBeingDragged={snapshot.isDragging && !snapshot.isDropAnimating}>
+          <Title>{issue.title}</Title>
+          <Bottom>
+            <div>
+              <IssueTypeIcon type={issue.type} />
+              <IssuePriorityIcon priority={issue.priority} top={-1} left={4} />
+            </div>
+            <Assignees>
+              {assignees.map(user => (
+                <AssigneeAvatar
+                  key={user.id}
+                  size={24}
+                  avatarUrl={user.avatarUrl}
+                  name={user.name}
+                />
+              ))}
+            </Assignees>
+          </Bottom>
+        </Issue>
+      </IssueLink>
+    )}
+  </Draggable>
   );
 };
 

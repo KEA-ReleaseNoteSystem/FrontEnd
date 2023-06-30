@@ -55,7 +55,7 @@ const projectMock = {
     },
     //... more issues as needed
     {
-      id: 1,
+      id: 3,
       title: 'Issue 3',
       type: 'task',
       description: 'Description for Issue 1',
@@ -66,7 +66,7 @@ const projectMock = {
       updatedAt: '2023-06-28',
     },
     {
-      id: 2,
+      id: 4,
       title: 'Issue 4',
       type: 'task',
       description: 'Description for Issue 2',
@@ -78,7 +78,7 @@ const projectMock = {
     },
     //... more issues as needed
     {
-      id: 1,
+      id: 5,
       title: 'Issue 5',
       type: 'task',
       description: 'Description for Issue 1',
@@ -89,7 +89,7 @@ const projectMock = {
       updatedAt: '2023-06-28',
     },
     {
-      id: 2,
+      id: 6,
       title: 'Issue 6',
       type: 'task',
       description: 'Description for Issue 2',
