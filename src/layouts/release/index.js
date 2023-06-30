@@ -12,14 +12,17 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
+import React, { useState } from 'react';
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -35,6 +38,14 @@ function Release() {
   const { columns, rows } = authorsTableData();
 
   const project = "BrainForm";
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  //릴리스 작성하기 버튼
+  const handleRelaseAddOnClick = (event) => {
+    console.log("릴리스 추가")
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <DashboardLayout>
@@ -73,6 +84,11 @@ function Release() {
           </Grid>
         </Grid>
       </MDBox>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <IconButton onClick={handleRelaseAddOnClick}>
+          <AddCircleOutlineIcon color="info"/>
+        </IconButton>
+      </div>
       <Footer />
     </DashboardLayout>
   );
