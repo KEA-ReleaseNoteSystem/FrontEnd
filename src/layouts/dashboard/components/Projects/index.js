@@ -53,9 +53,9 @@ function Projects() {
       open={Boolean(menu)}
       onClose={closeMenu}
     >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
+      <MenuItem onClick={closeMenu}>나에게 배정된 Issue만 확인</MenuItem>
+      <MenuItem onClick={closeMenu}>중요도 순 정렬</MenuItem>
+      <MenuItem onClick={closeMenu}>기한 순 정렬</MenuItem>
     </Menu>
   );
 
@@ -64,7 +64,7 @@ function Projects() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Projects
+            Issues
           </MDTypography>
           <MDBox display="flex" alignItems="center" lineHeight={0}>
             <Icon
@@ -77,7 +77,7 @@ function Projects() {
               done
             </Icon>
             <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
+              &nbsp; 현재 처리 중인 이슈들을 확인하세요.
             </MDTypography>
           </MDBox>
         </MDBox>

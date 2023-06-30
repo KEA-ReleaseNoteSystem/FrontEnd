@@ -14,6 +14,6 @@ Coded by www.creative-tim.com
 */
 
 export default {
-  labels: ["M", "T", "W", "T", "F", "S", "S"],
-  datasets: { label: "Sales", data: [50, 20, 10, 22, 50, 10, 40] },
+  labels: ["8월", "9월", "10월", "11월", "12월", "1월", "2월", "3월", "4월"],
+  datasets: { label: "배포한 릴리즈 노트", data: [1, 1, 1, 0, 1, 2, 0, 1, 1, 1, 0, 2] },
 };
