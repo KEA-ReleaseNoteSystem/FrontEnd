@@ -11,6 +11,7 @@ import SignIn from "layouts/authentication/sign-in";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Release from "layouts/release";
 
 const routes = [
   {
@@ -39,14 +40,6 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Billing",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <Billing />,
-  },
-  {
-    type: "collapse",
     name: "Issue",
     key: "issue",
     icon: <Icon fontSize="small">notifications</Icon>,
@@ -59,7 +52,7 @@ const routes = [
     key: "release",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/release",
-    component: <Notifications />,
+    component: <Release />,
   },
   {
     type: "collapse",
