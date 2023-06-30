@@ -5,9 +5,9 @@ import { color, font, mixin } from 'shared/utils/styles';
 export const List = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 5px;
+  margin: auto;
   min-height: 400px;
-  width: 25%;
+  width: 30%;
   border-radius: 3px;
   background: ${color.backgroundLightest};
 `;

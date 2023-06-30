@@ -11,6 +11,7 @@ export const Filters = styled.div`
 
 export const SearchInput = styled(InputDebounced)`
   margin-right: 18px;
+  margin-left: 15px;
   width: 160px;
 `;
 
