@@ -5,6 +5,9 @@ import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
 import Myteam from "layouts/myteam";
 import Billing from "layouts/billing";
+import notifications from "layouts/notifications";
+import RTL from "layouts/rtl";
+import ProjectBoard from "layouts/Board";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -44,7 +47,7 @@ const routes = [
     key: "issue",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issue",
-    component: <Notifications />,
+    component: <ProjectBoard />,
   },
   {
     type: "collapse",
@@ -54,6 +57,14 @@ const routes = [
     route: "/release",
     component: <Release />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Release",
+  //   key: "release",
+  //   icon: <Icon fontSize="small">assignment</Icon>,
+  //   route: "/release",
+  //   component: <Board />,
+  // },
   {
     type: "collapse",
     name: "Profile",
