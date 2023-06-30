@@ -36,6 +36,8 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   //     setLocalData: fields => updateLocalProjectIssues(issueId, fields),
   //   });
    };
+   console.log("프로젝트 목록", project);
+   console.log("필터 목록", filters);
    console.log(Object.values(IssueStatus))
   return (
     <DragDropContext onDragEnd={handleIssueDrop}>

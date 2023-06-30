@@ -54,6 +54,52 @@ const projectMock = {
       updatedAt: '2023-06-29',
     },
     //... more issues as needed
+    {
+      id: 1,
+      title: 'Issue 3',
+      type: 'task',
+      description: 'Description for Issue 1',
+      status: 'inprogress',
+      listPosition: 1,
+      priority : 1,
+      userIds: [1],
+      updatedAt: '2023-06-28',
+    },
+    {
+      id: 2,
+      title: 'Issue 4',
+      type: 'task',
+      description: 'Description for Issue 2',
+      status: 'inprogress',
+      listPosition: 2,
+      priority : 1,
+      userIds: [2],
+      updatedAt: '2023-06-29',
+    },
+    //... more issues as needed
+    {
+      id: 1,
+      title: 'Issue 5',
+      type: 'task',
+      description: 'Description for Issue 1',
+      status: 'done',
+      listPosition: 1,
+      priority : 1,
+      userIds: [1],
+      updatedAt: '2023-06-28',
+    },
+    {
+      id: 2,
+      title: 'Issue 6',
+      type: 'task',
+      description: 'Description for Issue 2',
+      status: 'done',
+      listPosition: 2,
+      priority : 1,
+      userIds: [2],
+      updatedAt: '2023-06-29',
+    },
+    //... more issues as needed
   ],
 };
 

@@ -15,7 +15,7 @@ const propTypes = {
 
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
  
-
+  console.log("index", index);
   const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
   
   return (
