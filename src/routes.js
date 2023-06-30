@@ -5,11 +5,9 @@ import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
 import Myteam from "layouts/myteam";
 import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -28,7 +26,7 @@ const routes = [
     name: "My team",
     key: "myTeam",
     icon: <Icon fontSize="small">groups</Icon>,
-    route: "/my-team",
+    route: "/myTeam",
     component: <Myteam />,
   },
   {
