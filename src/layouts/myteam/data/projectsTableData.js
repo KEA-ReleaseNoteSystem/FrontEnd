@@ -68,20 +68,20 @@ export default function data() {
     </MDBox>
   );
   const columns = [
-    { Header: "project", accessor: "project", width: "30%", align: "left" },
-    { Header: "status", accessor: "budget", align: "center" },
-    { Header: "date", accessor: "status", align: "center" },
-    { Header: "completion", accessor: "completion", align: "center" },
+    { Header: "프로젝트", accessor: "project", width: "30%", align: "left" },
+    { Header: "상태", accessor: "status", align: "center" },
+    { Header: "생성일자", accessor: "date", align: "center" },
+    { Header: "진행도", accessor: "completion", align: "center" },
   ];
 
   const rows = projects.map((project) => ({
     project: <Project image={project.project.image} name={project.project.name} />,
-    budget: (
+    status: (
       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
         {project.status}
       </MDTypography>
     ),
-    status: (
+    date: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
         {project.date}
       </MDTypography>

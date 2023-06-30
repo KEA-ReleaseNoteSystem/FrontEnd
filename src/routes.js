@@ -23,7 +23,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "My team",
+    name: "My Team",
     key: "myTeam",
     icon: <Icon fontSize="small">groups</Icon>,
     route: "/myTeam",
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "OtherTeams",
+    name: "Other Teams",
     key: "otherTeams",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/otherTeams",
