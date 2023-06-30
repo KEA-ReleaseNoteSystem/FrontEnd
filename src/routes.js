@@ -39,8 +39,9 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
+import notifications from "layouts/notifications";
 import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
+import ProjectBoard from "layouts/Board";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -79,16 +80,16 @@ const routes = [
     key: "issue",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issue",
-    component: <Notifications />,
+    component: <ProjectBoard />,
   },
-  {
-    type: "collapse",
-    name: "Release",
-    key: "release",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/release",
-    component: <Notifications />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Release",
+  //   key: "release",
+  //   icon: <Icon fontSize="small">assignment</Icon>,
+  //   route: "/release",
+  //   component: <Board />,
+  // },
   {
     type: "collapse",
     name: "Profile",
