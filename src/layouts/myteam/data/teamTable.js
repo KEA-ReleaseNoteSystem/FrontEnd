@@ -87,10 +87,10 @@ export default function data() {
     </MDBox>
   );
   const columns = [
-    { Header: "Author", accessor: "author", width: "45%", align: "left" },
-    { Header: "Function", accessor: "function", align: "left" },
-    { Header: "Status", accessor: "status", align: "center" },
-    { Header: "Employed", accessor: "employed", align: "center" },
+    { Header: "팀원", accessor: "author", width: "45%", align: "left" },
+    { Header: "직책/역할", accessor: "function", align: "left" },
+    { Header: "접속", accessor: "status", align: "center" },
+    { Header: "채용일", accessor: "employed", align: "center" },
   ];
 
   const rows = Team.map((member) => ({
