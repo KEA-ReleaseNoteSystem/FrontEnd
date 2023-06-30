@@ -25,7 +25,10 @@ const projects = [
     },
     status: "running",
     date: "23/04/18",
-    completion: 100,
+    version: "v 1.0.1",
+    writer: "박도영",
+    role: "pm",
+    note: "이동하기",
   },
   {
     project: {
@@ -34,7 +37,10 @@ const projects = [
     },
     status: "running",
     date: "23/04/18",
-    completion: 80,
+    version: "v 1.0.1",
+    writer: "박도영",
+    role: "pm",
+    note: "이동하기",
   },
   {
     project: {
@@ -43,7 +49,10 @@ const projects = [
     },
     status: "cancled",
     date: "23/04/18",
-    completion: 0,
+    version: "v 1.0.1",
+    writer: "박도영",
+    role: "pm",
+    note: "이동하기",
   },
 ];
 
@@ -67,26 +76,50 @@ export default function data() {
       </MDBox>
     </MDBox>
   );
+  
   const columns = [
-    { Header: "project", accessor: "project", width: "30%", align: "left" },
-    { Header: "status", accessor: "budget", align: "center" },
-    { Header: "date", accessor: "status", align: "center" },
-    { Header: "completion", accessor: "completion", align: "center" },
+    { Header: "Description", accessor: "project_", width: "30%", align: "left" },
+    { Header: "상태", accessor: "status_", align: "center" },
+    { Header: "버전", accessor: "version_", align: "center" },
+    { Header: "최근 릴리즈", accessor: "releaseDate_", align: "center" },
+    { Header: "작성자", accessor: "writer_", align: "center" },
+    { Header: "역할", accessor: "role_", align: "center" },
+    { Header: "릴리즈 노트", accessor: "note_", align: "center" },
   ];
 
   const rows = projects.map((project) => ({
-    project: <Project image={project.project.image} name={project.project.name} />,
-    budget: (
+    project_: <Project image={project.project.image} name={project.project.name} />,
+    status_: (
       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
         {project.status}
       </MDTypography>
     ),
-    status: (
+    version_: (
+      <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
+        {project.version}
+      </MDTypography>
+    ),
+    releaseDate_: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
         {project.date}
       </MDTypography>
     ),
-    completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
+    writer_: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {project.writer}
+      </MDTypography>
+    ),
+    role_: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {project.role}
+      </MDTypography>
+    ),
+    note_: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {project.note}
+      </MDTypography>
+    ),
+    // completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
   }));
   return {
     columns,

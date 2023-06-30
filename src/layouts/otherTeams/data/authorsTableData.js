@@ -17,12 +17,12 @@ const Team = [
       name: "John Michael",
       email: "john@creative-tim.com",
     },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
+    // job: {
+    //   title: "Manager",
+    //   description: "Organization",
+    // },
+    // status: "online",
+    // employed: "23/04/18",
   },
   {
     author: {
@@ -30,12 +30,12 @@ const Team = [
       name: "John Michael",
       email: "john@creative-tim.com",
     },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "offline",
-    employed: "23/04/18",
+    // job: {
+    //   title: "Manager",
+    //   description: "Organization",
+    // },
+    // status: "offline",
+    // employed: "23/04/18",
   },
   {
     author: {
@@ -43,12 +43,12 @@ const Team = [
       name: "John Michael",
       email: "john@creative-tim.com",
     },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
+    // job: {
+    //   title: "Manager",
+    //   description: "Organization",
+    // },
+    // status: "online",
+    // employed: "23/04/18",
   },
   {
     author: {
@@ -56,12 +56,12 @@ const Team = [
       name: "John Michael",
       email: "john@creative-tim.com",
     },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
+    // job: {
+    //   title: "Manager",
+    //   description: "Organization",
+    // },
+    // status: "online",
+    // employed: "23/04/18",
   },
   {
     author: {
@@ -69,12 +69,12 @@ const Team = [
       name: "John Michael",
       email: "john@creative-tim.com",
     },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
+    // job: {
+    //   title: "Manager",
+    //   description: "Organization",
+    // },
+    // status: "online",
+    // employed: "23/04/18",
   },
 ];
 
@@ -100,32 +100,32 @@ export default function data() {
     </MDBox>
   );
   const columns = [
-    { Header: "Author", accessor: "author", width: "45%", align: "left" },
-    { Header: "Function", accessor: "function", align: "left" },
-    { Header: "Status", accessor: "status", align: "center" },
-    { Header: "Employed", accessor: "employed", align: "center" },
+    { Header: "Team Name", accessor: "author", width: "45%", align: "left" },
+    // { Header: "Function", accessor: "function", align: "left" },
+    // { Header: "Status", accessor: "status", align: "center" },
+    // { Header: "Employed", accessor: "employed", align: "center" },
   ];
 
   const rows = Team.map((member) => ({
     author: (
       <Author image={member.author.image} name={member.author.name} email={member.author.email} />
     ),
-    function: <Job title={member.job.title} description={member.job.description} />,
-    status: (
-      <MDBox ml={-1}>
-        <MDBadge
-          badgeContent={member.status}
-          color={member.status === "offline" ? "dark" : "success"}
-          variant="gradient"
-          size="sm"
-        />
-      </MDBox>
-    ),
-    employed: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {member.employed}
-      </MDTypography>
-    ),
+    // function: <Job title={member.job.title} description={member.job.description} />,
+    // status: (
+    //   <MDBox ml={-1}>
+    //     <MDBadge
+    //       badgeContent={member.status}
+    //       color={member.status === "offline" ? "dark" : "success"}
+    //       variant="gradient"
+    //       size="sm"
+    //     />
+    //   </MDBox>
+    // ),
+    // employed: (
+    //   <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+    //     {member.employed}
+    //   </MDTypography>
+    // ),
   }));
 
   return {
