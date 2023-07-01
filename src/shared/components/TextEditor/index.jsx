@@ -58,7 +58,6 @@ const TextEditor = ({
       quill.off('text-change', handleContentsChange);
       quill = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

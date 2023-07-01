@@ -64,8 +64,5 @@
   },
   "overrides": {
     "svgo": "3.0.2"
-  },
-  "devDependencies": {
-    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
