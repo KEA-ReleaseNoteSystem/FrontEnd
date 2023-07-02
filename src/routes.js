@@ -11,6 +11,8 @@ import ProjectBoard from "layouts/Board";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
+import SignUp from "layouts/authentication/sign-up";
+import Home from "layouts/home"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -78,8 +80,24 @@ const routes = [
     name: "Log out",
     key: "log-out",
     icon: <Icon fontSize="small">logout</Icon>,
-    route: "/authentication/log-out",
+    route: "/authentication/sign-in",
     component: <SignIn />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "sign-up",
+    icon: "",
+    route: "/authentication/sign-up",
+    component: <SignUp />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "home",
+    icon: "",
+    route: "/home",
+    component: <Home />,
   },
 ];
 
