@@ -31,14 +31,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -68,57 +60,43 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
+            
             <Typography component="h1" variant="h5">
-              Sign in
+              제목제목
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+            <br /><br />
+            <Box sx={{ mt: 1 }}>
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+              <Box
+                sx={{
+                  my: 5,
+                  mx: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  href="/authentication/sign-in"
+                >
+                  로그인
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  href="/authentication/sign-up"
+                >
+                  회원가입
+                </Button>
+              </Box>
+              
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
