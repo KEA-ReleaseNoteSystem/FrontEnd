@@ -105,6 +105,7 @@ function Cover() {
             <MDBox mb={2}>
               <MDInput type="password" label="비밀번호" variant="standard" fullWidth value={password} onChange={handlePasswordChange} required/>
             </MDBox>
+            {(isEmailEmpty || isJobEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty) ?  ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;제대로 입력되지 않은 칸이 존재합니다.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1} textAlign="center">
               <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isJobEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
               component={Link} to={{
