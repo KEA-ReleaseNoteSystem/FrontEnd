@@ -110,7 +110,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home"} disabled={isEmailEmpty || isPasswordEmpty}>
+              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home/manage-project"} disabled={isEmailEmpty || isPasswordEmpty}>
                 로그인
               </MDButton>
             </MDBox>
@@ -136,21 +136,21 @@ function Basic() {
         href="http://localhost:8080/oauth2/authorization/kakao"
         fullWidth
       >
-        <img width="100%" height="35px" src={kakaoLogin} alt="카카오 로그인" />
+        <img width="100%" src={kakaoLogin} alt="카카오 로그인" />
       </MDButton>
       <MDButton
         component="a"
         href="http://localhost:8080/oauth2/authorization/naver"
         fullWidth
       >
-        <img width="100%" height="35px" src={naverLogin} alt="네이버 로그인" />
+        <img width="100%" src={naverLogin} alt="네이버 로그인" />
       </MDButton>
       <MDButton
         component="a"
         href="http://localhost:8080/oauth2/authorization/google"
         fullWidth
       >
-        <img width="100%" height="35px" src={googleLogin} alt="구글 로그인" />
+        <img width="100%" src={googleLogin} alt="구글 로그인" />
       </MDButton>
           </MDBox>
           <MDBox mt={3} mb={1} textAlign="center">
