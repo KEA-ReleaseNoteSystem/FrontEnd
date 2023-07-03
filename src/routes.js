@@ -13,7 +13,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Home from "layouts/home"
-
+import Projects from "layouts/project"
 // @mui icons
 import Icon from "@mui/material/Icon";
 import Release from "layouts/release";
@@ -82,6 +82,15 @@ const routes = [
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+  },
+  //테스트용
+  {
+    type: "collapse",
+    name: "projects",
+    key: "log-out",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/home/manageProject",
+    component: <Projects />,
   },
   {
     type: "",
