@@ -14,6 +14,9 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Home from "layouts/home"
 import Projects from "layouts/project"
+import CreateGroup from "layouts/authentication/sign-up/creategroup";
+import JoinGroup from "layouts/authentication/sign-up/joingroup";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 import Release from "layouts/release";
@@ -99,6 +102,21 @@ const routes = [
     icon: "",
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "create-group",
+    icon: "",
+    route: "authentication/sign-up/create-group",
+    component: <CreateGroup />,
+  },{
+    type: "",
+    name: "",
+    key: "join-group",
+    icon: "",
+    route: "/authentication/sign-up/join-group",
+    component: <JoinGroup />,
   },
   {
     type: "",

@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import PageLayout from 'examples/LayoutContainers/PageLayout';
 
 function Copyright(props) {
   return (
@@ -33,75 +34,77 @@ const defaultTheme = createTheme();
 export default function SignInSide() {
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
+    <PageLayout>
+      <ThemeProvider theme={defaultTheme}>
+        <Grid container component="main" sx={{ height: '100vh' }}>
+          <CssBaseline />
+          <Grid
+            item
+            xs={false}
+            sm={4}
+            md={7}
             sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: (t) =>
+                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
             }}
-          >
-            
-            <Typography component="h1" variant="h5">
-              제목제목
-            </Typography>
-            <br /><br />
-            <Box sx={{ mt: 1 }}>
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
-              <Box
-                sx={{
-                  my: 5,
-                  mx: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  href="/authentication/sign-in"
-                >
-                  로그인
-                </Button>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  href="/authentication/sign-up"
-                >
-                  회원가입
-                </Button>
+          />
+          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+
+              <Typography component="h1" variant="h5">
+                제목제목
+              </Typography>
+              <br /><br />
+              <Box sx={{ mt: 1 }}>
+                내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+                내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+                내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+                내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+                내용내용내용내용내용내용내용내용내용내용내용내용내용내용<br />
+                <Box
+                  sx={{
+                    my: 5,
+                    mx: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    href="/authentication/sign-in"
+                  >
+                    로그인
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    href="/authentication/sign-up"
+                  >
+                    회원가입
+                  </Button>
+                </Box>
+
+                <Copyright sx={{ mt: 5 }} />
               </Box>
-              
-              <Copyright sx={{ mt: 5 }} />
             </Box>
-          </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </ThemeProvider>
+      </ThemeProvider>
+    </PageLayout>
   );
 }

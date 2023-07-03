@@ -47,8 +47,24 @@ import naverLogin from "assets/images/naver_login.png";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const isEmailEmpty = (email === "") || !(email.includes("@"));
+  const isPasswordEmpty = password === "";
 
   return (
     <BasicLayout image={bgImage}>
@@ -74,10 +90,10 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" fullWidth />
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="비밀번호" fullWidth />
+              <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange}/>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -88,11 +104,11 @@ function Basic() {
                 onClick={handleSetRememberMe}
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
-                &nbsp;&nbsp;아이디 기억하기
+                &nbsp;&nbsp;이메일 기억하기
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home"} disabled={isEmailEmpty || isPasswordEmpty}>
                 로그인
               </MDButton>
             </MDBox>
