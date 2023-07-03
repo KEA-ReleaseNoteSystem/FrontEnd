@@ -1,0 +1,99 @@
+
+.background1 {
+    background-color: #031d60;
+    color: white;
+    width: 100px;
+    min-height: 100vh;
+    height: max-content;
+    padding-top: 5vh;
+    padding-left: 5vw;
+    padding-right: 5vw;
+}
+
+
+.background table {
+    width: 100%;
+    display: inside;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1%;
+}
+
+.col1 { width: 10%; }
+.col2 { width: 20%; }
+.col3 { width: 5%; }
+.col4 { width: 5%; }
+.col5 { width: 5%; }
+.col6 { width: 5%; }
+.col7 { width: 10%}
+
+
+.login-button {
+  background-color: #FFFFFF;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  color: #A0D3F9;
+}
+
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+
+.card-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border: #F8F9FA;
+  }
+
+  .ellipsis-icon {
+    color: rgb(49, 46, 46);
+    border: #F8F9FA;
+  }
+
+  .dropdown-toggle {
+   
+    
+    margin-top: -50px;
+    margin-left: 80%;
+    border: #F8F9FA;
+    background-color:#F8F9FA ;
+  }
+
+  .custom-dropdown-menu {
+    width: 50px; /* Adjust the width as needed */
+    font-size: 15px; /* Adjust the font size as needed */
+    height: 130px;
+    margin-bottom: 50px;
+  }
+
+  .custom-dropdown-item {
+    margin-bottom: -0.1rem; /* Adjust the margin value as needed */
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10%;
+  }
+  
+  .pagination .page-link {
+    font-size: 16px;
+    padding: 10px;
+    width: 500px;
+    height: 50px;
+  }
+ 

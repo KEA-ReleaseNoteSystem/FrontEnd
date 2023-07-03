@@ -15,6 +15,12 @@ import SignUp from "layouts/authentication/sign-up";
 import Home from "layouts/home";
 import Pm from "layouts/pm";
 
+import Home from "layouts/home"
+import Projects from "layouts/project"
+import CreateGroup from "layouts/authentication/sign-up/creategroup";
+import JoinGroup from "layouts/authentication/sign-up/joingroup";
+
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -93,6 +99,15 @@ const routes = [
     route: "/authentication/sign-in",
     component: <SignIn />,
   },
+  //테스트용
+  {
+    type: "collapse",
+    name: "projects",
+    key: "log-out",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/home/manageProject",
+    component: <Projects />,
+  },
   {
     type: "",
     name: "",
@@ -100,6 +115,21 @@ const routes = [
     icon: "",
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "create-group",
+    icon: "",
+    route: "authentication/sign-up/create-group",
+    component: <CreateGroup />,
+  },{
+    type: "",
+    name: "",
+    key: "join-group",
+    icon: "",
+    route: "/authentication/sign-up/join-group",
+    component: <JoinGroup />,
   },
   {
     type: "",
