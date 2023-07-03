@@ -63,7 +63,8 @@ function Basic() {
     event.preventDefault();
   };
 
-  const isEmailEmpty = (email === "") || !(email.includes("@"));
+  const isEmailEmpty = email === "";
+  const isEmailWrong = !(email.includes("@"));
   const isPasswordEmpty = password === "";
 
   return (
@@ -91,11 +92,10 @@ function Basic() {
           <MDBox component="form" role="form">
             <MDBox mb={2}>
               <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}/>
-              {isEmailEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography> ) : <MDTypography> </MDTypography> }
+              {(!isEmailEmpty && isEmailWrong) ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography> ) : <MDTypography> </MDTypography> }
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange}/>
-              {isPasswordEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;패스워드를 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography> }
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
