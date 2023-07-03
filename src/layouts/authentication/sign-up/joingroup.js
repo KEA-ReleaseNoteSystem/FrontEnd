@@ -79,6 +79,7 @@ function JoinGroup() {
             <MDBox mb={2}>
               <MDInput type="text" label="그룹 코드" fullWidth required value={groupCode} onChange={handleGroupCodeChange}/>
             </MDBox>
+            { isGroupCodeEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 코드를 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to="/home" disabled={isGroupCodeEmpty}>
                 회원가입

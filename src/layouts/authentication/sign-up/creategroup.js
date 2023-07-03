@@ -81,6 +81,7 @@ function CreateGroup() {
                         <MDBox mb={2}>
                             <MDInput type="text" label="그룹 이름" fullWidth required value={groupName} onChange={handleGroupNameChange}/>
                         </MDBox>
+                        { isGroupNameEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 이름을 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
                         <MDBox mt={4} mb={1}>
                             <MDButton variant="gradient" type="submit" color="info" fullWidth component={Link} to="/home" disabled={isGroupNameEmpty}>
                                 회원가입
