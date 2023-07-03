@@ -60,6 +60,12 @@ function Cover() {
     setPassword(event.target.value);
   };
 
+  const isNameEmpty = name === "";
+  const isNicknameEmpty = nickname === "";
+  const isJobEmpty = job === "";
+  const isEmailEmpty = (email === "") || !(email.includes("@"));
+  const isPasswordEmpty = password === "";
+
   return (
     <BasicLayout image={bgImage}>
       <br />
@@ -85,22 +91,23 @@ function Cover() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="이름" variant="standard" fullWidth value={name} onChange={handleNameChange} />
+              <MDInput type="text" label="이름" variant="standard" fullWidth value={name} onChange={handleNameChange} required/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="닉네임" variant="standard" fullWidth value={nickname} onChange={handleNicknameChange} />
+              <MDInput type="text" label="닉네임" variant="standard" fullWidth value={nickname} onChange={handleNicknameChange} required/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="직무 (예시: FE, BE)" variant="standard" fullWidth value={job} onChange={handleJobChange} />
+              <MDInput type="text" label="직무 (예시: FE, BE)" variant="standard" fullWidth value={job} onChange={handleJobChange} required/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" variant="standard" fullWidth value={email} onChange={handleEmailChange} />
+              <MDInput type="email" label="이메일" variant="standard" fullWidth value={email} onChange={handleEmailChange} required/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="비밀번호" variant="standard" fullWidth value={password} onChange={handlePasswordChange} />
+              <MDInput type="password" label="비밀번호" variant="standard" fullWidth value={password} onChange={handlePasswordChange} required/>
             </MDBox>
             <MDBox mt={4} mb={1} textAlign="center">
-              <MDButton variant="gradient" color="info" size="large" component={Link} to={{
+              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isJobEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
+              component={Link} to={{
                 pathname: "/authentication/sign-up/create-group",
                 state: {
                   name,
@@ -113,7 +120,8 @@ function Cover() {
                 새 그룹 생성
               </MDButton>
               &nbsp;&nbsp;
-              <MDButton variant="gradient" color="info" size="large" component={Link} to={{
+              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isJobEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
+              component={Link} to={{
                 pathname: "/authentication/sign-up/join-group",
                 state: {
                   name,

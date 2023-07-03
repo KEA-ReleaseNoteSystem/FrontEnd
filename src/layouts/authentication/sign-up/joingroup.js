@@ -42,7 +42,17 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bgtmp.png";
 
 function JoinGroup() {
+  const [groupCode, setGroupCode] = useState("");
 
+  const handleGroupCodeChange = (event) => {
+    setGroupCode(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const isGroupCodeEmpty = groupCode === "";
 
   return (
     <BasicLayout image={bgImage}>
@@ -56,8 +66,7 @@ function JoinGroup() {
           mt={-3}
           p={2}
           mb={1}
-          textAlign="center"
-        >
+          textAlign="center">
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             회원가입 - 그룹 참여
           </MDTypography>
@@ -68,10 +77,10 @@ function JoinGroup() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="그룹 코드" fullWidth />
+              <MDInput type="text" label="그룹 코드" fullWidth required value={groupCode} onChange={handleGroupCodeChange}/>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth component={Link} to="/home">
+              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to="/home" disabled={isGroupCodeEmpty}>
                 회원가입
               </MDButton>
             </MDBox>

@@ -43,7 +43,17 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bgtmp.png";
 
 function CreateGroup() {
+    const [groupName, setGroupName] = useState("");
 
+    const handleGroupNameChange = (event) => {
+      setGroupName(event.target.value);
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+    };
+  
+    const isGroupNameEmpty = groupName === "";
 
     return (
         <BasicLayout image={bgImage}>
@@ -69,10 +79,10 @@ function CreateGroup() {
                 <MDBox pt={4} pb={3} px={3}>
                     <MDBox component="form" role="form">
                         <MDBox mb={2}>
-                            <MDInput type="text" label="그룹 이름" fullWidth />
+                            <MDInput type="text" label="그룹 이름" fullWidth required value={groupName} onChange={handleGroupNameChange}/>
                         </MDBox>
                         <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" color="info" fullWidth component={Link} to="/home">
+                            <MDButton variant="gradient" type="submit" color="info" fullWidth component={Link} to="/home" disabled={isGroupNameEmpty}>
                                 회원가입
                             </MDButton>
                         </MDBox>
