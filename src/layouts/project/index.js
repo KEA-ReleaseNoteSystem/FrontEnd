@@ -135,21 +135,7 @@ const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurren
                             내 그룹의 프로젝트
                         </Pagination.Item>
                     </Pagination>
-
-                    {currentPage === 1 && (
-                        <>
-                            <h5 className="fw-bold text-primary  text-uppercase wow">Manage Project</h5>
-                            <h1 className="mb-0">Participating Projects</h1>
-                        </>
-                    )}
-
-                    {currentPage === 2 && (
-                        <>
-                            <h5 className="fw-bold text-primary text-uppercase">Manage Project</h5>
-                            <h1 className="mb-0">Your Groups Projects</h1>
-                        </>
-                    )}
-                </div>
+                
 
                 {currentPage === 1 && (
                     <div className="row g-3">
@@ -170,6 +156,7 @@ const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurren
                         ))}
                     </div>
                 )}
+                </div>
             </div>
         </div>
         </PageLayout>
