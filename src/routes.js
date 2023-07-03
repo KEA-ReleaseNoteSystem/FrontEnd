@@ -15,9 +15,9 @@ import SignUp from "layouts/authentication/sign-up";
 import Home from "layouts/home";
 import Pm from "layouts/pm";
 
-import Home from "layouts/home"
 import Projects from "layouts/project"
 import CreateGroup from "layouts/authentication/sign-up/creategroup";
+
 import JoinGroup from "layouts/authentication/sign-up/joingroup";
 
 
