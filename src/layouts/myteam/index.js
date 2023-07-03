@@ -69,6 +69,7 @@ function Tables() {
           </Grid>
           <Grid item xs={12}>
             <Card>
+              {/* 
               <MDBox
                 mx={2}
                 mt={-3}
@@ -79,6 +80,7 @@ function Tables() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
+              
                 <MDTypography variant="h6" color="white">
                   Projects
                 </MDTypography>
@@ -92,6 +94,7 @@ function Tables() {
                   noEndBorder
                 />
               </MDBox>
+            */}  
             </Card>
           </Grid>
         </Grid>
