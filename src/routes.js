@@ -101,11 +101,11 @@ const routes = [
   },
   //테스트용
   {
-    type: "collapse",
-    name: "projects",
-    key: "log-out",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/home/manageProject",
+    type: "",
+    name: "",
+    key: "manage-project",
+    icon: "",
+    route: "/home/manage-project",
     component: <Projects />,
   },
   {
