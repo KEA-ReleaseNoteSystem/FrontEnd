@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
@@ -10,6 +10,8 @@ import { IssueStatus } from 'shared/constants/issues';
 import List from './List';
 import { Lists } from './Styles';
 
+
+
 const propTypes = {
   project: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
@@ -20,14 +22,44 @@ const currentUserIdMock = 1;
 
 const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   
+  const [updatedProject, setUpdatedProject] = useState(project);
+
+
+
+
   const { currentUserId } = currentUserIdMock;
 
   const handleIssueDrop = ({ draggableId, destination, source }) => {
-    if (!isPositionChanged(source, destination)) return;
+    if (!isPositionChanged(destination,source)) return;
 
     const issueId = Number(draggableId);
-    fields => updateLocalProjectIssues(issueId, fields);
+    
 
+    console.log("draggableId",draggableId)
+    console.log("destination",destination)
+    console.log("source",source)
+
+    const updateLocalProjectIssuesMock = (issueId, fields) => {
+      const issueToUpdate = project.issues.find(issue => issue.id === issueId);
+  
+      if (issueToUpdate) {
+        issueToUpdate.status = fields.status;
+        issueToUpdate.listPosition = fields.position;
+      }
+  
+      
+      // Update the state with the updated project
+      setUpdatedProject({ ...project });
+    };
+    
+    updateLocalProjectIssuesMock(issueId,{ status: destination.droppableId ,position: 
+      calculateIssueListPosition(updatedProject.issues, destination, source, issueId)});
+   
+
+    
+    // console.log("꺅",updateLocalProjectIssuesMock(issueId,{ status: destination.droppableId }))
+    
+    // fields => updateLocalProjectIssues(issueId, fields);
   //   api.optimisticUpdate(`/issues/${issueId}`, {
   //     updatedFields: {
   //       status: destination.droppableId,
@@ -37,18 +69,23 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   //     setLocalData: fields => updateLocalProjectIssues(issueId, fields),
   //   });
    };
+
+   
+   
    console.log("프로젝트 목록", project);
    console.log("필터 목록", filters);
-   console.log(Object.values(IssueStatus))
+   console.log("뭐더",Object.values(IssueStatus))
+
+
+
   return (
     <DragDropContext onDragEnd={handleIssueDrop}>
-    
       <Lists>
         {Object.values(IssueStatus).map(status => (
           <List
             key={status}
             status={status}
-            project={project}
+            project={updatedProject}
             filters={filters}
             currentUserId={currentUserId}
           />
@@ -61,6 +98,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
 const isPositionChanged = (destination, source) => {
   if (!destination) return false;
+
   const isSameList = destination.droppableId === source.droppableId;
   const isSamePosition = destination.index === source.index;
   return !isSameList || !isSamePosition;
@@ -68,6 +106,8 @@ const isPositionChanged = (destination, source) => {
 
 const calculateIssueListPosition = (...args) => {
   const { prevIssue, nextIssue } = getAfterDropPrevNextIssue(...args);
+  console.log("prevIssue",prevIssue)
+  console.log("nextIssue",nextIssue)
   let position;
 
   if (!prevIssue && !nextIssue) {
@@ -84,7 +124,7 @@ const calculateIssueListPosition = (...args) => {
 
 const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueId) => {
   const beforeDropDestinationIssues = getSortedListIssues(allIssues, destination.droppableId);
-  const droppedIssue = allIssues.find(issue => issue.id === droppedIssueId);
+  const droppedIssue = allIssues.find(issue => issue.status === droppedIssueId);
   const isSameList = destination.droppableId === source.droppableId;
 
   const afterDropDestinationIssues = isSameList
