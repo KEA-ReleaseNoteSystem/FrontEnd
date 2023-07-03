@@ -30,7 +30,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   const { currentUserId } = currentUserIdMock;
 
   const handleIssueDrop = ({ draggableId, destination, source }) => {
-    if (!isPositionChanged(destination,source)) return;
+    if (!isPositionChanged(source,destination)) return;
 
     const issueId = Number(draggableId);
     
@@ -53,7 +53,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     };
     
     updateLocalProjectIssuesMock(issueId,{ status: destination.droppableId ,position: 
-      calculateIssueListPosition(updatedProject.issues, destination, source, issueId)});
+      calculateIssueListPosition(project.issues, destination, source, issueId)});
    
 
     
@@ -119,6 +119,8 @@ const calculateIssueListPosition = (...args) => {
   } else {
     position = prevIssue.listPosition + (nextIssue.listPosition - prevIssue.listPosition) / 2;
   }
+
+  console.log("position",position);
   return position;
 };
 
@@ -128,11 +130,14 @@ const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueI
   const isSameList = destination.droppableId === source.droppableId;
 
   const afterDropDestinationIssues = isSameList
-    ? moveItemWithinArray(beforeDropDestinationIssues, droppedIssue, destination.index)
-    : insertItemIntoArray(beforeDropDestinationIssues, droppedIssue, destination.index);
+    ? moveItemWithinArray(beforeDropDestinationIssues, droppedIssue, destination.index-1)
+    : insertItemIntoArray(beforeDropDestinationIssues, droppedIssue, destination.index+1);
+
+  console.log("가자",afterDropDestinationIssues);
 
   return {
     prevIssue: afterDropDestinationIssues[destination.index - 1],
+    
     nextIssue: afterDropDestinationIssues[destination.index + 1],
   };
 };
