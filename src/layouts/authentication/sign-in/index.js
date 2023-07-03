@@ -130,15 +130,28 @@ function Basic() {
               </MDTypography>
             </MDBox>
           </MDBox>
-          <MDBox mt={4} mb={1}>
-            <a href='http://localhost:8080/oauth2/authorization/kakao'>
-              <img width="100%" height="35px" src={kakaoLogin} alt="카카오 로그인" /></a>
-            <br />
-            <a href='http://localhost:8080/oauth2/authorization/naver'>
-              <img width="100%" height="35px" src={naverLogin} alt="네이버 로그인" /></a>
-            <br />
-            <a href='http://localhost:8080/oauth2/authorization/google'>
-              <img width="100%" height="35px" src={googleLogin} alt="구글 로그인" /></a>
+          <MDBox mt={1} mb={1}>
+          <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/kakao"
+        fullWidth
+      >
+        <img width="100%" height="35px" src={kakaoLogin} alt="카카오 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/naver"
+        fullWidth
+      >
+        <img width="100%" height="35px" src={naverLogin} alt="네이버 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/google"
+        fullWidth
+      >
+        <img width="100%" height="35px" src={googleLogin} alt="구글 로그인" />
+      </MDButton>
           </MDBox>
           <MDBox mt={3} mb={1} textAlign="center">
             <MDTypography
