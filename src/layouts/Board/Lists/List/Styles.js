@@ -7,6 +7,7 @@ export const List = styled.div`
   flex-direction: column;
   margin: auto;
   margin-top : 0px;
+  margin-bottom : 5%;
   min-height: 400px;
   width: 30%;
   border-radius: 3px;
