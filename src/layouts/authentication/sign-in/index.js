@@ -47,8 +47,25 @@ import naverLogin from "assets/images/naver_login.png";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const isEmailEmpty = email === "";
+  const isEmailWrong = !(email.includes("@"));
+  const isPasswordEmpty = password === "";
 
   return (
     <BasicLayout image={bgImage}>
@@ -74,10 +91,11 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" fullWidth />
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}/>
+              {(!isEmailEmpty && isEmailWrong) ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography> ) : <MDTypography> </MDTypography> }
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="비밀번호" fullWidth />
+              <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange}/>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -88,11 +106,11 @@ function Basic() {
                 onClick={handleSetRememberMe}
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
-                &nbsp;&nbsp;아이디 기억하기
+                &nbsp;&nbsp;이메일 기억하기
               </MDTypography>
             </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+            <MDBox mt={1} mb={1}>
+              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home/manage-project"} disabled={isEmailEmpty || isPasswordEmpty}>
                 로그인
               </MDButton>
             </MDBox>
@@ -112,15 +130,28 @@ function Basic() {
               </MDTypography>
             </MDBox>
           </MDBox>
-          <MDBox mt={4} mb={1}>
-            <a href='http://localhost:8080/oauth2/authorization/kakao'>
-              <img width="100%" height="35px" src={kakaoLogin} alt="카카오 로그인" /></a>
-            <br />
-            <a href='http://localhost:8080/oauth2/authorization/naver'>
-              <img width="100%" height="35px" src={naverLogin} alt="네이버 로그인" /></a>
-            <br />
-            <a href='http://localhost:8080/oauth2/authorization/google'>
-              <img width="100%" height="35px" src={googleLogin} alt="구글 로그인" /></a>
+          <MDBox mt={1} mb={1}>
+          <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/kakao"
+        fullWidth
+      >
+        <img width="100%" src={kakaoLogin} alt="카카오 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/naver"
+        fullWidth
+      >
+        <img width="100%" src={naverLogin} alt="네이버 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/google"
+        fullWidth
+      >
+        <img width="100%" src={googleLogin} alt="구글 로그인" />
+      </MDButton>
           </MDBox>
           <MDBox mt={3} mb={1} textAlign="center">
             <MDTypography

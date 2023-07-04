@@ -12,10 +12,18 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import Home from "layouts/home"
+import Home from "layouts/home";
+import Pm from "layouts/pm";
+
+import Projects from "layouts/project"
+import CreateGroup from "layouts/authentication/sign-up/creategroup";
+
+import JoinGroup from "layouts/authentication/sign-up/joingroup";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
 
 const routes = [
@@ -77,11 +85,28 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "PM",
+    key: "pm",
+    icon: <ManageAccountsIcon fontSize="small">pm</ManageAccountsIcon>,
+    route: "/pm",
+    component: <Pm />,
+  },
+  {
+    type: "collapse",
     name: "Log out",
     key: "log-out",
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+  },
+  //테스트용
+  {
+    type: "",
+    name: "",
+    key: "manage-project",
+    icon: "",
+    route: "/home/manage-project",
+    component: <Projects />,
   },
   {
     type: "",
@@ -90,6 +115,21 @@ const routes = [
     icon: "",
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "create-group",
+    icon: "",
+    route: "authentication/sign-up/create-group",
+    component: <CreateGroup />,
+  },{
+    type: "",
+    name: "",
+    key: "join-group",
+    icon: "",
+    route: "/authentication/sign-up/join-group",
+    component: <JoinGroup />,
   },
   {
     type: "",
