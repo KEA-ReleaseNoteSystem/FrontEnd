@@ -58,6 +58,7 @@ import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -69,25 +70,30 @@ function MDDatePicker({ label, defaultValue, onChange }) {
 
   return (
     <MDBox mb={2}>
-      <div>
       <MDInput
         type="text"
         label={label}
         value={selectedDate.toDateString()}
         readOnly
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dateFormat="yyyy-MM-dd"
+              showYearDropdown
+              showMonthDropdown
+              dropdownMode="select"
+              customInput={<CalendarTodayIcon />}
+            />
+          ),
+        }}
       />
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleDateChange}
-        dateFormat="yyyy-MM-dd"
-        showYearDropdown
-        showMonthDropdown
-        dropdownMode="select"
-      />
-      </div>
     </MDBox>
   );
 }
+
 
 function Overview() {
   const defaultValue = '뇌파를 이용한 설문조사 서비스';
@@ -136,17 +142,17 @@ function Overview() {
               </MDBox>
               <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
                 <MDBox mb={2}>
-                  <MDInput type="text" label="프로젝트 이름" defaultValue="BrainForm" />
+                  <MDInput type="text" label="프로젝트 이름" defaultValue="BrainForm" fullWidth/>
                 </MDBox>
                 <MDBox mb={2}>
-                  <MDInput type="text" label="그룹" defaultValue="kakao99%" />
+                  <MDInput type="text" label="그룹" defaultValue="kakao99%" fullWidth/>
                 </MDBox>
                 <MDBox mb={2}>
-                  <MDInput type="text" label="상태" defaultValue="stop" />
+                  <MDInput type="text" label="상태" defaultValue="stop" fullWidth/>
                 </MDBox>
                 <MDBox mb={2}>
                   <MDDatePicker
-                    label="상태"
+                    label="생성일"
                     defaultValue={new Date()}
                     onChange={handleDateChange}
                   />
