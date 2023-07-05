@@ -39,12 +39,33 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import bgImage from "assets/images/bgtmp.png";
+
+import googleLogin from "assets/images/google_login.png";
+import kakaoLogin from "assets/images/kakao_login.png";
+import naverLogin from "assets/images/naver_login.png";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const isEmailEmpty = email === "";
+  const isEmailWrong = !(email.includes("@"));
+  const isPasswordEmpty = password === "";
 
   return (
     <BasicLayout image={bgImage}>
@@ -61,33 +82,20 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
+            로그인
           </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-          </Grid>
+          <MDTypography display="block" variant="button" color="white" my={1}>
+            이메일 또는 소셜 로그인을 진행할 수 있습니다.
+          </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}/>
+              {(!isEmailEmpty && isEmailWrong) ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography> ) : <MDTypography> </MDTypography> }
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange}/>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -98,17 +106,17 @@ function Basic() {
                 onClick={handleSetRememberMe}
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
-                &nbsp;&nbsp;Remember me
+                &nbsp;&nbsp;이메일 기억하기
               </MDTypography>
             </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+            <MDBox mt={1} mb={1}>
+              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home/manage-project"} disabled={isEmailEmpty || isPasswordEmpty}>
+                로그인
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
+                아직 계정이 없으신가요?{" "}
                 <MDTypography
                   component={Link}
                   to="/authentication/sign-up"
@@ -117,10 +125,44 @@ function Basic() {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign up
+                  회원가입
                 </MDTypography>
               </MDTypography>
             </MDBox>
+          </MDBox>
+          <MDBox mt={1} mb={1}>
+          <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/kakao"
+        fullWidth
+      >
+        <img width="100%" src={kakaoLogin} alt="카카오 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/naver"
+        fullWidth
+      >
+        <img width="100%" src={naverLogin} alt="네이버 로그인" />
+      </MDButton>
+      <MDButton
+        component="a"
+        href="http://localhost:8080/oauth2/authorization/google"
+        fullWidth
+      >
+        <img width="100%" src={googleLogin} alt="구글 로그인" />
+      </MDButton>
+          </MDBox>
+          <MDBox mt={3} mb={1} textAlign="center">
+            <MDTypography
+              component={Link}
+              to="/home"
+              variant="button"
+              color="gray"
+              fontWeight="light"
+            >
+              메인 화면으로 돌아가기
+            </MDTypography>
           </MDBox>
         </MDBox>
       </Card>

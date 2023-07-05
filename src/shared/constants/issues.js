@@ -10,6 +10,11 @@ export const IssueStatus = {
   DONE: 'done',
 };
 
+export const IssueAll = {
+  all: 'all',
+
+};
+
 export const IssuePriority = {
   HIGHEST: '5',
   HIGH: '4',
