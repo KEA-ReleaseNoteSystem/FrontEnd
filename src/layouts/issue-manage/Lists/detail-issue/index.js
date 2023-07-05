@@ -83,7 +83,6 @@ function Overview(issue) {
     <MDBox pb={3}>
       <Grid>
         <Grid item xs={12}>
-          <Card>
             <MDBox
               mx={2}
               mt={-3}
@@ -132,7 +131,6 @@ function Overview(issue) {
                 <MDInput type="textarea" label="설명" defaultValue={issue.issue.description} disabled rows={4} multiline fullWidth />
               </MDBox>
             </MDBox>
-          </Card>
         </Grid>
       </Grid>
     </MDBox>
