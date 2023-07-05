@@ -76,7 +76,6 @@ function OtherTeams() {
                     issue={issue}
                     index={index}
                   />
-               
                 ))}
               </MDBox>
             </Card>
