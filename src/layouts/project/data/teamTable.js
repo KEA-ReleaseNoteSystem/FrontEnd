@@ -8,7 +8,6 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
-import TableRow from "../components/slide/TableRow";
 // Images
 import team2 from "assets/images/team-2.jpg";
 
