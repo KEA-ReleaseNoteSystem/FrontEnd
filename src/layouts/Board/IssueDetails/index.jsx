@@ -43,16 +43,16 @@ const ProjectBoardIssueDetails = ({
   const updateLocalIssueDetails = fields =>
     setLocalData(currentData => ({ issue: { ...currentData.issue, ...fields } }));
 
-  const updateIssue = updatedFields => {
-    api.optimisticUpdate(`/issues/${issueId}`, {
-      updatedFields,
-      currentFields: issue,
-      setLocalData: fields => {
-        updateLocalIssueDetails(fields);
-        updateLocalProjectIssues(issue.id, fields);
-      },
-    });
-  };
+  // const updateIssue = updatedFields => {
+  //   api.optimisticUpdate(`/issues/${issueId}`, {
+  //     updatedFields,
+  //     currentFields: issue,
+  //     setLocalData: fields => {
+  //       updateLocalIssueDetails(fields);
+  //       updateLocalProjectIssues(issue.id, fields);
+  //     },
+  //   });
+  // };
 
   return (
     <Fragment>
