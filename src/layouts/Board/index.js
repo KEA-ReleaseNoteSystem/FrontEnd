@@ -41,8 +41,6 @@ const defaultFilters = {
   recent: false,
 };
 
-
-
 window.projectMock = {
   id: 1,
   name: 'Project 1',
