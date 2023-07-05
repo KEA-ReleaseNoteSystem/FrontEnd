@@ -14,7 +14,6 @@ import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Modal from 'react-modal';
 
-
 const propTypes = {
   status: PropTypes.string.isRequired,
   project: PropTypes.object.isRequired,
@@ -84,7 +83,7 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
       <Droppable key={filteredListIssues} droppableId={status}>
         {provided => (
           <List>
-            <div onClick={openIssueDetailModal}>
+            {/* <div onClick={openIssueDetailModal}> */}
             <Title>
               {`${IssueStatusCopy[status]} `}
               <IssuesCount>{formatIssuesCount(allListIssues, filteredListIssues)}</IssuesCount>
@@ -98,7 +97,7 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
               ))}
               {provided.placeholder}
             </Issues>
-            </div>
+            {/* </div> */}
             {status === "backlog" && activeModal !== "createIssue" && (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <IconButton onClick={openIssueAddModal}>
@@ -115,13 +114,6 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
         style={customModalStyles}
       >
         <CreateIssue />
-      </Modal>
-      <Modal
-        isOpen={activeModal === "detailIssue"}
-        onRequestClose={closeModal}
-        style={customModalStyles}
-      >
-        
       </Modal>
     </>
   );
