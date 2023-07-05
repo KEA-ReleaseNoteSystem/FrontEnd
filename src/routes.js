@@ -8,7 +8,7 @@ import Billing from "layouts/billing";
 import notifications from "layouts/notifications";
 import RTL from "layouts/rtl";
 import IssueSearch from "layouts/Board";
-import IssueManage from "layouts/Board";
+import IssueManage from "layouts/issue-manage";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
