@@ -61,7 +61,7 @@ function NavigationBar() {
             </Nav.Link>
             <Nav.Link
               as={Link}
-              to="/managesurvey"
+              to="/home/manage-project"
               onMouseEnter={() => handleMouseEnter(1)}
               onMouseLeave={handleMouseLeave}
               style={{
