@@ -3,6 +3,7 @@
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
+import Issue from "layouts/issue";
 import Myteam from "layouts/myteam";
 import Billing from "layouts/billing";
 import notifications from "layouts/notifications";
@@ -139,6 +140,14 @@ const routes = [
     route: "/home",
     component: <Home />,
   },
+  {
+    type: "collapse",
+    name: "issuesearch",
+    key: "issue",
+    //icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/issuesearch",
+    component: <Issue />,
+  }
 ];
 
 export default routes;

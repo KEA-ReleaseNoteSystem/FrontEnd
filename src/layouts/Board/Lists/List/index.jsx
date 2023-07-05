@@ -10,10 +10,10 @@ import Issue from './Issue';
 import { List, Title, IssuesCount, Issues } from './Styles';
 
 const propTypes = {
-  status: PropTypes.string.isRequired,
-  project: PropTypes.object.isRequired,
-  filters: PropTypes.object.isRequired,
-  currentUserId: PropTypes.number,
+  // status: PropTypes.string.isRequired,
+  // project: PropTypes.object.isRequired,
+  // filters: PropTypes.object.isRequired,
+  // currentUserId: PropTypes.number,
 };
 
 const defaultProps = {

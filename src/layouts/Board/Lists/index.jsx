@@ -47,28 +47,17 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
     const updateLocalProjectIssuesMock = (issueId, fields) => {
       console.log("&& fields: ", fields);
-      // console.log("&& project: ", project);
       const issueToUpdate = project.issues.find(issue => issue.id === issueId);
       console.log("&& issueToUpdate: ", issueToUpdate);
-      // const issueToUpdate = project.issues.filter(issue => issue.id !== issueId);
-      // console.log("&& issueId: ", issueId);
+   
 
       if (issueToUpdate) {
         issueToUpdate.status = fields.status;
         issueToUpdate.listPosition = fields.position;
       }
 
-      // console.log("@@ issueToUpdate: ", issueToUpdate);
-      // project.issues.splice(issueId, 1);
-
-      // console.log("추출한 project: ", tt);
-      // issueToUpdate.splice(issueId, 0,tt);
-      // console.log("다시 세팅한 project: ", issueToUpdate);
-
-      // project.issues = issueToUpdate;
       console.log("최종 다시 세팅한 project: ", project);
-      // Update the state with the updated project
-
+  
       setUpdatedProject({ ...project });
       console.log("## updatedProject: ", updatedProject);
     };
@@ -151,12 +140,12 @@ const calculateIssueListPosition = (...args) => {
 };
 
 const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueId) => {
-  console.log("** allIssues: ", allIssues);
-  console.log("** destination: ", destination);
-  console.log("** destination.index: ", destination.index);
-  console.log("** destination.droppableId: ", destination.droppableId);
-  console.log("** source: ", source);
-  console.log("** droppedIssueId: ", droppedIssueId);
+  // console.log("** allIssues: ", allIssues);
+  // console.log("** destination: ", destination);
+  // console.log("** destination.index: ", destination.index);
+  // console.log("** destination.droppableId: ", destination.droppableId);
+  // console.log("** source: ", source);
+  // console.log("** droppedIssueId: ", droppedIssueId);
   let tt = destination.droppableId;
   // const beforeDropDestinationIssues = getSortedListIssues(allIssues, destination.droppableId);
   let beforeDropDestinationIssues = getSortedListIssues(allIssues, tt);
@@ -174,27 +163,11 @@ const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueI
 
   console.log("** diffIssue: ", diffIssue);
 
-  // const droppedIssue = allIssues.find((issue) => { 
-  //   console.log("** issue.status: ", issue.status);
-  //   return issue.status === droppedIssueId});
 
   const isSameList = destination.droppableId === source.droppableId;
 
   console.log("** droppedIssue **: ", droppedIssue);
-//======
-  // const afterDropDestinationIssues = isSameList
-  //   ? moveItemWithinArray(beforeDropDestinationIssues, droppedIssue, destination.index)
-  //   : insertItemIntoArray(beforeDropDestinationIssues, diffIssue, destination.index);
 
-  //   console.log("** afterDropDestinationIssues **: ", afterDropDestinationIssues);
-  //   console.log("** destination.index **: ", destination.index);
-
-  // return {
-  //   prevIssue: afterDropDestinationIssues[destination.index],
-  //   nextIssue: afterDropDestinationIssues[destination.index + 2],
-  // };
-
-  // ======
   let afterDropDestinationIssues = null;
   if(isSameList){
     afterDropDestinationIssues = moveItemWithinArray(beforeDropDestinationIssues, droppedIssue, destination.index);

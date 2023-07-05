@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PageLayout from 'examples/LayoutContainers/PageLayout';
+import imagee from "../assets/images/release.png"
 
 function Copyright(props) {
   return (
@@ -44,7 +45,7 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+              backgroundImage: {imagee},
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
