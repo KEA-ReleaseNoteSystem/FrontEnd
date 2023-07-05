@@ -189,7 +189,6 @@ function Overview(name) {
       <MDBox pt={3} pb={3}>
         <Grid>
           <Grid item xs={12}>
-            <Card>
               <MDBox
                 mx={2}
                 mt={-3}
@@ -235,7 +234,6 @@ function Overview(name) {
                   </MDButton>
                 </MDBox>
               </MDBox>
-            </Card>
           </Grid>
         </Grid>
       </MDBox>
