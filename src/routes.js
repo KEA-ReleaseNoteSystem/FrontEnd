@@ -3,11 +3,12 @@
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
-import Myteam from "layouts/myteam";
+import Members from "layouts/myteam";
 import Billing from "layouts/billing";
 import notifications from "layouts/notifications";
 import RTL from "layouts/rtl";
-import ProjectBoard from "layouts/Board";
+import IssueSearch from "layouts/Board";
+import IssueManage from "layouts/Board";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -37,44 +38,36 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "My Team",
-    key: "myTeam",
+    name: "Member's Info",
+    key: "memberinfo",
     icon: <Icon fontSize="small">groups</Icon>,
-    route: "/myTeam",
-    component: <Myteam />,
+    route: "/members",
+    component: <Members />,
   },
   {
     type: "collapse",
-    name: "Other Teams",
-    key: "otherTeams",
+    name: "Member's Project",
+    key: "memberproject",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/otherTeams",
+    route: "/members-project",
     component: <OtherTeams />,
   },
   {
     type: "collapse",
-    name: "Issue",
-    key: "issue",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/issue",
-    component: <ProjectBoard />,
+    name: "Issue Search",
+    key: "issuesearch",
+    icon: <Icon fontSize="small">search</Icon>,
+    route: "/issue-search",
+    component: <IssueSearch />,
   },
   {
     type: "collapse",
-    name: "Release",
-    key: "release",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/release",
-    component: <Release />,
+    name: "Issue Management",
+    key: "issuemenage",
+    icon: <Icon fontSize="small">notifications</Icon>,
+    route: "/issue-management",
+    component: <IssueManage />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Release",
-  //   key: "release",
-  //   icon: <Icon fontSize="small">assignment</Icon>,
-  //   route: "/release",
-  //   component: <Board />,
-  // },
   {
     type: "collapse",
     name: "Profile",
@@ -82,6 +75,14 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <Profile />,
+  },
+  {
+    type: "collapse",
+    name: "Release Note",
+    key: "release",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/release",
+    component: <Release />,
   },
   {
     type: "collapse",
