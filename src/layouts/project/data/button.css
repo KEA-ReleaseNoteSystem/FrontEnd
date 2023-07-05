@@ -1,0 +1,15 @@
+.styled-button {
+    /* 스타일을 여기에 추가하세요 */
+    /* 예시 스타일 */
+    background-color: #ff6666;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.styled-button:hover {
+    background-color: #ff6666;
+}
