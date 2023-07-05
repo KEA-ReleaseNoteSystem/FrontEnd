@@ -18,8 +18,8 @@ import Pm from "layouts/pm";
 
 import Projects from "layouts/project"
 import CreateGroup from "layouts/authentication/sign-up/creategroup";
-
 import JoinGroup from "layouts/authentication/sign-up/joingroup";
+import CreateRelease from "layouts/release/create";
 
 
 // @mui icons
@@ -140,6 +140,13 @@ const routes = [
     route: "/home",
     component: <Home />,
   },
+  {
+    type: "",
+    name: "",
+    key: "create-release",
+    route: "release/create",
+    component: <CreateRelease />
+  }
 ];
 
 export default routes;
