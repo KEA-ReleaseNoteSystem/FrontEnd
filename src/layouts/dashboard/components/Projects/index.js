@@ -13,7 +13,11 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, Link } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -31,12 +35,125 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
 
+import Gpt from "layouts/gpt"
+//GPT
+import teamTable from "layouts/myteam";
+import { useNavigate } from "react-router-dom";
 function Projects() {
-  const { columns, rows } = data();
+  const [issues, setIssues] = useState([
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "서강덕",
+      due: "2020-05-04",
+      value: 20,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "서지원",
+      due: "2020-08-02",
+      value: 70,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "서지원",
+      due: "2020-03-04",
+      value: 40,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "박재석",
+      due: "2020-06-03",
+      value: null,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "서강덕",
+      due: "2020-06-04",
+      value: null,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "서강덕",
+      due: "2020-06-09",
+      value: null,
+    },
+    {
+      name: "#00 Test issue",
+      description: "어쩌구 되지않는 이슈",
+      member: "박도영",
+      due: "2020-06-25",
+      value: 80,
+    },
+  ]);
+  const [filteredIssues, setFilteredIssues] = useState(issues);
+  const { columns, rows } = data({ issues:filteredIssues });
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+
+  const [openModals, setOpenModal] = useState(false);
+  const openModal = () => {
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  // 이전 코드
+  const onClicks = () => {
+    openModal();
+    setMenu(null);
+  };
+
+  const handleShowAssignedIssues = () => {
+    const filteredIssues = issues.filter((issue) => issue.member === "서지원");
+    setFilteredIssues(filteredIssues);
+    setMenu(null);
+  };
+
+  const handleSort = (sortType) => {
+    let sortedArray = [...issues];
+
+    if (sortType === "value") {
+      sortedArray.sort((a, b) => {
+        if (a.value === null) return 1;
+        if (b.value === null) return -1;
+        return a.value - b.value;
+      });
+    } else if (sortType === "due") {
+      sortedArray.sort((a, b) => {
+        if (a.due === "0000-00-00") return 1;
+        if (b.due === "0000-00-00") return -1;
+        return new Date(a.due) - new Date(b.due);
+      });
+    }
+
+    setFilteredIssues(sortedArray);
+    setMenu(null);
+  };
+  
+  const renderModal = (
+    <Modal
+      open={openModals}
+      onClose={closeModal}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+    >
+      <Box sx={{ position: "absolute",borderRadius:"100px", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+        <Box sx={{ bgcolor: "background.paper", boxShadow: 24, p: 4, borderRadius:10}}>
+          <Gpt/>
+        </Box>
+      </Box>
+    </Modal>
+  );
 
   const renderMenu = (
     <Menu
@@ -53,10 +170,11 @@ function Projects() {
       open={Boolean(menu)}
       onClose={closeMenu}
     >
-      <MenuItem onClick={closeMenu}>나에게 배정된 Issue만 확인</MenuItem>
-      <MenuItem onClick={closeMenu}>중요도 순 정렬</MenuItem>
-      <MenuItem onClick={closeMenu}>기한 순 정렬</MenuItem>
-    </Menu>
+      <MenuItem onClick={() => handleShowAssignedIssues()}>나에게 배정된 Issue만 확인</MenuItem>
+      <MenuItem onClick={() => handleSort("value")}>중요도 순 정렬</MenuItem>
+      <MenuItem onClick={() => handleSort("due")}>기한 순 정렬</MenuItem>
+      <MenuItem  onClick={onClicks}>GPT 추천</MenuItem>
+    </Menu> 
   );
 
   return (
@@ -88,7 +206,7 @@ function Projects() {
         </MDBox>
         {renderMenu}
       </MDBox>
-      <MDBox>
+      <MDBox sx={{ overflowY: "scroll",  maxHeight:"200px"}}>
         <DataTable
           table={{ columns, rows }}
           showTotalEntries={false}
@@ -96,6 +214,7 @@ function Projects() {
           noEndBorder
           entriesPerPage={false}
         />
+        {renderModal}
       </MDBox>
     </Card>
   );
