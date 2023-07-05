@@ -85,7 +85,7 @@ function Release() {
         </Grid>
       </MDBox>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <IconButton onClick={handleRelaseAddOnClick}>
+        <IconButton onClick={handleRelaseAddOnClick} href="/release/create">
           <AddCircleOutlineIcon color="info"/>
         </IconButton>
       </div>
