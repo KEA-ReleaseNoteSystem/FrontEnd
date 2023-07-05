@@ -16,13 +16,10 @@ const PAGE_SIZE = 1; // You can adjust this to change how many surveys are shown
 const ManagementPage = () => {
 
 
-
-
     const [projectData, setProjectData] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [projectDataAnswered, setProjectDataAnswered] = useState([]);
     const token = localStorage.getItem('ACCESS_TOKEN');
-
 
 
     useEffect(() => {
@@ -48,50 +45,18 @@ const ManagementPage = () => {
                     member: {
                         nickname: "Jane"
                     }
+                },{
+                    id: 3,
+                    title: "Project 3",
+                    updatedAt: "2023-07-02",
+                    startDate: "2023-07-01",
+                    endDate: "2023-07-31",
+                    member: {
+                        nickname: "Jane"
+                    }
                 }
             ];
 
-            /*
-          //   생성한 설문 가져오는 요청
-            try {
-                console.log("ACCESS-Token: ", token);
-                // 페이지가 마운트된 후에 서버로 GET 요청 보내기
-                const response = await axios.get('/api/data', { //   생성한 설문 가져오는 요청
-                    headers: {
-                        Authorization: `Bearer ${token}` // JWT 토큰을 헤더에 추가합니다.
-                    }
-                });
-                console.log("response.data", response.data);
-                if (response.data.length === 0) {
-                    setProjectData([]);
-                } else {
-                    setProjectData(response.data); // 데이터를 상태로 설정합니다.
-                    console.log("response.data: ", response.data);
-                }
-
-            } catch (error) {
-                console.error(error);
-            }
-
-            //   응답한 설문 가져오는 요청
-            try {
-                // 페이지가 마운트된 후에 서버로 GET 요청 보내기
-                const response2 = await axios.get('/api/data/answered', { //   생성한 설문 가져오는 요청
-                    headers: {
-                        Authorization: `Bearer ${token}` // JWT 토큰을 헤더에 추가합니다.
-                    }
-                });
-                console.log("response2.data", response2.data);
-                if (response2.data.length === 0) {
-                    setProjectDataAnswered([]);
-                } else {
-                    setProjectDataAnswered(response2.data); // 데이터를 상태로 설정합니다.
-                    console.log("응답한 설문 response.data: ", response2.data);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-*/
             setProjectData(dummyData);
             setProjectDataAnswered([]);
         }
