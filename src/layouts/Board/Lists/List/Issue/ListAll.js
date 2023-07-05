@@ -11,6 +11,7 @@ const propTypes = {
   projectUsers: PropTypes.array.isRequired,
   issue: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+
 };
 
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
@@ -22,7 +23,7 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
    <IssueLink>
     <Issue>
       
-          <Title>{issue.title}</Title>
+          <Title>{issue.title }</Title>
           <Bottom>
             <div>
               <IssueTypeIcon type={issue.type} />
