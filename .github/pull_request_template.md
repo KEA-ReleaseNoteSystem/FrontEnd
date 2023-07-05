@@ -2,6 +2,7 @@
 <!-- PR 타입을 적어주세요 -->
 - [ ] Bugfix
 - [ ] Feature
+- [ ] UX/UI
 - [ ] Code style update (formatting, local variables)
 - [ ] Refactoring (no functional changes, no api changes)
 - [ ] Build related changes
