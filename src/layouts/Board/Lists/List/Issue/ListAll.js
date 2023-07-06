@@ -20,20 +20,12 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
 
   const [selectedIssue, setSelectedIssue] = useState(null);
 
-  
-
-
-  const handleClick = () => {
-    setSelectedIssue(issue);
-
-  };
-
   const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
   
   return (
     
     <div>
-      <IssueLink onClick={handleClick}>
+      <IssueLink>
         <Issue>
           <Title>{issue.title}</Title>
           <Bottom>

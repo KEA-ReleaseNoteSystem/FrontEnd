@@ -34,7 +34,7 @@ function IssueEditing({ selectedIssue }) {
             </MDTypography>
           </MDBox>
           <MDBox pt={3} width="37vw" height="37vw">
-            <IssueDetail />
+            <IssueDetail  />
             {selectedIssue.title}
           </MDBox>
         </Card>
