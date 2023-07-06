@@ -4,15 +4,17 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
 
-import Issue from "layouts/issue";
+import IssueSearch from "layouts/issue";
 import Myteam from "layouts/myteam";
+
+import IssueSearchid from "layouts/issue/index";
 
 import Members from "layouts/myteam";
 
 import Billing from "layouts/billing";
 import notifications from "layouts/notifications";
 import RTL from "layouts/rtl";
-import IssueSearch from "layouts/Board";
+import Issue from "layouts/Board";
 import IssueManage from "layouts/issue-manage";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
@@ -45,7 +47,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Member's Info",
+    name: "Members' Info",
     key: "memberinfo",
     icon: <Icon fontSize="small">groups</Icon>,
     route: "/members",
@@ -59,20 +61,21 @@ const routes = [
     route: "/members-project",
     component: <OtherTeams />,
   },
+
   {
     type: "collapse",
-    name: "Issue Search",
-    key: "issuesearch",
+    name: "IssueSearch",
+    key: "issueSearch",
     icon: <Icon fontSize="small">search</Icon>,
-    route: "/issue-search",
+    route: "/issuesearch",
     component: <IssueSearch />,
   },
   {
     type: "collapse",
-    name: "Issue Management",
+    name: "IssueManagement",
     key: "issuemenage",
     icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/issue-management",
+    route: "/issuemanagement",
     component: <IssueManage />,
   },
   {
@@ -146,37 +149,46 @@ const routes = [
     route: "/home",
     component: <Home />,
   },
-  {
-    type: "collapse",
-    name: "issuesearch",
-    key: "issue",
-    //icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/issuesearch",
-    component: <Issue />},
+
+
+
   { 
     type: "",
     name: "",
     key: "create-release",
-    route: "release/create",
+    route: "release/",
     component: <CreateRelease />
   },
+
+
+
+    // {
+    //   type: "",
+    //   name: "",
+    //   key: "/issuesearch-id",
+    //   route: "/issuesearch/:id", // Use ":id" as a placeholder for the dynamic parameter
+    //   component: <IssueSearchid />,
+    // },
+  ];
+
   //    /home/project/new
-  {
-    type: "",
-    name: "",
-    key: "home",
-    icon: "",
-    route: "/home/project/new",
-    component: <NewProject />,
-  },
-  {
-    type: "",
-    name: "",
-    key: "home",
-    icon: "",
-    route: "/home/mypage",
-    component: <MyPage />,
-  },
-];
+//   {
+//     type: "",
+//     name: "",
+//     key: "home",
+//     icon: "",
+//     route: "/home/project/new",
+//     component: <NewProject />,
+//   },
+//   {
+//     type: "",
+//     name: "",
+//     key: "home",
+//     icon: "",
+//     route: "/home/mypage",
+//     component: <MyPage />,
+//   },
+// ];
+
 
 export default routes;

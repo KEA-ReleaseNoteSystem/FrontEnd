@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMatch  } from 'react-router-dom';
 import { Draggable } from 'react-beautiful-dnd';
+import Title1 from 'layouts/Board/IssueDetails/Title';
+import IssueEditing  from "layouts/issue/index";
+import IssueEdit  from "layouts/issue/IssueEditing";
 
 import { IssueTypeIcon, IssuePriorityIcon } from 'shared/components';
 
@@ -11,19 +14,20 @@ const propTypes = {
   projectUsers: PropTypes.array.isRequired,
   issue: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-
 };
 
 const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
- 
-  console.log("index", index);
+
+  const [selectedIssue, setSelectedIssue] = useState(null);
+
   const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
   
   return (
-   <IssueLink>
-    <Issue>
-      
-          <Title>{issue.title }</Title>
+    
+    <div>
+      <IssueLink>
+        <Issue>
+          <Title>{issue.title}</Title>
           <Bottom>
             <div>
               <IssueTypeIcon type={issue.type} />
@@ -40,10 +44,13 @@ const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
               ))}
             </Assignees>
           </Bottom>
-          </Issue>
-  
-          </IssueLink>
-
+        </Issue>
+        {selectedIssue && <IssueEdit selectedIssue={selectedIssue} />}
+      </IssueLink>
+      
+      
+    
+    </div>
   );
 };
 
