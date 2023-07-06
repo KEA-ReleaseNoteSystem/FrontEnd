@@ -169,7 +169,7 @@ const ProjectBoard = ({ project = { projectMock },
   , updateLocalProjectIssues = { updateLocalProjectIssuesMock } }) => {
 
 
-  const [filters, mergeFilters] = useMergeState(defaultFilters);
+  // const [filters, mergeFilters] = useMergeState(defaultFilters);
 
   return (
 
