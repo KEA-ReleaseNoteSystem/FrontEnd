@@ -23,11 +23,8 @@ const propTypes = {
   updateLocalProjectIssues: PropTypes.func.isRequired,
 };
 
-const ProjectBoardIssueDetails = ({
-  issueId,
-  projectUsers,
-  fetchProject,
-  updateLocalProjectIssues,
+const ProjectBoardIssueDetails = ({selectedIssue
+ 
 }) => {
   const [issue, setIssue] = useState({
     id: 7,
@@ -41,13 +38,15 @@ const ProjectBoardIssueDetails = ({
     updatedAt: '2023-06-29',
   });
 
+  console.log(issue);
+
   const updateIssue = updatedFields => {
     setIssue(currentIssue => ({ ...currentIssue, ...updatedFields }));
   };
 
   return (
     <Fragment>
-      <TopActions>
+      {/* <TopActions>
         <Type issue={issue} updateIssue={updateIssue} />
         <TopActionsRight>
           <AboutTooltip
@@ -59,19 +58,20 @@ const ProjectBoardIssueDetails = ({
           />
           <CopyLinkButton variant="empty" />
         </TopActionsRight>
-      </TopActions>
+      </TopActions> */}
       <Content>
         <Left>
+
           <Title issue={issue} updateIssue={updateIssue} />
           <Description issue={issue} updateIssue={updateIssue} />
         </Left>
-        <Right>
-          <Status issue={issue} updateIssue={updateIssue} />
+
+          {/* <Status issue={issue} updateIssue={updateIssue} />
           <AssigneesReporter issue={issue} updateIssue={updateIssue} projectUsers={projectUsers} />
           <Priority issue={issue} updateIssue={updateIssue} />
           <EstimateTracking issue={issue} updateIssue={updateIssue} />
-          <Dates issue={issue} />
-        </Right>
+          <Dates issue={issue} /> */}
+       
       </Content>
     </Fragment>
   );
