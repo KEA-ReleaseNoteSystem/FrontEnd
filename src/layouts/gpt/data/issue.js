@@ -16,28 +16,37 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
+import Tooltip from "@mui/material/Tooltip";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import MDAvatar from "components/MDAvatar";
 import MDProgress from "components/MDProgress";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+
+// Images
+// 로고 넣기
+import logoXD from "assets/images/small-logos/logo-xd.svg";
+
+// 팀원 넣기
+import team1 from "assets/images/team-1.jpg";
+import team2 from "assets/images/team-2.jpg";
+import team3 from "assets/images/team-3.jpg";
+import team4 from "assets/images/team-4.jpg";
+import axios from 'axios';
+
+
+
 
 export default function data({issues}) {
-  const Issue = ({ name }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
+  const Issue = ({ name, description}) => (
+    <MDBox display="flex" alignItems="center" lineHeight={2}>
       <MDTypography variant="button" fontWeight="medium" ml={1} lineHeight={1}>
-        {name}
+        {name}<br/>
+        {description}
       </MDTypography>
+      
+  
     </MDBox>
   );
-
-  const columns = [
-    { Header: "이슈", accessor: "issue", width: "45%", align: "left" },
-    { Header: "담당자", accessor: "member", width: "10%", align: "center" },
-    { Header: "기한", accessor: "due", align: "center" },
-    { Header: "중요도", accessor: "importance", align: "center" },
-  ];
-
 
   const renderProgress = (value) => {
     if (value === null) {
@@ -56,8 +65,17 @@ export default function data({issues}) {
       />
     );
   };
+
+
+  const columns = [
+    { Header: "이슈", accessor: "issue", width: "45%", align: "left" },
+    { Header: "담당자", accessor: "member", width: "10%", align: "center" },
+    { Header: "기한", accessor: "due", align: "center" },
+    { Header: "중요도", accessor: "importance", align: "center" },
+  ];
+
   const rows = issues.map((issues) => ({
-    issue: <Issue name={issues.name} />,
+    issue: <Issue name={issues.name} description={issues.description} />,
     member: (
       <MDTypography variant="caption" color="text" fontWeight="medium">
         {issues.member}
@@ -68,7 +86,7 @@ export default function data({issues}) {
         {issues.due}
       </MDTypography>
     ),
-    importance: (      
+    importance: (
       <MDBox width="8rem" textAlign="left">
         {renderProgress(issues.value)}
       </MDBox>
@@ -76,7 +94,6 @@ export default function data({issues}) {
   }));
 
   return {
-    
     columns,
     rows,
   };

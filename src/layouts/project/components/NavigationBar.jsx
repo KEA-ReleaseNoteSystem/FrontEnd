@@ -1,6 +1,8 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import logo from '../../../assets/images/Logo.png';
+import releasy_logo from '../../../assets/images/releasy_logo.png';
+
 import Nav from 'react-bootstrap/Nav';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -33,20 +35,21 @@ function NavigationBar() {
         }}
       >
         
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/home/manage-project">
             <img
               alt=""
-              src={logo}
-              width="30"
-              height="30"
+              src={releasy_logo}
+              width="105"
+              height="45"
               className="d-inline-block align-top"
-            />{' '}
-            BrainForm
-          </Navbar.Brand>
+            /> </Navbar.Brand> 
+            {/* {' '}
+            Releasy
+          </Navbar.Brand> */}
           <Nav className="me-auto">
             <Nav.Link
               as={Link}
-              to="/createsurvey"
+              to="/home/project/new" // /home/project/new 으로 수정 예정
               onMouseEnter={() => handleMouseEnter(0)}
               onMouseLeave={handleMouseLeave}
               style={{
@@ -58,7 +61,7 @@ function NavigationBar() {
             </Nav.Link>
             <Nav.Link
               as={Link}
-              to="/managesurvey"
+              to="/home/manage-project"
               onMouseEnter={() => handleMouseEnter(1)}
               onMouseLeave={handleMouseLeave}
               style={{
@@ -73,7 +76,7 @@ function NavigationBar() {
           <Nav className="ml-auto">
           <Nav.Link
               as={Link}
-              to="/mypage"
+              to="/home/mypage"
               onMouseEnter={() => handleMouseEnter(2)}
               onMouseLeave={handleMouseLeave}
               style={{

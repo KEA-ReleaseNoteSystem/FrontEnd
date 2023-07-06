@@ -13,6 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import Modal from 'react-modal';
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -33,8 +36,33 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDInput from 'components/MDInput';
 import MDButton from 'components/MDButton';
 import MDProgress from 'components/MDProgress';
+import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+
+const customModalStyles = {
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: '1000', // add a high zIndex value
+    },
+    content: {
+        width: '60%',
+        height: '80%',
+        top: '50%',
+        left: '55%',
+        transform: 'translate(-50%, -45%)',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 20,
+        justifyContent: 'center',
+        position: 'relative', // make sure it's a positioned element
+        zIndex: '10001', // it should be higher than overlay's zIndex to appear on top
+        paddingTop: '30%'
+    }
+};
 
 function CreateRelease() {
+    const { issues, users } = window.projectMock
+    const [issueDetail, setIssueDetail] = useState("");
+
     const [info, setInfo] = useState({
         version: "1.0.0",
         abstract: "이 프로젝트의 간략한 설명",
@@ -46,8 +74,6 @@ function CreateRelease() {
     });
 
     const members = ["박도영", "박재석", "서강덕", "서지원", "안해빈"];
-
-
 
     //릴리스 작성하기 버튼
     const handleRelaseAddOnClick = (event) => {
@@ -100,6 +126,21 @@ function CreateRelease() {
         setState(event.target.value);
     };
 
+    const [activeModal, setActiveModal] = useState("");
+
+    const openIssueAddModal = () => {
+        setActiveModal("addIssue");
+    };
+
+    const openIssueInfoModal = (issue) => {
+        setIssueDetail(issue);
+        setActiveModal("issueInfo");
+    };
+
+    const closeModal = () => {
+        setActiveModal(null);
+    };
+
     return (
         <DashboardLayout>
             <DashboardNavbar />
@@ -107,7 +148,7 @@ function CreateRelease() {
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <Card>
-                            <MDBox pt={2} px={2}>
+                            <MDBox pt={2} px={3}>
                                 <MDTypography variant="h6">
                                     릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={info.version} />
                                 </MDTypography>
@@ -146,7 +187,7 @@ function CreateRelease() {
                                         <Grid container spacing={0}>
                                             <Grid item xs={2}>
                                                 <MDTypography variant="body2" fontWeight="medium">
-                                                    이슈
+                                                    관련 이슈
                                                 </MDTypography>
                                             </Grid>
                                             <Grid item xs={8}>
@@ -157,13 +198,24 @@ function CreateRelease() {
                                                 {renderMenu2}
                                             </Grid>
                                             <Grid item xs={2}>
-                                                <MDTypography variant="button">
+                                                <MDTypography variant="button" onClick={openIssueAddModal}>
                                                     <AddCircleOutlineIcon color="black" /> 추가하기
                                                 </MDTypography>
                                             </Grid>
                                         </Grid>
                                         <MDBox pt={2} px={2}>
-
+                                            <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll", maxHeight: "50vh" }}>
+                                                {issues.map((issue, index) => (
+                                                    <div onClick={() => openIssueInfoModal(issue)}>
+                                                        <ProjectBoardListIssue
+                                                            key={issue.id}
+                                                            projectUsers={users}
+                                                            issue={issue}
+                                                            index={index}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </MDBox>
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -182,7 +234,6 @@ function CreateRelease() {
                                             value={state}
                                             label="릴리즈 상태"
                                             onChange={handleChange}
-                                            backgroundColor="white"
                                             sx={{ minHeight: 50 }}
                                         >
                                             <MenuItem value={"Released"}>릴리즈 안됨(예정)</MenuItem>
@@ -191,8 +242,8 @@ function CreateRelease() {
                                         <FormHelperText>릴리즈 상태를 설정해주세요.</FormHelperText>
                                     </FormControl>
                                 </Grid>
-                                <Grid item p={2} xs={4} sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                                    <MDButton color="info" sx={{ mt: -4, mb: 2 }}>전체 저장</MDButton>
+                                <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>전체 저장</h6></MDButton>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Card>
@@ -226,8 +277,8 @@ function CreateRelease() {
                                             <Grid item xs={12}>
                                                 <MDBox pt={6} px={2} pb={3}>
                                                     <MDTypography variant="subtitle2">
-                                                        백로그: 0<br/>
-                                                        진행중: 0<br/>
+                                                        백로그: 0<br />
+                                                        진행중: 0<br />
                                                         완료: 0
                                                     </MDTypography>
                                                 </MDBox>
@@ -238,9 +289,118 @@ function CreateRelease() {
                             </Grid>
                         </MDBox>
                     </Grid>
-
                 </Grid >
             </MDBox >
+            <Modal
+                isOpen={activeModal === "addIssue"}
+                onRequestClose={closeModal}
+                style={customModalStyles}
+            >
+                <Card>
+                    <MDBox
+                        mx={2}
+                        mt={-3}
+                        py={3}
+                        px={2}
+                        variant="gradient"
+                        bgColor="info"
+                        borderRadius="lg"
+                        coloredShadow="info"
+                    >
+                        <MDTypography variant="h6" color="white">
+                            이슈 목록
+                        </MDTypography>
+                    </MDBox>
+                    <MDBox pt={3} pl={1} pr={1}>
+                        {issues.map((issue, index) => (
+                            <ProjectBoardListIssue
+                                key={issue.id}
+                                projectUsers={users}
+                                issue={issue}
+                                index={index}
+                            />
+                        ))}
+                    </MDBox>
+                </Card>
+            </Modal>
+            <Modal
+                isOpen={activeModal === "issueInfo"}
+                onRequestClose={closeModal}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: '1000', // add a high zIndex value
+                    },
+                    content: {
+                        width: '60%',
+                        height: '80%',
+                        top: '50%',
+                        left: '55%',
+                        transform: 'translate(-50%, -45%)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        borderRadius: 20,
+                        justifyContent: 'center',
+                        position: 'relative', // make sure it's a positioned element
+                        zIndex: '10001', // it should be higher than overlay's zIndex to appear on top
+                    }
+                }}
+            >
+                <MDBox pt={3}>
+                    <Grid>
+                        <Grid item xs={12}>
+                            <MDBox
+                                mx={2}
+                                mt={-3}
+                                py={3}
+                                px={2}
+                                variant="gradient"
+                                bgColor="info"
+                                borderRadius="lg"
+                                coloredShadow="info"
+                            >
+                                <MDTypography variant="h6" color="white">
+                                    Issue #{issueDetail.id}
+                                </MDTypography>
+                            </MDBox>
+                            <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
+                                <MDBox mb={2}>
+                                    <MDInput type="text" label="제목" defaultValue={issueDetail.title} disabled fullWidth />
+                                </MDBox>
+                                <MDBox mb={2}>
+                                    <MDInput type="text" label="보고자" defaultValue="서강덕" disabled fullWidth />
+                                </MDBox>
+                                <MDBox mb={2}>
+                                    <MDInput type="text" label="담당자" defaultValue="안해빈" disabled fullWidth />
+                                </MDBox>
+                                <MDBox mb={2}>
+                                    <MDInput
+                                        label="타입"
+                                        value={issueDetail.type}
+                                        disabled
+                                    />
+                                    <MDInput
+                                        label="상태"
+                                        value={issueDetail.status}
+                                        disabled
+                                    />
+                                </MDBox>
+                                <MDBox mb={2}>
+                                    <MDInput
+                                        label="생성일"
+                                        disabled
+                                        defaultValue={issueDetail.updatedAt}
+
+                                    />
+                                </MDBox>
+                                <MDBox mb={2}>
+                                    <MDInput type="textarea" label="설명" defaultValue={issueDetail.description} disabled rows={4} multiline fullWidth />
+                                </MDBox>
+                            </MDBox>
+                        </Grid>
+                    </Grid>
+                </MDBox>
+            </Modal>
         </DashboardLayout >
     );
 }

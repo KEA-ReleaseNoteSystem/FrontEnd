@@ -108,11 +108,13 @@ function IssueEditing({ info }) {
                 <MDTypography variant="body2" fontWeight="medium" defaultValue={info.type} multiline fullWidth  >
                   요약
                 </MDTypography>
+
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="body2">
                     <MDInput variant="standard" defaultValue={info.discription} multiline fullWidth />
                   </MDTypography>
                 </MDBox>
+
               </MDBox>
             </Card>
           </MDBox>

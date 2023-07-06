@@ -28,6 +28,8 @@ import CreateGroup from "layouts/authentication/sign-up/creategroup";
 import JoinGroup from "layouts/authentication/sign-up/joingroup";
 import CreateRelease from "layouts/release/create";
 
+import NewProject from "layouts/project/pages/newProject";
+import MyPage from "layouts/project/pages/myPage";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -108,13 +110,12 @@ const routes = [
     route: "/authentication/sign-in",
     component: <SignIn />,
   },
-  //테스트용
   {
     type: "",
     name: "",
     key: "manage-project",
     icon: "",
-    route: "/home/manage-project",
+    route: "/home/manage-project", // 상위 페이지 URL
     component: <Projects />,
   },
   {
@@ -149,6 +150,8 @@ const routes = [
     component: <Home />,
   },
 
+
+
   { 
     type: "",
     name: "",
@@ -156,6 +159,7 @@ const routes = [
     route: "release/",
     component: <CreateRelease />
   },
+
 
 
     // {
@@ -166,6 +170,25 @@ const routes = [
     //   component: <IssueSearchid />,
     // },
   ];
+
+  //    /home/project/new
+//   {
+//     type: "",
+//     name: "",
+//     key: "home",
+//     icon: "",
+//     route: "/home/project/new",
+//     component: <NewProject />,
+//   },
+//   {
+//     type: "",
+//     name: "",
+//     key: "home",
+//     icon: "",
+//     route: "/home/mypage",
+//     component: <MyPage />,
+//   },
+// ];
 
 
 export default routes;
