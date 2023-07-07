@@ -12,10 +12,15 @@ const propTypes = {
 };
 
 const ProjectBoardIssueDetailsDescription = ({ issue, updateIssue }) => {
+  const des =issue.description
   const [description, setDescription] = useState(issue.description);
+  
   const [isEditing, setEditing] = useState(false);
+  console.log("des",issue.description);
+  console.log("des",description);
 
   const handleUpdate = () => {
+    setDescription(issue.description);
     setEditing(false);
     updateIssue({ description });
   };
@@ -24,7 +29,7 @@ const ProjectBoardIssueDetailsDescription = ({ issue, updateIssue }) => {
 
   return (
     <Fragment>
-      <Title>Description</Title>
+      
       {isEditing ? (
         <Fragment>
           <TextEditor

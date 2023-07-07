@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Route, useMatch, useNavigate } from 'react-router-dom';
-
+import Axios from 'axios';
 import useMergeState from 'shared/hooks/mergeState';
 import { Breadcrumbs, Modal } from 'shared/components';
 
-import Header from './Header';
+
 import Filters from './Filters';
 import Lists from './Lists';
-import IssueDetails from './IssueDetails';
+
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -22,11 +22,9 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
 
-// Data
-import teamTable from "layouts/myteam/data/teamTable";
-import projectsTableData from "layouts/myteam/data/projectsTableData";
+
+
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -40,6 +38,9 @@ const defaultFilters = {
   myOnly: false,
   recent: false,
 };
+
+
+
 
 const projectMock = {
   id: 1,
