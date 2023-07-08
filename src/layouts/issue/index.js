@@ -18,7 +18,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Description from 'layouts/issue/IssueDetails/Description';
-
+import Comments from 'layouts/issue/IssueDetails/Comments';
+import PostViewPage from 'layouts/issue/page/PostViewPage'
 
 function IssueSearch() {
   const { issues, users } = window.projectMock;
@@ -132,23 +133,7 @@ function IssueEditing({ info,updateIssue }) {
             </MDTypography>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
-              <MDBox pt={2} px={2} pb={2}>
-                <MDTypography variant="body2" fontWeight="medium" defaultValue={info.type} multiline fullWidth  >
-                  요약
-                </MDTypography>
-
-                <MDBox pt={2} px={2}>
-                  <MDTypography variant="body2">
-                    <MDInput variant="standard" defaultValue={info.discription} multiline fullWidth />
-                  </MDTypography>
-                </MDBox>
-
-              </MDBox>
-            </Card>
-          </MDBox>
-          <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
+            <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
                 <MDTypography variant="body2" fontWeight="medium">
                   세부 설명
@@ -163,15 +148,20 @@ function IssueEditing({ info,updateIssue }) {
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
+            <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
                 <Grid container spacing={0}>
-                  <Grid item xs={2}>
-                    <MDTypography variant="body2" fontWeight="medium">
+                  <Grid item xs={11} >
+                    <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
+                      
                     </MDTypography>
+                    {info.length == 0 ?  null : <Comments issue={info} />}
+                    
+                  
                   </Grid>
-                  <MDInput variant="standard"  multiline fullWidth />
+                  
+                 
                   <Grid item xs={8}>
                   </Grid>
                   <Grid item xs={2}>

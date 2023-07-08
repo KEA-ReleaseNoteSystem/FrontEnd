@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import api from 'shared/utils/api';
-import useCurrentUser from 'shared/hooks/currentUser';
+
+// import useCurrentUser from 'shared/hooks/currentUser';
 import toast from 'shared/utils/toast';
 
 import BodyForm from '../BodyForm';
@@ -19,13 +19,13 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
   const [isCreating, setCreating] = useState(false);
   const [body, setBody] = useState('');
 
-  const { currentUser } = useCurrentUser();
+   const { currentUser } = 1;
 
   const handleCommentCreate = async () => {
     try {
       setCreating(true);
-      await api.post(`/comments`, { body, issueId, userId: currentUser.id });
-      await fetchIssue();
+      // await api.post(`/comments`, { body, issueId, userId: currentUser.id });
+      // await fetchIssue();
       setFormOpen(false);
       setCreating(false);
       setBody('');

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import api from 'shared/utils/api';
+// import api from 'shared/utils/api';
 import toast from 'shared/utils/toast';
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
 import { ConfirmModal } from 'shared/components';
@@ -30,8 +30,8 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
 
   const handleCommentDelete = async () => {
     try {
-      await api.delete(`/comments/${comment.id}`);
-      await fetchIssue();
+      // await api.delete(`/comments/${comment.id}`);
+      // await fetchIssue();
     } catch (error) {
       toast.error(error);
     }
@@ -40,8 +40,8 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
   const handleCommentUpdate = async () => {
     try {
       setUpdating(true);
-      await api.put(`/comments/${comment.id}`, { body });
-      await fetchIssue();
+      // await api.put(`/comments/${comment.id}`, { body });
+      // await fetchIssue();
       setUpdating(false);
       setFormOpen(false);
     } catch (error) {
@@ -68,13 +68,13 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
           <Fragment>
             <Body>{comment.body}</Body>
             <EditLink onClick={() => setFormOpen(true)}>Edit</EditLink>
-            <ConfirmModal
+            {/* <ConfirmModal
               title="Are you sure you want to delete this comment?"
               message="Once you delete, it's gone for good."
               confirmText="Delete comment"
               onConfirm={handleCommentDelete}
               renderLink={modal => <DeleteLink onClick={modal.open}>Delete</DeleteLink>}
-            />
+            /> */}
           </Fragment>
         )}
       </Content>

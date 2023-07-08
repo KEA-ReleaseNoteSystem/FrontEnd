@@ -1,9 +1,10 @@
 import React, { useState } from  "react";
-import { useNavigate, useParams }
-from "react-router-dom";  import styled from "styled-components";
+import { useNavigate, useParams } from "react-router-dom";  
+import styled from "styled-components";
 import CommentList from  "../list/commentList"; 
 import TextInput from "../ui/TextInput";
-import Button from "../ui/Button";  import data from "../data.json";
+import Button from "../ui/Button";
+import data from "./data.json";
 
 const Wrapper = styled.div`  padding: 16px;
 width: calc(100% - 32px);  display: flex;
@@ -45,9 +46,11 @@ function PostViewPage(props) {
     const navigate = useNavigate(); 
     const { postId } = useParams();  
     const post = data.find((item) => {
-    return item.id == postId;
+    return item.id == 1;
     });
-    const [comment, setComment] = useState("");  return (
+    const [comment, setComment] = useState("");  
+
+    return (
     <Wrapper>
         <Container>
         {/* <Button title="뒤로 가기" onClick={() =>{ navigate("/"); }} />
@@ -60,7 +63,7 @@ function PostViewPage(props) {
         <CommentLabel>댓글</CommentLabel>
     
         <CommentList comments={post.comments} />
-
+        {console.log("post:" , post)}
         <TextInput height={40} value={comment}  onChange={(event) => { setComment(event.target.value);}} />
 
     <Button title="댓글 작성하기" onClick={() => { navigate("/"); }} />
