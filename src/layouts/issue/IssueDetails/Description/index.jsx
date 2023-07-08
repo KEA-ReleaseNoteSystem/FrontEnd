@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState ,useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { getTextContentsFromHtmlString } from 'shared/utils/browser';
@@ -11,20 +11,29 @@ const propTypes = {
   updateIssue: PropTypes.func.isRequired,
 };
 
-const ProjectBoardIssueDetailsDescription = ({ issue, updateIssue }) => {
+const ProjectBoardIssueDetailsDescription = ( {issue} ,updateIssue ) => {
+  
   const [description, setDescription] = useState(issue.description);
   const [isEditing, setEditing] = useState(false);
+  
+  
 
   const handleUpdate = () => {
     setEditing(false);
-    updateIssue({ description });
+    setDescription(description);
   };
+
+
+  useEffect(() => {
+    setDescription(issue.description);
+  }, [issue.description]);
+  
 
   const isDescriptionEmpty = getTextContentsFromHtmlString(description).trim().length === 0;
 
   return (
     <Fragment>
-      <Title>Description</Title>
+      
       {isEditing ? (
         <Fragment>
           <TextEditor

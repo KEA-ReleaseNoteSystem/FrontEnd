@@ -23,9 +23,7 @@ const propTypes = {
   updateLocalProjectIssues: PropTypes.func.isRequired,
 };
 
-const ProjectBoardIssueDetails = ({selectedIssue
- 
-}) => {
+const ProjectBoardIssueDetails = ({selectedIssue}) => {
   const [issue, setIssue] = useState({
     id: 7,
     title: 'Issue 7',
@@ -41,7 +39,7 @@ const ProjectBoardIssueDetails = ({selectedIssue
   console.log(issue);
 
   const updateIssue = updatedFields => {
-    setIssue(currentIssue => ({ ...currentIssue, ...updatedFields }));
+   (currentIssue => ({ ...currentIssue, ...updatedFields }));
   };
 
   return (
@@ -61,8 +59,8 @@ const ProjectBoardIssueDetails = ({selectedIssue
       </TopActions> */}
       <Content>
         <Left>
-
-          <Title issue={issue} updateIssue={updateIssue} />
+{/* 
+          <Title issue={issue} updateIssue={updateIssue} /> */}
           <Description issue={issue} updateIssue={updateIssue} />
         </Left>
 

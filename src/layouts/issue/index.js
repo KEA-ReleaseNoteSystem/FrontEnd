@@ -17,9 +17,39 @@ import MDInput from 'components/MDInput';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import Description from 'layouts/issue/IssueDetails/Description';
+import Comments from 'layouts/issue/IssueDetails/Comments';
+import PostViewPage from 'layouts/issue/page/PostViewPage'
+
+function IssueSearch() {
+  const { issues, users } = window.projectMock;
+  console.log("window", window.projectMock);
+  console.log("issues:", issues);
+  console.log("users:", users);
+
+  return (
+    <DashboardLayout>
+      <DashboardNavbar />
+      <MDBox pt={6} pb={3}>
+        <Stack direction="row" spacing={6}>
+          <IssueList issues={issues} users={users} />
+        </Stack>
+      </MDBox>
+      <Footer />
+    </DashboardLayout>
+  );
+}
+
+
 
 function IssueList({ issues, users }) {
   const [issueDetail, setIssueDetail] = useState("");
+  const updateIssue = updatedFields => {
+    (currentIssue => ({ ...currentIssue, ...updatedFields }));
+  };
+
+  console.log("123",updateIssue)
+
 
   const handleClick = (issue) => {
     setIssueDetail(issue);
@@ -59,7 +89,7 @@ function IssueList({ issues, users }) {
       </Grid>
 
       <Grid item xs={5 }>
-        <IssueEditing info={issueDetail} />
+        <IssueEditing info={issueDetail} updateIssue={updateIssue} />
       </Grid>
 
       <Grid item xs={4}>
@@ -70,10 +100,10 @@ function IssueList({ issues, users }) {
 }
 
 
-function IssueEditing({ info }) {
+function IssueEditing({ info,updateIssue }) {
 
-  console.log(info);
-
+  console.log("updateIssue",updateIssue);
+  console.log("info",info);
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
       <Card>
@@ -103,44 +133,35 @@ function IssueEditing({ info }) {
             </MDTypography>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
-              <MDBox pt={2} px={2} pb={2}>
-                <MDTypography variant="body2" fontWeight="medium" defaultValue={info.type} multiline fullWidth  >
-                  요약
-                </MDTypography>
-
-                <MDBox pt={2} px={2}>
-                  <MDTypography variant="body2">
-                    <MDInput variant="standard" defaultValue={info.discription} multiline fullWidth />
-                  </MDTypography>
-                </MDBox>
-
-              </MDBox>
-            </Card>
-          </MDBox>
-          <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
+            <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
                 <MDTypography variant="body2" fontWeight="medium">
                   세부 설명
                 </MDTypography>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="body2">
-                    <MDInput variant="standard" defaultValue={info.description} multiline fullWidth />
+                    {/* <MDInput variant="standard" defaultValue={info.description} multiline fullWidth /> */}
+                    <Description issue={info} updateIssue={updateIssue} />
                   </MDTypography>
                 </MDBox>
               </MDBox>
             </Card>
           </MDBox>
-          <MDBox pt={2} px={2} mb={4}>
-            <Card sx={{ backgroundColor: '#e9e9e9' }}>
+          <MDBox pt={2} px={2} mb={2}>
+            <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
                 <Grid container spacing={0}>
-                  <Grid item xs={2}>
-                    <MDTypography variant="body2" fontWeight="medium">
+                  <Grid item xs={11} >
+                    <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
+                      
                     </MDTypography>
+                    {info.length == 0 ?  null : <Comments issue={info} />}
+                    
+                  
                   </Grid>
+                  
+                 
                   <Grid item xs={8}>
                   </Grid>
                   <Grid item xs={2}>
@@ -230,28 +251,5 @@ function IssueDetails({ info }) {
   );
 }
 
-function OtherTeams() {
-  const { issues, users } = window.projectMock;
-  console.log("window", window.projectMock);
-  console.log("issues:", issues);
-  console.log("users:", users);
 
-
-
-
-
-  return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        <Stack direction="row" spacing={6}>
-          <IssueList issues={issues} users={users} />
-
-        </Stack>
-      </MDBox>
-      <Footer />
-    </DashboardLayout>
-  );
-}
-
-export default OtherTeams;
+export default IssueSearch;

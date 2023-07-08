@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Route, useMatch, useNavigate } from 'react-router-dom';
-
+import Axios from 'axios';
 import useMergeState from 'shared/hooks/mergeState';
 import { Breadcrumbs, Modal } from 'shared/components';
 
-import Header from './Header';
+
 import Filters from './Filters';
 import Lists from './Lists';
-import IssueDetails from './IssueDetails';
+
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -22,11 +22,9 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
 
-// Data
-import teamTable from "layouts/myteam/data/teamTable";
-import projectsTableData from "layouts/myteam/data/projectsTableData";
+
+
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -41,7 +39,10 @@ const defaultFilters = {
   recent: false,
 };
 
-const projectMock = {
+
+
+
+window.projectMock = {
   id: 1,
   name: 'Project 1',
   users: [
@@ -56,9 +57,12 @@ const projectMock = {
       description: 'Description for Issue 1',
       status: 'backlog',
       listPosition: 1,
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 1"}
+    ],
       priority: 23,
       userIds: [1],
-      updatedAt: '2023-06-28',
+      createdAt: '2023-06-28',
     },
     {
       id: 2,
@@ -68,8 +72,11 @@ const projectMock = {
       status: 'backlog',
       listPosition: 2,
       priority: 50,
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 2"}
+    ],
       userIds: [2],
-      updatedAt: '2023-06-29',
+      createdAt: '2023-06-29',
     },
     //... more issues as needed
     {
@@ -78,10 +85,13 @@ const projectMock = {
       type: 'task',
       description: 'Description for Issue 1',
       status: 'backlog',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 3"}
+    ],
       listPosition: 3,
       priority: 90,
       userIds: [1],
-      updatedAt: '2023-06-28',
+      createdAt: '2023-06-28',
     },
     {
       id: 4,
@@ -89,10 +99,13 @@ const projectMock = {
       type: 'task',
       description: 'Description for Issue 2',
       status: 'backlog',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 4"}
+    ],
       listPosition: 4,
       priority: 99,
       userIds: [2],
-      updatedAt: '2023-06-29',
+      createdAt: '2023-06-29',
     },
     //... more issues as needed
     {
@@ -101,10 +114,13 @@ const projectMock = {
       type: 'task',
       description: 'Description for Issue 1',
       status: 'inprogress',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 5"}
+    ],
       listPosition: 1,
       priority: 73,
       userIds: [1],
-      updatedAt: '2023-06-28',
+      createdAt: '2023-06-28',
     },
     {
       id: 6,
@@ -112,10 +128,13 @@ const projectMock = {
       type: 'task',
       description: 'Description for Issue 2',
       status: 'inprogress',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 6"}
+    ],
       listPosition: 2,
       priority: 10,
       userIds: [2],
-      updatedAt: '2023-06-29',
+      createdAt: '2023-06-29',
     },
     //... more issues as needed
     {
@@ -123,22 +142,28 @@ const projectMock = {
       title: 'Issue 7',
       type: 'task',
       description: 'Description for Issue 2',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 7"}
+    ],
       status: 'done',
       listPosition: 1,
       priority: 55,
       userIds: [2],
-      updatedAt: '2023-06-29',
+      createdAt: '2023-06-29',
     },
     {
       id: 8,
       title: 'Issue 8',
       type: 'task',
       description: 'Description for Issue 2',
+      comments : [
+        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 8"}
+    ],
       status: 'done',
       listPosition: 2,
       priority: 35,
       userIds: [2],
-      updatedAt: '2023-06-29',
+      createdAt: '2023-06-29',
     },
   ],
 };
