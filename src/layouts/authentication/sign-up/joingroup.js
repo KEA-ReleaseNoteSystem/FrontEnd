@@ -68,6 +68,7 @@ function JoinGroup() {
     .then((response) => {
         if (response.status === 200) {
           alert(response.data.message);
+          window.location.href = "/authentication/sign-in";
         } // Alert 창을 띄웁니다.
     })
     .catch((error) => {
@@ -105,7 +106,7 @@ function JoinGroup() {
             </MDBox>
             { isGroupCodeEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 코드를 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to="/authentication/sign-in" disabled={isGroupCodeEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" disabled={isGroupCodeEmpty} onClick={handleSubmit}>
                 회원가입
               </MDButton>
             </MDBox>

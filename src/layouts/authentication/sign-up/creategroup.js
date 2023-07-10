@@ -71,6 +71,7 @@ function CreateGroup() {
             console.log(response)
             if (response.status === 200) {
                 alert(response.data.message);
+                window.location.href = "/authentication/sign-in";
               } // Alert 창을 띄웁니다.
         })
         .catch((error) => {
