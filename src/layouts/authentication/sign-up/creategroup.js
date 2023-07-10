@@ -109,7 +109,7 @@ function CreateGroup() {
                         </MDBox>
                         { isGroupNameEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 이름을 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
                         <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" type="submit" color="info" fullWidth component={Link} to="/authentication/sign-in" disabled={isGroupNameEmpty} onClick={handleSubmit}>
+                            <MDButton variant="gradient" color="info" fullWidth disabled={isGroupNameEmpty} onClick={handleSubmit}>
                                 회원가입
                             </MDButton>
                         </MDBox>

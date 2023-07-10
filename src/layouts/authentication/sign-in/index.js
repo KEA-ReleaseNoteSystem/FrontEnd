@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState } from "react";
-
+import axios from "axios";
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -59,9 +59,26 @@ function Basic() {
     setPassword(event.target.value);
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
+     // POST 요청을 보내는 부분
+     axios.post("/api/member/login", {
+      email: email,
+      password: password
+      // 다른 데이터들도 추가로 설정할 수 있습니다.
+    })
+    .then((response) => {
+        console.log(response)
+            alert(response.data.message); // Alert 창을 띄웁니다.
+            localStorage.setItem("ACCESS_TOKEN", response.data.data);
+            window.location.href = "/dashboard";
+
+    })
+    .catch((error) => {
+      // 요청이 실패한 경우의 처리
+      console.error(error);
+    });
   };
+    
 
   const isEmailEmpty = email === "";
   const isEmailWrong = !(email.includes("@"));
@@ -110,7 +127,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" type="submit" fullWidth component={Link} to={"/home/manage-project"} disabled={isEmailEmpty || isPasswordEmpty}>
+              <MDButton variant="gradient" color="info" fullWidth  disabled={isEmailEmpty || isPasswordEmpty} onClick={handleSubmit}>
                 로그인
               </MDButton>
             </MDBox>
