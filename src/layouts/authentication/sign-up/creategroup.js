@@ -15,9 +15,10 @@ Coded by www.creative-tim.com
 */
 
 import { useState } from "react";
+import axios from "axios";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -43,15 +44,37 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bgtmp.png";
 
 function CreateGroup() {
+
     const [groupName, setGroupName] = useState("");
+
+    const location = useLocation();
+    const { name, nickname, position, email, password } = location.state;
+
+    const navigate = useNavigate(); 
 
     const handleGroupNameChange = (event) => {
       setGroupName(event.target.value);
     };
   
     const handleSubmit = (event) => {
-      event.preventDefault();
-    };
+        // POST 요청을 보내는 부분
+        axios.post("/api/member/signup", {
+          name: name,
+          nickname: nickname,
+          position: position,
+          email: email,
+          password: password,
+          groupName: groupName,
+          // 다른 데이터들도 추가로 설정할 수 있습니다.
+        })
+        .then((response) => {
+            alert(response.data.message ); // Alert 창을 띄웁니다.
+        })
+        .catch((error) => {
+          // 요청이 실패한 경우의 처리
+          console.error(error);
+        });
+      };
   
     const isGroupNameEmpty = groupName === "";
 
@@ -83,7 +106,7 @@ function CreateGroup() {
                         </MDBox>
                         { isGroupNameEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 이름을 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
                         <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" type="submit" color="info" fullWidth component={Link} to="/home" disabled={isGroupNameEmpty}>
+                            <MDButton variant="gradient" type="submit" color="info" fullWidth component={Link} to="/authentication/sign-in" disabled={isGroupNameEmpty} onClick={handleSubmit}>
                                 회원가입
                             </MDButton>
                         </MDBox>
