@@ -58,7 +58,7 @@ function CreateGroup() {
   
     const handleSubmit = (event) => {
         // POST 요청을 보내는 부분
-        axios.post("/api/member/signup", {
+        axios.post("/api/member/signup/group", {
           name: name,
           nickname: nickname,
           position: position,
@@ -68,7 +68,10 @@ function CreateGroup() {
           // 다른 데이터들도 추가로 설정할 수 있습니다.
         })
         .then((response) => {
-            alert(response.data.message ); // Alert 창을 띄웁니다.
+            console.log(response)
+            if (response.status === 200) {
+                alert(response.data.message);
+              } // Alert 창을 띄웁니다.
         })
         .catch((error) => {
           // 요청이 실패한 경우의 처리

@@ -135,16 +135,15 @@ function Cover() {
               </MDButton>
               &nbsp;&nbsp;
               <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
-              component={Link} to={{
-                pathname: "/authentication/sign-up/join-group",
-                state: {
+              component={Link} to={"/authentication/sign-up/join-group"}
+                state = {{
                   name,
                   nickname,
                   position,
                   email,
                   password,
-                },
-              }}>
+                }
+              }>
                 그룹 참가
               </MDButton>
             </MDBox>
