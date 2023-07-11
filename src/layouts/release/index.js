@@ -37,7 +37,7 @@ import authorsTableData from "layouts/release/data/authorsTableData";
 function Release() {
   const { columns, rows } = authorsTableData();
 
-  const project = "BrainForm";
+  const project = "Project name";
 
   const [anchorEl, setAnchorEl] = useState(null);
 

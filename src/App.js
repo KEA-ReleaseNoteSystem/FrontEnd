@@ -47,6 +47,7 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import CreateRelease from "layouts/release/create";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -130,6 +131,20 @@ export default function App() {
     </MDBox>
   );
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
+
+  useEffect(() => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    setIsAuthenticated(!!token);
+    setIsAuthChecked(true); // Set to true after checking
+  }, []);
+
+  
+  if (isAuthenticated === null) {
+    return null;
+  }
+
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
@@ -151,6 +166,7 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/home" />} />
+        <Route path="/release/:releaseId" element={ isAuthenticated ? <CreateRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
       </Routes>
     </ThemeProvider>
   );
