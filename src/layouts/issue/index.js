@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./index.css"
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -17,10 +17,10 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 import axios from 'axios';
 
 function IssueSearch() {
-  const {  users } = window.projectMock;
+  const { users } = window.projectMock;
   const [fetchedIssues, setFetchedIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const projectId = 1; 
+  const projectId = 1;
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -37,17 +37,17 @@ function IssueSearch() {
 
   if (isLoading) {
     return <div>
-       <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        <Stack direction="row" spacing={6}>
-          <IssueList issues={fetchedIssues} users={users} isLoading={isLoading} />
-        </Stack>
-      </MDBox>
-      <Footer />
-    </DashboardLayout>
+      <DashboardLayout>
+        <DashboardNavbar />
+        <MDBox pt={6} pb={3}>
+          <Stack direction="row" spacing={6}>
+            <IssueList issues={fetchedIssues} users={users} isLoading={isLoading} />
+          </Stack>
+        </MDBox>
+        <Footer />
+      </DashboardLayout>
     </div>;
-    
+
   }
 
 
@@ -57,7 +57,7 @@ function IssueSearch() {
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Stack direction="row" spacing={6}>
-          <IssueList issues={fetchedIssues} users={users} projectId = {projectId} />
+          <IssueList issues={fetchedIssues} users={users} projectId={projectId} />
         </Stack>
       </MDBox>
       <Footer />
@@ -68,7 +68,7 @@ function IssueSearch() {
 
 
 
-function IssueList({ issues, users , isLoading,projectId}) {
+function IssueList({ issues, users, isLoading, projectId }) {
   const [issueDetail, setIssueDetail] = useState("");
   const [fetchedMemo, setFetchedMemo] = useState([]);
 
@@ -76,11 +76,11 @@ function IssueList({ issues, users , isLoading,projectId}) {
     (currentIssue => ({ ...currentIssue, ...updatedFields }));
   };
 
-  console.log("123",updateIssue)
- 
+  console.log("123", updateIssue)
+
   const handleClick = (issue) => {
     setIssueDetail(issue);
-    
+
   };
 
   useEffect(() => {
@@ -94,16 +94,16 @@ function IssueList({ issues, users , isLoading,projectId}) {
         console.error('Error:', error);
       }
     };
-  
-    if (issueDetail.id) { 
+
+    if (issueDetail.id) {
       fetchMemo();
     }
   }, [issueDetail.id]);
-  
-  
 
-  console.log("id",issueDetail.id)
-  console.log("fetchedMemo",fetchedMemo)
+
+
+  console.log("id", issueDetail.id)
+  console.log("fetchedMemo", fetchedMemo)
 
   return (
     <Grid container spacing={3}>
@@ -124,25 +124,25 @@ function IssueList({ issues, users , isLoading,projectId}) {
             </MDTypography>
           </MDBox>
           <MDBox pt={3} pr={2} pl={2} fullWidth>
-          {isLoading == true ? (
-            <MDTypography>there is no issues</MDTypography>
-          ) : (
-            issues.map((issue, index) => (
-              <div key={issue.id} onClick={() => handleClick(issue)}>
-                <ProjectBoardListIssue
-                  projectUsers={users}
-                  issue={issue}
-                  index={index}
-                />
-              </div>
-            ))
-          )}
-            
+            {isLoading == true ? (
+              <MDTypography>there is no issues</MDTypography>
+            ) : (
+              issues.map((issue, index) => (
+                <div key={issue.id} onClick={() => handleClick(issue)}>
+                  <ProjectBoardListIssue
+                    projectUsers={users}
+                    issue={issue}
+                    index={index}
+                  />
+                </div>
+              ))
+            )}
+
           </MDBox>
         </Card>
       </Grid>
 
-      <Grid item xs={5 }>
+      <Grid item xs={5}>
         <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
       </Grid>
 
@@ -154,10 +154,10 @@ function IssueList({ issues, users , isLoading,projectId}) {
 }
 
 
-function IssueEditing({ issue,updateIssue ,fetchedMemo }) {
+function IssueEditing({ issue, updateIssue, fetchedMemo }) {
 
-  console.log("updateIssue",updateIssue);
-  console.log("new issue",issue);
+  console.log("updateIssue", updateIssue);
+  console.log("new issue", issue);
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
       <Card>
@@ -206,8 +206,8 @@ function IssueEditing({ issue,updateIssue ,fetchedMemo }) {
                     <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
                     </MDTypography>
-                    {fetchedMemo.length == 0 ?  null : <Comments issue={fetchedMemo} />}
-                  </Grid> 
+                    {fetchedMemo.length == 0 ? null : <Comments issue={fetchedMemo} />}
+                  </Grid>
                   <Grid item xs={8}>
                   </Grid>
                   <Grid item xs={2}>
@@ -229,7 +229,7 @@ function IssueEditing({ issue,updateIssue ,fetchedMemo }) {
 function IssueDetails({ issue }) {
   console.log("iii", issue)
   return (
-    <Grid container xs={12} id="right"  direction="column" lg={200}>
+    <Grid container xs={12} id="right" direction="column" lg={200}>
       <Card>
         <MDBox
           mx={2}
