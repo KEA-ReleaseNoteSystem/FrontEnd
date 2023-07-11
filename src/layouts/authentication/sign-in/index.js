@@ -70,7 +70,7 @@ function Basic() {
         console.log(response)
             alert(response.data.message); // Alert 창을 띄웁니다.
             localStorage.setItem("ACCESS_TOKEN", response.data.data);
-            window.location.href = "/dashboard";
+            window.location.href = "/home/manage-project";
 
     })
     .catch((error) => {
