@@ -58,7 +58,7 @@ window.projectMock = {
       status: 'backlog',
       listPosition: 1,
       comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 1"}
+        {user : {id :"1",name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 1"}
     ],
       priority: 23,
       userIds: [1],

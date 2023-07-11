@@ -26,8 +26,8 @@ const propTypes = {
 const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [isUpdating, setUpdating] = useState(false);
-  const [body, setBody] = useState(comment.body);
-
+  const [body, setBody] = useState(comment.memoContent);
+  
   const handleCommentDelete = async () => {
     try {
       // await api.delete(`/comments/${comment.id}`);
@@ -37,6 +37,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
     }
   };
 
+  console.log("body",body);
   const handleCommentUpdate = async () => {
     try {
       setUpdating(true);
@@ -51,9 +52,9 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
 
   return (
     <Comment data-testid="issue-comment">
-      <UserAvatar name={comment.user.name} avatarUrl={comment.user.avatarUrl} />
+      {/* <UserAvatar name={comment.memberNickName} avatarUrl={null} /> */}
       <Content>
-        <Username>{comment.user.name}</Username>
+        <Username>{comment.memberNickName}</Username>
         <CreatedAt>{formatDateTimeConversational(comment.createdAt)}</CreatedAt>
 
         {isFormOpen ? (
@@ -66,7 +67,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
           />
         ) : (
           <Fragment>
-            <Body>{comment.body}</Body>
+            <Body>{comment.memoContent}</Body>
             <EditLink onClick={() => setFormOpen(true)}>Edit</EditLink>
             {/* <ConfirmModal
               title="Are you sure you want to delete this comment?"
