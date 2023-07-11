@@ -24,8 +24,19 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
   const handleCommentCreate = async () => {
     try {
       setCreating(true);
-      // await api.post(`/comments`, { body, issueId, userId: currentUser.id });
-      // await fetchIssue();
+      const currentDateTime = new Date();
+      let result = await Axios.post("/api/memo/1/1/new", {
+        memberId: 1,
+        issueId: 1,
+        content: "십라!",
+        createdAt: currentDateTime,
+    
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // 요청 본문의 타입을 지정합니다.
+        }
+      });
+    
       setFormOpen(false);
       setCreating(false);
       setBody('');
@@ -33,6 +44,9 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
       toast.error(error);
     }
   };
+
+
+  
 
   return (
     <Create>
