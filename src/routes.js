@@ -156,7 +156,7 @@ const routes = [
     type: "",
     name: "",
     key: "create-release",
-    route: "release/",
+    route: "/release/create",
     component: <CreateRelease />
   },
 

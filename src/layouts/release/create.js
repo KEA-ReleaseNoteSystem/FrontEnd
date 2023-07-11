@@ -60,7 +60,7 @@ const customModalStyles = {
 };
 
 function CreateRelease() {
-    const { issues, users } = window.projectMock
+    const { issues, users } = window.projectMock;
     const [issueDetail, setIssueDetail] = useState("");
 
     const [info, setInfo] = useState({
