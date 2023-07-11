@@ -12,8 +12,8 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from "react-router-dom";
 import Modal from 'react-modal';
 
 // @mui material components
@@ -38,6 +38,8 @@ import MDButton from 'components/MDButton';
 import MDProgress from 'components/MDProgress';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 
+import axios from 'axios';
+
 const customModalStyles = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -59,21 +61,35 @@ const customModalStyles = {
     }
 };
 
-function CreateRelease() {
+function ViewRelease() {
+    const { releaseId } = useParams();
+    console.log(`id= ${releaseId}`);
     const { issues, users } = window.projectMock;
+    const [releaseNoteData, setReleaseNoteData] = useState([]);
     const [issueDetail, setIssueDetail] = useState("");
 
-    const [info, setInfo] = useState({
-        version: "1.0.0",
-        abstract: "이 프로젝트의 간략한 설명",
-        content: "이 프로젝트에 대한 자세한 설명(필요 시)",
-        createDate: "2023-07-01",
-        releaseDate: "2023-07-02",
-        memberInCharge: "RiverDuck",
-        progress: 92
-    });
-
     const members = ["박도영", "박재석", "서강덕", "서지원", "안해빈"];
+    const token = localStorage.getItem('ACCESS_TOKEN');
+
+    async function getReleaseNoteData(releaseId, token) {
+        try {
+            const response = await axios.get(`/api/release/${encodeURIComponent(releaseId)}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setReleaseNoteData(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        getReleaseNoteData(releaseId, token);
+    }, []);
+
+    console.log(`값을 가져왔어! ${releaseNoteData.id}`);
+    console.log(releaseNoteData.version);
 
     //릴리스 작성하기 버튼
     const handleRelaseAddOnClick = (event) => {
@@ -149,8 +165,8 @@ function CreateRelease() {
                     <Grid item xs={6}>
                         <Card>
                             <MDBox pt={2} px={3}>
-                                <MDTypography variant="h6">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={info.version} />
+                                <MDTypography variant="body">
+                                    <MDInput variant="standard" label="버전" defaultValue={releaseNoteData.version} />
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={2} px={2} mb={2}>
@@ -161,7 +177,7 @@ function CreateRelease() {
                                         </MDTypography>
                                         <MDBox pt={2} px={2}>
                                             <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={info.abstract} multiline fullWidth />
+                                                <MDInput variant="standard" defaultValue={releaseNoteData.brief} multiline fullWidth />
                                             </MDTypography>
                                         </MDBox>
                                     </MDBox>
@@ -175,7 +191,7 @@ function CreateRelease() {
                                         </MDTypography>
                                         <MDBox pt={2} px={2}>
                                             <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={info.content} multiline fullWidth />
+                                                <MDInput variant="standard" defaultValue={releaseNoteData.description} multiline fullWidth />
                                             </MDTypography>
                                         </MDBox>
                                     </MDBox>
@@ -243,7 +259,7 @@ function CreateRelease() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>생성</h6></MDButton>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>수정</h6></MDButton>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Card>
@@ -251,27 +267,29 @@ function CreateRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">생성 일자</MDTypography>
-                                                    <MDTypography variant="subtitle2" ml={10}>{info.createDate}</MDTypography>
+                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.createdAt && releaseNoteData.createdAt.slice(0, 10)}</MDTypography>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                                                    <MDTypography variant="subtitle2" ml={12}>{info.releaseDate}</MDTypography>
+                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)}</MDTypography>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">담당자</MDTypography>
-                                                    <MDTypography variant="subtitle2" ml={10}>{info.memberInCharge}</MDTypography>
+                                                    <MDTypography variant="subtitle2" ml={1}>
+                                                        {releaseNoteData.member && releaseNoteData.member.username}
+                                                    </MDTypography>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">진행률</MDTypography>
                                                     <MDProgress
-                                                        value={info.progress}
-                                                        color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} />
+                                                        value={releaseNoteData.percent}
+                                                        color={releaseNoteData.percent < 30 ? "primary" : releaseNoteData.percent < 60 ? "error" : releaseNoteData.percent < 80 ? "warning" : "info"} variant="gradient" label={releaseNoteData.percent} />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -405,4 +423,4 @@ function CreateRelease() {
     );
 }
 
-export default CreateRelease;
+export default ViewRelease;
