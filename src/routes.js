@@ -187,24 +187,5 @@ const routes = [
   },
 ];
 
-//    /home/project/new
-//   {
-//     type: "",
-//     name: "",
-//     key: "home",
-//     icon: "",
-//     route: "/home/project/new",
-//     component: <NewProject />,
-//   },
-//   {
-//     type: "",
-//     name: "",
-//     key: "home",
-//     icon: "",
-//     route: "/home/mypage",
-//     component: <MyPage />,
-//   },
-// ];
-
 
 export default routes;

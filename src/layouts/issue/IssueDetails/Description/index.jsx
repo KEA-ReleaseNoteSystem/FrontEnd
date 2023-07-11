@@ -5,7 +5,7 @@ import { getTextContentsFromHtmlString } from 'shared/utils/browser';
 import { TextEditor, TextEditedContent, Button } from 'shared/components';
 
 import { Title, EmptyLabel, Actions } from './Styles';
-
+import axios from 'axios';
 const propTypes = {
   issue: PropTypes.object.isRequired,
   updateIssue: PropTypes.func.isRequired,
@@ -18,9 +18,16 @@ const ProjectBoardIssueDetailsDescription = ( {issue} ,updateIssue ) => {
   
   
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setEditing(false);
+    console.log(`DS 변경 ${issue.id}`);
     setDescription(description);
+
+    // const response = await axios.put(`/api/project/${1}/issues/${issueDetail.id}`,{
+      const response = await axios.put(`/api/${Number(1)}/issues/${issue.id}`,{
+      title : null, 
+      description : description
+    });
   };
 
 
