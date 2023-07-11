@@ -133,7 +133,7 @@ const routes = [
     icon: "",
     route: "authentication/sign-up/create-group",
     component: <CreateGroup />,
-  },{
+  }, {
     type: "",
     name: "",
     key: "join-group",
@@ -152,7 +152,7 @@ const routes = [
 
 
 
-  { 
+  {
     type: "",
     name: "",
     key: "create-release",
@@ -162,16 +162,32 @@ const routes = [
 
 
 
-    // {
-    //   type: "",
-    //   name: "",
-    //   key: "/issuesearch-id",
-    //   route: "/issuesearch/:id", // Use ":id" as a placeholder for the dynamic parameter
-    //   component: <IssueSearchid />,
-    // },
-  ];
+  {
+    type: "",
+    name: "",
+    key: "/issuesearch-id",
+    route: "/issuesearch/:id", // Use ":id" as a placeholder for the dynamic parameter
+    component: <IssueSearchid />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "home",
+    icon: "",
+    route: "/home/project/new",
+    component: <NewProject />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "home",
+    icon: "",
+    route: "/home/mypage",
+    component: <MyPage />,
+  },
+];
 
-  //    /home/project/new
+//    /home/project/new
 //   {
 //     type: "",
 //     name: "",
