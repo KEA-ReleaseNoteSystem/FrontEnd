@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import api from 'shared/utils/api';
+import Axios from "axios";
 import toast from 'shared/utils/toast';
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
 import { ConfirmModal } from 'shared/components';
@@ -30,9 +30,19 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
 
   const handleCommentDelete = async () => {
     try {
-      await api.delete(`/comments/${comment.id}`);
-      await fetchIssue();
+      await Axios.patch(`/api/memo/${projectId}/${issueId}/${memoId}/delete`, {
+        memberId: 1,
+        issueId: 1,
+        content: body,
+        createdAt: currentDateTime,
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // 요청 본문의 타입을 지정합니다.
+        }
+      });
     } catch (error) {
+      console.error('Error making the request:', error.message);
+      console.error('Full error object:', error);
       toast.error(error);
     }
   };
@@ -40,8 +50,16 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
   const handleCommentUpdate = async () => {
     try {
       setUpdating(true);
-      await api.put(`/comments/${comment.id}`, { body });
-      await fetchIssue();
+      await Axios.patch(`api/memo/${projectId}/${issueId}/${memoId}/patch`, {
+        memberId: 1,
+        issueId: 1,
+        content: body,
+        createdAt: currentDateTime,
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // 요청 본문의 타입을 지정합니다.
+        }
+      });
       setUpdating(false);
       setFormOpen(false);
     } catch (error) {

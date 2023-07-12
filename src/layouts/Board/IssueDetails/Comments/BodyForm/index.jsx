@@ -23,7 +23,7 @@ const ProjectBoardIssueDetailsCommentsBodyForm = ({
   const $textareaRef = useRef();
 
   const handleSubmit = () => {
-    if ($textareaRef.current.value.trim()) {
+   {
       onSubmit();
     }
   };
