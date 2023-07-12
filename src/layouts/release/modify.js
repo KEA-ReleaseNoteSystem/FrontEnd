@@ -15,11 +15,13 @@ Coded by www.creative-tim.com
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
 import Modal from 'react-modal';
+import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from '../issue-manage/Lists/List/Issue/Styles.js';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CircleIcon from '@mui/icons-material/Circle';
 import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -36,7 +38,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDInput from 'components/MDInput';
 import MDButton from 'components/MDButton';
 import MDProgress from 'components/MDProgress';
-import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+import MDBadge from "components/MDBadge";
 
 import axios from 'axios';
 
@@ -65,19 +67,42 @@ const customModalStyles = {
 function ViewRelease() {
     const { releaseId } = useParams();
     const { users } = window.projectMock;
-    
+
     const [releaseNoteData, setReleaseNoteData] = useState([]); //해당 릴리즈노트 정보
     const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
     const [issueData, setIssueData] = useState([]); //릴리즈노트와 연관된 이슈들 정보
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
+    const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
 
     const [state, setState] = useState(''); //우상단 상태 리스트 선택박스용
     const [memberInCharge, setmemberInCharge] = useState('');
     const [progress, setProgress] = useState(0); //프로그레스바 전용
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
-    const [issueDetail, setIssueDetail] = useState(""); //이슈 각각 눌렀을 때 상세정보
+    const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
 
-    const members = ["박도영", "박재석", "서강덕", "서지원", "안해빈"];
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'done':
+                return 'success';
+            case 'backlog':
+                return 'dark';
+            case 'inprogress':
+                return 'warning';
+            default:
+                return 'default';
+        }
+    }
+
+    const getPriorityColor = (priority) => {
+        if (priority >= 90) {
+            return 'error';
+        } else if (priority < 90 && priority >= 50) {
+            return 'warning';
+        } else {
+            return 'info';
+        }
+    }
+
     const token = localStorage.getItem('ACCESS_TOKEN');
 
     // 이 릴리즈노트의 정보 받아오기
@@ -103,11 +128,37 @@ function ViewRelease() {
             const response = await axios.get(`/api/releaseNote/${encodeURIComponent(releaseId)}/issues`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
+            const counts = [0, 0, 0];
             setIssueData(response.data.data);
+            setFilteredIssues(response.data.data);
+
+            (response.data.data).forEach((issue) => {
+                if (issue.status === 'backlog') {
+                    counts[0]++;
+                } else if (issue.status === 'inprogress') {
+                    counts[1]++;
+                } else if (issue.status === 'done') {
+                    counts[2]++;
+                }
+            });
+            setStatusNo(counts);
+
         } catch (error) {
             console.error(error);
         }
     };
+
+    //이 릴리즈 노트에 속하지 않은 프로젝트의 이슈 받아오기 (릴리즈 노트에 이슈를 추가하기 위한 용도)
+    async function getOtherIssueData(projectId, releaseId, token) {
+        try {
+            const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/releaseNote/${encodeURIComponent(releaseId)}/issues`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setOtherIssueData(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     async function getMembersData(projectId, token) {
         try {
@@ -123,9 +174,9 @@ function ViewRelease() {
     useEffect(() => {
         getReleaseNoteData(releaseId, token);
         getIssueData(releaseId, token);
-        getMembersData(projectId, token)
-    }, [])
-
+        getMembersData(projectId, token);
+        getOtherIssueData(projectId, releaseId, token);
+    }, []);
 
     //릴리스 작성하기 버튼
     const handleRelaseAddOnClick = (event) => {
@@ -141,13 +192,37 @@ function ViewRelease() {
     const openMenu2 = ({ currentTarget }) => setMenu2(currentTarget);
     const closeMenu2 = () => setMenu2(null);
 
-    const memberList = membersData.map((member) => (
-        <MenuItem key={member.name} onClick={closeMenu2}>
+    const handleShowAssignedIssues = (name) => {
+        const filtered = issueData.filter((issue) => issue.memberIdInCharge && issue.memberIdInCharge.name === name);
+        setFilteredIssues(filtered);
+        setMenu1(null);
+    };
+    const handleShowBacklog = () => {
+        const filteredIssues = issueData.filter((issue) => issue.status === 'backlog');
+        setFilteredIssues(filteredIssues);
+        setMenu2(null);
+    };
+    const handleShowInProgress = () => {
+        const filteredIssues = issueData.filter((issue) => issue.status === 'inprogress');
+        setFilteredIssues(filteredIssues);
+        setMenu2(null);
+    };
+    const handleShowDone = () => {
+        const filteredIssues = issueData.filter((issue) => issue.status === 'done');
+        setFilteredIssues(filteredIssues);
+        setMenu2(null);
+    };
+    const filterReset = () => {
+        setFilteredIssues(issueData);
+    }
+
+    const memberList = membersData && membersData.map((member) => (
+        <MenuItem key={member.name} onClick={() => handleShowAssignedIssues(member.name)}>
             {member.name}
         </MenuItem>
     ));
 
-    const memberList2 = membersData.map((member) => (
+    const memberList2 = membersData && membersData.map((member) => (
         <MenuItem value={member.name}>
             {member.name}
         </MenuItem>
@@ -162,9 +237,9 @@ function ViewRelease() {
             open={Boolean(menu1)}
             onClose={closeMenu1}
         >
-            <MenuItem onClick={closeMenu1}>Backlog</MenuItem>
-            <MenuItem onClick={closeMenu1}>In progress</MenuItem>
-            <MenuItem onClick={closeMenu1}>Done</MenuItem>
+            <MenuItem onClick={handleShowBacklog}>Backlog</MenuItem>
+            <MenuItem onClick={handleShowInProgress}>In progress</MenuItem>
+            <MenuItem onClick={handleShowDone}>Done</MenuItem>
         </Menu>
     );
 
@@ -188,27 +263,24 @@ function ViewRelease() {
     };
 
     const handlePercent = (event) => {
-        setProgress(event.target.value);
+        let inputValue = event.target.value;
+        if (Number.isNaN(Number(inputValue))) { inputValue = ''; }
+        if (inputValue.length > 3) {
+            inputValue = inputValue.slice(0, 3); // 최대 3글자까지만 유지
+        }
+        if (inputValue > 100) { inputValue = 100; }
+        if (inputValue < 0) { inputValue = 0; }
+        setProgress(inputValue);
     };
 
     const handleMemberInCharge = (event) => {
         setmemberInCharge(even.target.value);
-    }
+    };
 
     const [activeModal, setActiveModal] = useState("");
 
-    const openIssueAddModal = async () => {
-        try { // 이 릴리즈 노트에 속하지 않았지만 프로젝트에는 속한 이슈 받아오기 (릴리즈 노트에 이슈를 추가하기 위한 용도)
-            const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/releaseNote/${encodeURIComponent(releaseId)}/issues`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setOtherIssueData(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
+    const openIssueAddModal = () => {
         setActiveModal("addIssue");
-
-        console.log(`이 프로젝트의 다른 이슈 가져오기 ${otherIssueData}`);
     };
 
     const openIssueInfoModal = (issue) => {
@@ -218,6 +290,16 @@ function ViewRelease() {
 
     const closeModal = () => {
         setActiveModal(null);
+    };
+
+    // 이슈 추가하기
+    const addIssue = (id) => {
+        filterReset();
+        const selectedIssue = otherIssueData.filter((issue) => issue.id === id);
+        const addedIssues = issueData.concat(selectedIssue);
+        const removedIssues = otherIssueData.filter((issue) => issue.id !== id);
+        setFilteredIssues(addedIssues);
+        setOtherIssueData(removedIssues);
     };
 
     return (
@@ -264,34 +346,51 @@ function ViewRelease() {
                                 <Card sx={{ backgroundColor: '#e9e9e9' }}>
                                     <MDBox pt={2} px={2} pb={2}>
                                         <Grid container spacing={0}>
-                                            <Grid item xs={2}>
+                                            <Grid item xs={10}>
                                                 <MDTypography variant="body2" fontWeight="medium">
                                                     관련 이슈
                                                 </MDTypography>
                                             </Grid>
-                                            <Grid item xs={8}>
+                                            <Grid item xs={2}>
+                                                <MDButton size="small" color="black" onClick={openIssueAddModal}>
+                                                    <AddCircleOutlineIcon color="white" />&nbsp; 추가
+                                                </MDButton>
+                                            </Grid>
+                                            <Grid item xs={5}>
                                                 <MDTypography variant="button">필터: &nbsp;</MDTypography>
                                                 <MDButton size="small" color="dark" onClick={openMenu1}>상태</MDButton>
                                                 {renderMenu1} &nbsp;
                                                 <MDButton size="small" color="dark" onClick={openMenu2}>담당자</MDButton>
                                                 {renderMenu2}
                                             </Grid>
-                                            <Grid item xs={2}>
-                                                <MDTypography variant="button" onClick={openIssueAddModal}>
-                                                    <AddCircleOutlineIcon color="black" /> 추가하기
-                                                </MDTypography>
+                                            <Grid item xs={4}>
+                                                <MDButton size="small" color="dark" onClick={filterReset}>필터 초기화</MDButton>
                                             </Grid>
                                         </Grid>
-                                        <MDBox pt={2} px={2}>
+                                        <MDBox pt={1} px={2}>
                                             <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll", maxHeight: "50vh" }}>
-                                                {issueData.map((issue, index) => (
+                                                {filteredIssues.map((issue) => (
                                                     <div onClick={() => openIssueInfoModal(issue)}>
-                                                        <ProjectBoardListIssue
-                                                            key={issue.id}
-                                                            projectUsers={users}
-                                                            issue={issue}
-                                                            index={index}
-                                                        />
+                                                        <Issue>
+                                                            <Title>#{issue.issueNum} {issue.title}
+                                                                <MDBadge
+                                                                    badgeContent={issue.status}
+                                                                    color={getStatusColor(issue.status)}
+                                                                    variant="gradient"
+                                                                    size="sm"
+                                                                />
+
+                                                                <MDBadge
+                                                                    badgeContent={issue.issueType}
+                                                                    color={getPriorityColor(issue.importance)}
+                                                                    variant="gradient"
+                                                                    size="sm"
+                                                                />
+                                                            </Title>
+                                                            <Bottom>
+                                                                <MDTypography variant="caption" fontWeight="light">담당자: {issue.memberIdInCharge.name}</MDTypography>
+                                                            </Bottom>
+                                                        </Issue>
                                                     </div>
                                                 ))}
                                             </MDBox>
@@ -353,7 +452,7 @@ function ViewRelease() {
                                                         sx={{ minHeight: 50 }}
                                                     >
                                                         {memberList2}
-                                        </Select>
+                                                    </Select>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -361,16 +460,19 @@ function ViewRelease() {
                                                     <MDTypography variant="h6">진행률</MDTypography>
                                                     <MDInput variant="standard" value={progress} onChange={handlePercent} sx={{ width: "5%" }} multiline />  %
                                                     <MDProgress
-                                                        value={progress<=100 && progress>=0 ? progress : progress>100 ? 100 : 0 }
+                                                        value={progress <= 100 && progress >= 0 ? progress : progress > 100 ? 100 : 0}
                                                         color={progress < 30 ? "primary" : progress < 60 ? "error" : progress < 80 ? "warning" : "info"} variant="gradient" />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <MDBox pt={6} px={2} pb={3}>
+                                                    <MDTypography variant="h6">
+                                                        해당 릴리즈 노트 관련 이슈
+                                                    </MDTypography>
                                                     <MDTypography variant="subtitle2">
-                                                        백로그: 0<br />
-                                                        진행중: 0<br />
-                                                        완료: 0
+                                                        백로그: {statusNo[0]}<br />
+                                                        진행중: {statusNo[1]}<br />
+                                                        완료: {statusNo[2]}
                                                     </MDTypography>
                                                 </MDBox>
                                             </Grid>
@@ -399,17 +501,34 @@ function ViewRelease() {
                         coloredShadow="info"
                     >
                         <MDTypography variant="h6" color="white">
-                            이슈 목록
+                            릴리즈 노트에 추가할 이슈 목록
                         </MDTypography>
                     </MDBox>
-                    <MDBox pt={3} pl={1} pr={1}>
-                        {otherIssueData.map((issue, index) => (
-                            <ProjectBoardListIssue
-                                key={issue.id}
-                                projectUsers={users}
-                                issue={issue}
-                                index={index}
-                            />
+                    <MDBox pt={1} pl={1} pr={1}>
+                        <MDTypography variant="caption" color="info" sx={{ml:1}}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
+                        {otherIssueData.map((issue) => (
+                            <Issue>
+                                <Title>#{issue.issueNum} {issue.title}
+                                    <MDBadge
+                                        badgeContent={issue.status}
+                                        color={getStatusColor(issue.status)}
+                                        variant="gradient"
+                                        size="sm"
+                                    />
+                                    <MDBadge
+                                        badgeContent={issue.issueType}
+                                        color={getPriorityColor(issue.importance)}
+                                        variant="gradient"
+                                        size="sm"
+                                    /> <br />
+                                    <MDTypography variant="caption" fontWeight="light"> 설명: {issue.description} </MDTypography>
+                                </Title>
+                                <Bottom>
+                                    <MDTypography variant="caption" fontWeight="light">보고자: {issue.memberReport.name} / 담당자: {issue.memberIdInCharge.name} / 생성일: {issue.createdAt.slice(0, 10)}</MDTypography>
+                                    <MDButton size="small" color="dark" onClick={() => addIssue(issue.id)}>릴리즈 노트에 추가하기</MDButton>
+                                </Bottom>
+                                
+                            </Issue>
                         ))}
                     </MDBox>
                 </Card>
@@ -459,29 +578,29 @@ function ViewRelease() {
                                     <MDInput type="text" label="제목" defaultValue={issueDetail.title} disabled fullWidth />
                                 </MDBox>
                                 <MDBox mb={2}>
-                                    <MDInput type="text" label="보고자" defaultValue="서강덕" disabled fullWidth />
+                                    <MDInput type="text" label="보고자" defaultValue={issueDetail.memberReport && issueDetail.memberReport.name} disabled fullWidth />
                                 </MDBox>
                                 <MDBox mb={2}>
-                                    <MDInput type="text" label="담당자" defaultValue="안해빈" disabled fullWidth />
+                                    <MDInput type="text" label="담당자" defaultValue={issueDetail.memberIdInCharge && issueDetail.memberIdInCharge.name} disabled fullWidth />
                                 </MDBox>
                                 <MDBox mb={2}>
                                     <MDInput
                                         label="타입"
-                                        value={issueDetail.type}
+                                        value={issueDetail.issueType}
                                         disabled
                                     />
                                     <MDInput
                                         label="상태"
                                         value={issueDetail.status}
+                                        sx={{ ml: 5 }}
                                         disabled
                                     />
                                 </MDBox>
                                 <MDBox mb={2}>
                                     <MDInput
                                         label="생성일"
+                                        value={issueDetail.createdAt && issueDetail.createdAt.slice(0, 10)}
                                         disabled
-                                        defaultValue={issueDetail.updatedAt}
-
                                     />
                                 </MDBox>
                                 <MDBox mb={2}>
