@@ -10,7 +10,7 @@ import BasicLayout from 'layouts/authentication/components/BasicLayout';
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import NavigationBar from './components/NavigationBar';
 
-const PAGE_SIZE = 1; // You can adjust this to change how many surveys are shown per page
+const PAGE_SIZE = 1; // You can adjust this to change how many projects are shown per page
 
 
 const ManagementPage = () => {
@@ -18,47 +18,50 @@ const ManagementPage = () => {
 
     const [projectData, setProjectData] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [projectDataAnswered, setProjectDataAnswered] = useState([]);
+    const [groupProjectData, setGroupProjectData] = useState([]);
     const token = localStorage.getItem('ACCESS_TOKEN');
 
 
     useEffect(() => {
-
         async function fetchData() {
-            const dummyData = [
-                {
-                    id: 1,
-                    title: "Project 1",
-                    updatedAt: "2023-07-01",
-                    startDate: "2023-06-01",
-                    endDate: "2023-06-30",
-                    member: {
-                        nickname: "John"
+            try {
+                console.log("ACCESS-Token: ", token);
+                // 페이지가 마운트된 후에 서버로 GET 요청 보내기
+                const response = await axios.get('/api/myProject', { //   생성한 설문 가져오는 요청
+                    headers: {
+                        Authorization: `Bearer ${token}` // JWT 토큰을 헤더에 추가합니다.
                     }
-                },
-                {
-                    id: 2,
-                    title: "Project 2",
-                    updatedAt: "2023-07-02",
-                    startDate: "2023-07-01",
-                    endDate: "2023-07-31",
-                    member: {
-                        nickname: "Jane"
-                    }
-                },{
-                    id: 3,
-                    title: "Project 3",
-                    updatedAt: "2023-07-02",
-                    startDate: "2023-07-01",
-                    endDate: "2023-07-31",
-                    member: {
-                        nickname: "Jane"
-                    }
+                });
+                console.log("response.data", response.data.data);
+                if (response.data.data.length === 0) {
+                    setProjectData([]);
+                } else {
+                    setProjectData(response.data.data); // 데이터를 상태로 설정합니다.
+                    console.log("response.data: ", response.data.data);
                 }
-            ];
 
-            setProjectData(dummyData);
-            setProjectDataAnswered([]);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //   응답한 설문 가져오는 요청
+            try {
+                // 페이지가 마운트된 후에 서버로 GET 요청 보내기
+                const response2 = await axios.get('/api/otherProject', { //   생성한 설문 가져오는 요청
+                    headers: {
+                        Authorization: `Bearer ${token}` // JWT 토큰을 헤더에 추가합니다.
+                    }
+                });
+                console.log("response2.data", response2.data.data);
+                if (response2.data.data.length === 0) {
+                    setGroupProjectData([]);
+                } else {
+                    setGroupProjectData(response2.data.data); // 데이터를 상태로 설정합니다.
+                    console.log("응답한 설문 response.data: ", response2.data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         fetchData();
@@ -66,14 +69,14 @@ const ManagementPage = () => {
 
 
     return (
-        <Managesurvey projectData={projectData} projectDataAnswered={projectDataAnswered} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        <ManageProject projectData={projectData} groupProjectData={groupProjectData} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     )
 };
 
 
 
-const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurrentPage }) => {
-    const [selectedSurvey, setSelectedSurvey] = useState('');
+const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentPage }) => {
+    const [selectedProject, setSelectedProject] = useState('');
 
     const currentdate = new Date();
     console.log("현재시간", currentdate);
@@ -82,7 +85,7 @@ const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurren
     }
 
     const handleStatisticsClick = (projectData) => {
-        setSelectedSurvey(projectData);
+        setSelectedProject(projectData);
     };
 
     console.log(projectData);
@@ -104,9 +107,9 @@ const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurren
 
                 {currentPage === 1 && (
                     <div className="row g-3">
-                        {projectData.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).map((survey) => (
-                            <div className="col-lg-3" key={survey.id}>
-                                <Card itemId={survey.member.nickname} id={survey.id} title={survey.title} date={survey.updatedAt.slice(0, 10)} startdate={survey.startDate.slice(0, 10)} enddate={survey.endDate.slice(0, 10)} currentdate={currentdate} />
+                        {projectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
+                            <div className="col-lg-3" key={project.id}>
+                                <Card itemId={project.id} id={project.id} title={project.name} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)} currentdate={currentdate} />
                             </div>
                         ))}
                     </div>
@@ -114,9 +117,9 @@ const Managesurvey = ({ projectData, projectDataAnswered, currentPage, setCurren
 
                 {currentPage === 2 && (
                     <div className="row g-3">
-                        {projectDataAnswered.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).map((survey) => (
-                            <div className="col-lg-3" key={survey.id}>
-                                <CardResponse itemId={survey.member.nickname} id={survey.id} title={survey.title} date={survey.updatedAt.slice(0, 10)} startdate={survey.startDate.slice(0, 10)} enddate={survey.endDate.slice(0, 10)} currentdate={currentdate} />
+                        {groupProjectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
+                            <div className="col-lg-3" key={project.id}>
+                                <CardResponse itemId={project.id} id={project.id} title={project.name} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)} currentdate={currentdate} />
                             </div>
                         ))}
                     </div>

@@ -160,13 +160,7 @@ const NewProject = () => {
                           프로젝트 생성중...
                         </MDTypography>
                       </MDBox>
-                    ) : ( // Render error message if loading state is "error"
-                      <MDBox display="flex" alignItems="center">
-                        <MDTypography variant="body2" color="error">
-                          프로젝트 생성 실패
-                        </MDTypography>
-                      </MDBox>
-                    )
+                    ) : <MDBox display="flex" alignItems="center"></MDBox>
                   ) : (
                     <MDButton
                       variant="gradient"

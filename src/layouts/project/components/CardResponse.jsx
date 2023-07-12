@@ -9,29 +9,37 @@ import Badge from 'react-bootstrap/Badge';
 import 'animate.css';
 
 
-function surveyStatus(startdate, enddate, currentdate) {
-  // parse startdate and enddate to ensure they are in correct format
-  let parsedStart = new Date(startdate);
-  let parsedEnd = new Date(enddate);
-
-  if(currentdate >= parsedStart && currentdate <= parsedEnd) {
+function projectStatus(status) {
+  console.log(status);
+  if(status == "In-progress") {
     return ( <Badge bg="primary" style={{ fontSize: '12px' }}>
    '진행중'
     </Badge>);
-  } else {
-    return (<Badge bg="danger" style={{ fontSize: '12px' }}>
-    '종료'
+  } 
+  else if(status == "Completed") {
+    return ( <Badge bg="success" style={{ fontSize: '12px' }}>
+   '완료'
+    </Badge>);
+  }
+  if(status == "Stopped") {
+    return ( <Badge bg="danger" style={{ fontSize: '12px' }}>
+   '중단함'
+    </Badge>);
+  } 
+  else {
+    return (<Badge bg="warning" style={{ fontSize: '12px' }}>
+    '시작 전'
      </Badge>);
   }
 }
 
-const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) => (
+const Card = ({ key, itemId, id, title, status, date ,startdate, enddate, currentdate}) => (
   <div className="col-lg-3A wow slideInUp" data-wow-delay="0.2s" >
   
       
   <img className="img-fluid" src={brain} alt="" style={{ width: '100%'}} />
-  <div className="p-5" style={{ height: '185px', backgroundColor: '#F8F9FA', boxShadow: '0 0 20px 5px rgba(0, 0, 0, 0.2)' }}>
-  {surveyStatus(startdate,enddate,currentdate)}<br></br>
+  <div className="p-5" style={{ height: '200px', backgroundColor: '#F8F9FA', boxShadow: '0 0 20px 5px rgba(0, 0, 0, 0.2)' }}>
+  {projectStatus(status)}<br></br>
       <h5 className="fw-bold  card-title">{title}</h5>
      
       <ReactBootstrapDropdown>
@@ -48,18 +56,14 @@ const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) 
           </ReactBootstrapDropdown>
           <br/>
           
-        <div className="card-content mb-5">
+   
+          <i className="far fa-user text-primary me-1"/>
+            <a style={{fontSize:'15px', marginRight:"15px"}}>{itemId}</a>&nbsp; 
           
-          <small className="me-3">
-        
-            <i className="far fa-user text-primary me-2" />
-            {itemId} &nbsp;
-       
-            <i className=" far fa-calendar-alt text-primary me-2" />
-            {date}
-          </small>
-         
-        </div>
+            
+            <i className=" far fa-calendar-alt text-primary me-" />
+            <a style={{fontSize:'15px'}}>{date}</a>     
+
         
       </div>
     </div>
