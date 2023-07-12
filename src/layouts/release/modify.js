@@ -302,6 +302,13 @@ function ViewRelease() {
         setOtherIssueData(removedIssues);
     };
 
+    // 이슈 제거하기
+    const deleteIssue = (id) => {
+        const removedIssues = filteredIssues.filter((issue) => issue.id !== id);
+        setFilteredIssues(removedIssues);
+        setActiveModal(null);
+    }
+
     return (
         <DashboardLayout>
             <DashboardNavbar />
@@ -606,6 +613,10 @@ function ViewRelease() {
                                 <MDBox mb={2}>
                                     <MDInput type="textarea" label="설명" defaultValue={issueDetail.description} disabled rows={4} multiline fullWidth />
                                 </MDBox>
+                                <MDBox mb={2} display="flex" justifyContent="center" alignItems="center">
+                                    <MDButton size="small" color="dark" onClick={() => deleteIssue(issueDetail.id)}>제거하기</MDButton>
+                                </MDBox>
+
                             </MDBox>
                         </Grid>
                     </Grid>
