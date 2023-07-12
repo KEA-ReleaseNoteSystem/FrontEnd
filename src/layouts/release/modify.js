@@ -298,15 +298,18 @@ function ViewRelease() {
         const selectedIssue = otherIssueData.filter((issue) => issue.id === id);
         const addedIssues = issueData.concat(selectedIssue);
         const removedIssues = otherIssueData.filter((issue) => issue.id !== id);
+        setIssueData(addedIssues);
         setFilteredIssues(addedIssues);
         setOtherIssueData(removedIssues);
     };
 
     // 이슈 제거하기
     const deleteIssue = (id) => {
-        const removedIssues = filteredIssues.filter((issue) => issue.id !== id);
+        filterReset();
+        const removedIssues = issueData.filter((issue) => issue.id !== id);
         const selectedIssue = filteredIssues.filter((issue) => issue.id === id);
         const addedIssues = otherIssueData.concat(selectedIssue);
+        setIssueData(removedIssues);
         setFilteredIssues(removedIssues);
         setOtherIssueData(addedIssues);
         setActiveModal(null);
