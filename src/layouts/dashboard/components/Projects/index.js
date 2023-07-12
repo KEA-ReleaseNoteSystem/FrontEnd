@@ -173,7 +173,7 @@ function Projects() {
       <MenuItem onClick={() => handleShowAssignedIssues()}>나에게 배정된 Issue만 확인</MenuItem>
       <MenuItem onClick={() => handleSort("value")}>중요도 순 정렬</MenuItem>
       <MenuItem onClick={() => handleSort("due")}>기한 순 정렬</MenuItem>
-      <MenuItem  onClick={onClicks}>GPT 추천</MenuItem>
+      <MenuItem onClick={onClicks}>GPT 추천</MenuItem>
     </Menu> 
   );
 
