@@ -6,6 +6,7 @@ import NavigationBar from "../components/NavigationBar";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -25,31 +26,38 @@ const NewProject = () => {
     description: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
+    setIsLoading(true); // Start loading
+
     // Send form data as JSON using Axios
     axios
-      .post("/api/project", formData, {headers})
+      .post("/api/project", formData, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         console.log("Form submitted successfully", response);
-        alert(response.data.message);
-        // Reset form fields and state
-        setFormData({
-          name: "",
-          status: "",
-          description: "",
-        });
-        setIsFormValid(false);
-        window.location.href = "/home/manage-project";
+        setIsLoading("success"); // Set loading state to success
+        setTimeout(() => {
+          alert(response.data.message);
+          // Reset form fields and state
+          setFormData({
+            name: "",
+            status: "",
+            description: "",
+          });
+          setIsFormValid(false);
+          setIsLoading(false); // Stop loading
+          window.location.href = "/dashboard";
+        }, 2000); // Wait for 2 seconds
       })
       .catch((error) => {
         console.log(formData);
         console.error("Error submitting form", error);
+        setIsLoading("error"); // Set loading state to error
+        setTimeout(() => {
+          setIsLoading(false); // Stop loading
+        }, 2000); // Wait for 2 seconds
       });
   };
 
@@ -144,14 +152,31 @@ const NewProject = () => {
                   />
                 </MDBox>
                 <MDBox mt={4} mb={1} display="flex" justifyContent="center">
-                  <MDButton
-                    variant="gradient"
-                    color="info"
-                    disabled={!isFormValid}
-                    onClick={handleFormSubmit}
-                  >
-                    생성
-                  </MDButton>
+                  {isLoading ? (
+                    isLoading === "success" ? ( // Render success message if loading state is "success"
+                      <MDBox display="flex" alignItems="center">
+                        <CircularProgress color="info" size={30} />
+                        <MDTypography variant="body2" ml={2}>
+                          프로젝트 생성중...
+                        </MDTypography>
+                      </MDBox>
+                    ) : ( // Render error message if loading state is "error"
+                      <MDBox display="flex" alignItems="center">
+                        <MDTypography variant="body2" color="error">
+                          프로젝트 생성 실패
+                        </MDTypography>
+                      </MDBox>
+                    )
+                  ) : (
+                    <MDButton
+                      variant="gradient"
+                      color="info"
+                      disabled={!isFormValid}
+                      onClick={handleFormSubmit}
+                    >
+                      생성
+                    </MDButton>
+                  )}
                 </MDBox>
               </MDBox>
             </Card>
