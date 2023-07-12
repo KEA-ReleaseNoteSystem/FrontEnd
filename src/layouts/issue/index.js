@@ -22,10 +22,16 @@ function IssueSearch() {
   const [isLoading, setIsLoading] = useState(true);
   const projectId = 1;
 
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await axios.get(`/api/${projectId}/issues`);
+        const response = await axios.get(`/api/${projectId}/issues`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setFetchedIssues(response.data.data);
         setIsLoading(false);
       } catch (error) {
@@ -35,6 +41,8 @@ function IssueSearch() {
     fetchIssues();
   }, [projectId]);
 
+  
+  
   if (isLoading) {
     return <div>
       <DashboardLayout>
@@ -102,8 +110,6 @@ function IssueList({ issues, users, isLoading, projectId }) {
 
 
 
-  console.log("id", issueDetail.id)
-  console.log("fetchedMemo", fetchedMemo)
 
   return (
     <Grid container spacing={3}>
@@ -156,8 +162,19 @@ function IssueList({ issues, users, isLoading, projectId }) {
 
 function IssueEditing({ issue, updateIssue, fetchedMemo }) {
 
-  console.log("updateIssue", updateIssue);
-  console.log("new issue", issue);
+
+  // console.log("updateIssue",updateIssue);
+
+  const [Memo, setMemo] = useState(fetchedMemo);
+
+  useEffect(() => {
+    setMemo(fetchedMemo);
+  }, [updateIssue]);
+
+  console.log("issue",issue);
+  console.log("fetchedMemo",Memo)
+
+
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
       <Card>
@@ -191,7 +208,6 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
                 </MDTypography>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="body2">
-                    {/* <MDInput variant="standard" defaultValue={info.description} multiline fullWidth /> */}
                     <Description issue={issue} updateIssue={updateIssue} />
                   </MDTypography>
                 </MDBox>
@@ -206,8 +222,8 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
                     <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
                     </MDTypography>
-                    {fetchedMemo.length == 0 ? null : <Comments issue={fetchedMemo} />}
-                  </Grid>
+                    {issue.length == 0 ?  null : <Comments issue={issue} memo={Memo} fetchedMemo={fetchedMemo} setMemo={setMemo} />}
+                  </Grid> 
                   <Grid item xs={8}>
                   </Grid>
                   <Grid item xs={2}>
@@ -227,7 +243,6 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
 }
 
 function IssueDetails({ issue }) {
-  console.log("iii", issue)
   return (
     <Grid container xs={12} id="right" direction="column" lg={200}>
       <Card>
