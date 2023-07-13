@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from '../issue-manage/Lists/List/Issue/Styles.js';
 
@@ -21,7 +21,6 @@ import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from '../i
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CircleIcon from '@mui/icons-material/Circle';
 import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -66,19 +65,26 @@ const customModalStyles = {
 
 function ViewRelease() {
     const { releaseId } = useParams();
-    const { users } = window.projectMock;
 
     const [releaseNoteData, setReleaseNoteData] = useState([]); //해당 릴리즈노트 정보
     const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
     const [issueData, setIssueData] = useState([]); //릴리즈노트와 연관된 이슈들 정보
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
     const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
-
-    const [state, setState] = useState(''); //우상단 상태 리스트 선택박스용
     const [memberInCharge, setmemberInCharge] = useState('');
-    const [progress, setProgress] = useState(0); //프로그레스바 전용
+
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
+
+    //POST 요청 위한 변수들
+    const [version, setVersion] = useState('');
+    const [state, setState] = useState(''); //우상단 상태 리스트 선택박스용
+    const [progress, setProgress] = useState(0); //프로그레스바 전용
+    const [brief, setBrief] = useState('');
+    const [description, setDescription] = useState('');
+    const [releaseDate, setReleaseDate] = useState('');
+    
+    const navigate = useNavigate();
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -114,8 +120,12 @@ function ViewRelease() {
                 }
             });
             setReleaseNoteData(response.data.data);
-            setProgress(response.data.data.percent);
+            setVersion(response.data.data.version);
+            setBrief(response.data.data.brief);
+            setDescription(response.data.data.description);
             setState(response.data.data.status);
+            setProgress(response.data.data.percent);
+            setReleaseDate(response.data.data.releaseDate);
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
         } catch (error) {
             console.error(error);
@@ -149,9 +159,9 @@ function ViewRelease() {
     };
 
     //이 릴리즈 노트에 속하지 않은 프로젝트의 이슈 받아오기 (릴리즈 노트에 이슈를 추가하기 위한 용도)
-    async function getOtherIssueData(projectId, releaseId, token) {
+    async function getOtherIssueData(projectId, token) {
         try {
-            const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/releaseNote/${encodeURIComponent(releaseId)}/issues`, {
+            const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/issues`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setOtherIssueData(response.data.data);
@@ -171,17 +181,43 @@ function ViewRelease() {
         }
     };
 
+    async function putReleaseNoteData(token) {
+        try {
+          const response = await axios.put(
+            `/api/release/update`, {
+                projectId: projectId,
+                releaseId: releaseId,
+                status: state,
+                version: version,
+                percent: progress,
+                releaseDate: releaseDate,
+                brief: brief,
+                description: description,
+                issueList: issueData
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          console.log("전송 완료");
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
     useEffect(() => {
         getReleaseNoteData(releaseId, token);
         getIssueData(releaseId, token);
         getMembersData(projectId, token);
-        getOtherIssueData(projectId, releaseId, token);
+        getOtherIssueData(projectId, token);
     }, []);
 
     //릴리스 작성하기 버튼
-    const handleRelaseAddOnClick = (event) => {
-        console.log("릴리스 저장")
-        setAnchorEl(event.currentTarget);
+    const handleReleaseUpdateOnClick = (event) => {
+        console.log("릴리스 저장 버튼 클릭됨");
+        putReleaseNoteData(token);
+        alert('수정사항이 반영되었습니다!');
+        navigate(-1);
     };
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
@@ -195,22 +231,22 @@ function ViewRelease() {
     const handleShowAssignedIssues = (name) => {
         const filtered = issueData.filter((issue) => issue.memberIdInCharge && issue.memberIdInCharge.name === name);
         setFilteredIssues(filtered);
-        setMenu1(null);
+        setMenu2(null);
     };
     const handleShowBacklog = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'backlog');
         setFilteredIssues(filteredIssues);
-        setMenu2(null);
+        setMenu1(null);
     };
     const handleShowInProgress = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'inprogress');
         setFilteredIssues(filteredIssues);
-        setMenu2(null);
+        setMenu1(null);
     };
     const handleShowDone = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'done');
         setFilteredIssues(filteredIssues);
-        setMenu2(null);
+        setMenu1(null);
     };
     const filterReset = () => {
         setFilteredIssues(issueData);
@@ -218,12 +254,6 @@ function ViewRelease() {
 
     const memberList = membersData && membersData.map((member) => (
         <MenuItem key={member.name} onClick={() => handleShowAssignedIssues(member.name)}>
-            {member.name}
-        </MenuItem>
-    ));
-
-    const memberList2 = membersData && membersData.map((member) => (
-        <MenuItem value={member.name}>
             {member.name}
         </MenuItem>
     ));
@@ -270,6 +300,7 @@ function ViewRelease() {
         }
         if (inputValue > 100) { inputValue = 100; }
         if (inputValue < 0) { inputValue = 0; }
+
         setProgress(inputValue);
     };
 
@@ -324,7 +355,7 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} multiline />
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={(e) => setVersion(e.target.value)} multiline />
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={2} px={2} mb={2}>
@@ -335,7 +366,7 @@ function ViewRelease() {
                                         </MDTypography>
                                         <MDBox pt={2} px={2}>
                                             <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={releaseNoteData.brief} multiline fullWidth />
+                                                <MDInput variant="standard" defaultValue={releaseNoteData.brief} onChange={(e) => setBrief(e.target.value)} multiline fullWidth />
                                             </MDTypography>
                                         </MDBox>
                                     </MDBox>
@@ -349,7 +380,7 @@ function ViewRelease() {
                                         </MDTypography>
                                         <MDBox pt={2} px={2}>
                                             <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={releaseNoteData.description} multiline fullWidth />
+                                                <MDInput variant="standard" defaultValue={releaseNoteData.description} onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
                                             </MDTypography>
                                         </MDBox>
                                     </MDBox>
@@ -420,21 +451,21 @@ function ViewRelease() {
                                     <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
                                         <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-helper-label"
-                                            id="demo-simple-select-helper"
                                             value={state}
                                             label="릴리즈 상태"
                                             onChange={handleChange}
                                             sx={{ minHeight: 50 }}
                                         >
                                             <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                            <MenuItem value={"Released"}>랄리즈 됨</MenuItem>
+                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
                                         </Select>
                                         <FormHelperText>릴리즈 상태를 설정해주세요.</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>수정</h6></MDButton>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                        <h6>수정</h6>
+                                    </MDButton>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Card>
@@ -448,16 +479,17 @@ function ViewRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                                                    <MDInput variant="standard" defaultValue={releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)} multiline />
+                                                    <MDInput variant="standard" defaultValue={releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)} 
+                                                    onChange={(e) => setReleaseDate(e.target.value)} multiline />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <MDBox pt={2} px={2}>
-                                                    <MDTypography variant="h6">담당자</MDTypography>
-                                                    {/* <MDTypography variant="subtitle2" ml={1}>
+                                                    <MDTypography variant="h6">작성자</MDTypography>
+                                                    <MDTypography variant="subtitle2" ml={1}>
                                                         {releaseNoteData.member && releaseNoteData.member.username}
-                                                    </MDTypography> */}
-                                                    <Select
+                                                    </MDTypography>
+                                                    {/* <Select
                                                         labelId="demo-simple-select-helper-label"
                                                         id="demo-simple-select-helper"
                                                         value={memberInCharge}
@@ -465,11 +497,11 @@ function ViewRelease() {
                                                         sx={{ minHeight: 50 }}
                                                     >
                                                         {memberList2}
-                                                    </Select>
+                                                    </Select> */}
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
-                                                <MDBox pt={2} px={2}>
+                                                <MDBox pt={2} px={2} pb={5}>
                                                     <MDTypography variant="h6">진행률</MDTypography>
                                                     <MDInput variant="standard" value={progress} onChange={handlePercent} sx={{ width: "5%" }} multiline />  %
                                                     <MDProgress
@@ -477,7 +509,7 @@ function ViewRelease() {
                                                         color={progress < 30 ? "primary" : progress < 60 ? "error" : progress < 80 ? "warning" : "info"} variant="gradient" />
                                                 </MDBox>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            {/* <Grid item xs={12}>
                                                 <MDBox pt={6} px={2} pb={3}>
                                                     <MDTypography variant="h6">
                                                         해당 릴리즈 노트 관련 이슈
@@ -488,7 +520,7 @@ function ViewRelease() {
                                                         완료: {statusNo[2]}
                                                     </MDTypography>
                                                 </MDBox>
-                                            </Grid>
+                                            </Grid> */}
                                         </Grid>
                                     </Card>
                                 </Grid>
@@ -619,8 +651,8 @@ function ViewRelease() {
                                 <MDBox mb={2}>
                                     <MDInput type="textarea" label="설명" defaultValue={issueDetail.description} disabled rows={4} multiline fullWidth />
                                 </MDBox>
-                                <MDBox mb={2} display="flex" justifyContent="center" alignItems="center">
-                                    <MDButton size="small" color="dark" onClick={() => deleteIssue(issueDetail.id)}>제거하기</MDButton>
+                                <MDBox mb={2} ml={3} display="flex" justifyContent="center" alignItems="center">
+                                    <MDButton size="small" color="dark" onClick={() => deleteIssue(issueDetail.id)}>릴리즈 노트에서 제거하기</MDButton>
                                 </MDBox>
 
                             </MDBox>
