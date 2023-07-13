@@ -60,25 +60,27 @@ function Basic() {
   }
 
   const handleSubmit = () => {
-     // POST 요청을 보내는 부분
-     axios.post("/api/member/login", {
+    // POST 요청을 보내는 부분
+    axios.post("/api/member/login", {
       email: email,
       password: password
       // 다른 데이터들도 추가로 설정할 수 있습니다.
     })
-    .then((response) => {
+      .then((response) => {
         console.log(response)
-            alert(response.data.message); // Alert 창을 띄웁니다.
-            localStorage.setItem("ACCESS_TOKEN", response.data.data);
-            window.location.href = "/home/manage-project";
+        alert(response.data.message); // Alert 창을 띄웁니다.
+        localStorage.setItem("ACCESS_TOKEN", response.data.data);
+        window.location.href = "/home/manage-project";
 
-    })
-    .catch((error) => {
-      // 요청이 실패한 경우의 처리
-      console.error(error);
-    });
+      })
+      .catch((error) => {
+        // 요청이 실패한 경우의 처리
+        console.error(error);
+      });
   };
-    
+
+
+
 
   const isEmailEmpty = email === "";
   const isEmailWrong = !(email.includes("@"));
@@ -108,11 +110,11 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}/>
-              {(!isEmailEmpty && isEmailWrong) ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography> ) : <MDTypography> </MDTypography> }
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange} />
+              {(!isEmailEmpty && isEmailWrong) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography>) : <MDTypography> </MDTypography>}
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange}/>
+              <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange} />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -127,7 +129,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth  disabled={isEmailEmpty || isPasswordEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordEmpty} onClick={handleSubmit}>
                 로그인
               </MDButton>
             </MDBox>
@@ -148,27 +150,27 @@ function Basic() {
             </MDBox>
           </MDBox>
           <MDBox mt={1} mb={1}>
-          <MDButton
-        component="a"
-        href="http://localhost:8080/oauth2/authorization/kakao"
-        fullWidth
-      >
-        <img width="100%" src={kakaoLogin} alt="카카오 로그인" />
-      </MDButton>
-      <MDButton
-        component="a"
-        href="http://localhost:8080/oauth2/authorization/naver"
-        fullWidth
-      >
-        <img width="100%" src={naverLogin} alt="네이버 로그인" />
-      </MDButton>
-      <MDButton
-        component="a"
-        href="http://localhost:8080/oauth2/authorization/google"
-        fullWidth
-      >
-        <img width="100%" src={googleLogin} alt="구글 로그인" />
-      </MDButton>
+            <MDButton
+              component="a"
+              href="http://localhost:8080/oauth2/authorization/kakao"
+              fullWidth
+            >
+              <img width="100%" src={kakaoLogin} alt="카카오 로그인" />
+            </MDButton>
+            <MDButton
+              component="a"
+              href="http://localhost:8080/oauth2/authorization/naver"
+              fullWidth
+            >
+              <img width="100%" src={naverLogin} alt="네이버 로그인" />
+            </MDButton>
+            <MDButton
+              component="a"
+              fullWidth
+              href="http://localhost:8080/oauth2/authorization/google"
+            >
+              <img width="100%" src={googleLogin} alt="구글 로그인" />
+            </MDButton>
           </MDBox>
           <MDBox mt={3} mb={1} textAlign="center">
             <MDTypography

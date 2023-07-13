@@ -12,6 +12,8 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+import { React, useState, useEffect } from "react";
+import axios from "axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -52,11 +54,34 @@ import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
 function Overview() {
+  const [memberInfo, setMemberInfo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("ACCESS_TOKEN");
+        const response = await axios.get("/api/member", {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setMemberInfo(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(memberInfo);
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header>
+      <Header info={{ nickname: memberInfo.nickname }}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} md={6} xl={12} sx={{ display: "flex" }}>
@@ -65,11 +90,10 @@ function Overview() {
                 title="profile information"
                 description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
                 info={{
-                  fullName: "서강덕",
-                  team: "kakao99%",
-                  mobile: "010-8731-2312",
-                  email: "rkdejr2321naver.com",
-                  position: "Backend-Developer",
+                  fullName: memberInfo.name,
+                  team: memberInfo.groupName,
+                  position: memberInfo.position,
+                  email: memberInfo.email
                 }}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
@@ -87,90 +111,25 @@ function Overview() {
         </MDBox>
         <MDBox p={2}>
           <Grid container spacing={6}>
-            <Grid item xs={12} md={6} xl={3}>
-              <DefaultProjectCard
-                image={homeDecor1}
-                label="project #2"
-                title="modern"
-                description="As Uber works through a huge amount of internal management turmoil."
-                action={{
-                  type: "internal",
-                  route: "/pages/profile/profile-overview",
-                  color: "info",
-                  label: "view project",
-                }}
-                authors={[
-                  { image: team1, name: "Elena Morison" },
-                  { image: team2, name: "Ryan Milly" },
-                  { image: team3, name: "Nick Daniel" },
-                  { image: team4, name: "Peterson" },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={3}>
-              <DefaultProjectCard
-                image={homeDecor2}
-                label="project #1"
-                title="scandinavian"
-                description="Music is something that everyone has their own specific opinion about."
-                action={{
-                  type: "internal",
-                  route: "/pages/profile/profile-overview",
-                  color: "info",
-                  label: "view project",
-                }}
-                authors={[
-                  { image: team3, name: "Nick Daniel" },
-                  { image: team4, name: "Peterson" },
-                  { image: team1, name: "Elena Morison" },
-                  { image: team2, name: "Ryan Milly" },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={3}>
-              <DefaultProjectCard
-                image={homeDecor3}
-                label="project #3"
-                title="minimalist"
-                description="Different people have different taste, and various types of music."
-                action={{
-                  type: "internal",
-                  route: "/pages/profile/profile-overview",
-                  color: "info",
-                  label: "view project",
-                }}
-                authors={[
-                  { image: team4, name: "Peterson" },
-                  { image: team3, name: "Nick Daniel" },
-                  { image: team2, name: "Ryan Milly" },
-                  { image: team1, name: "Elena Morison" },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={3}>
-              <DefaultProjectCard
-                image={homeDecor4}
-                label="project #4"
-                title="gothic"
-                description="Why would anyone pick blue over pink? Pink is obviously a better color."
-                action={{
-                  type: "internal",
-                  route: "/pages/profile/profile-overview",
-                  color: "info",
-                  label: "view project",
-                }}
-                authors={[
-                  { image: team4, name: "Peterson" },
-                  { image: team3, name: "Nick Daniel" },
-                  { image: team2, name: "Ryan Milly" },
-                  { image: team1, name: "Elena Morison" },
-                ]}
-              />
-            </Grid>
+            {memberInfo.projectList && memberInfo.projectList.map((project, index) => (
+              <Grid item xs={12} md={6} xl={3} key={index}>
+                <DefaultProjectCard
+                  image={homeDecor2}
+                  title={project.name}
+                  description={project.description}
+                  action={{
+                    type: "internal",
+                    route: "#",
+                    color: "info",
+                    label: "view project",
+                  }}
+                />
+              </Grid>
+            ))}
           </Grid>
         </MDBox>
+
       </Header>
-      <Footer />
     </DashboardLayout>
   );
 }

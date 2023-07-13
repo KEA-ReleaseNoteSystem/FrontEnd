@@ -14,8 +14,8 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 // @mui material components
@@ -36,12 +36,30 @@ import CreateGroup from "./creategroup";
 import bgImage from "assets/images/bgtmp.png";
 
 function Cover() {
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const provider = searchParams.get('provider');
+  const oauthEmail = searchParams.get("email");
+  const oauthName = searchParams.get('username');
+
+
+  
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+    
+  useEffect(() => {
+    if (oauthEmail !== "" && oauthName !== "") {
+      setEmail(oauthEmail);
+      setName(oauthName);
+    }
+  }, []);
+
+  console.log("email", email);
   const handleNameChange = (event) => {
     setName(event.target.value);
     console.log(name);
@@ -66,6 +84,7 @@ function Cover() {
   const handleCreateGroupOnClick = () => {
     navigate("/create-group", {
       state: {
+        provider,
         name,
         nickname,
         position,
@@ -81,6 +100,7 @@ function Cover() {
   const isEmailEmpty = (email === "") || !(email.includes("@"));
   const isPasswordEmpty = password === "";
 
+  console.log("isEmailEmpy", isEmailEmpty);
   return (
     <BasicLayout image={bgImage}>
       <br />
@@ -106,7 +126,7 @@ function Cover() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="이름" variant="standard" fullWidth value={name} onChange={handleNameChange} required/>
+              <MDInput type="text" label="이름" variant="standard" fullWidth defaultValue={oauthName ? oauthName : ""} onChange={handleNameChange}  disabled={!!oauthName} />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="text" label="닉네임" variant="standard" fullWidth value={nickname} onChange={handleNicknameChange} required/>
@@ -115,7 +135,7 @@ function Cover() {
               <MDInput type="text" label="직무 (예시: FE, BE)" variant="standard" fullWidth value={position} onChange={handlePositionChange} required/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" variant="standard" fullWidth value={email} onChange={handleEmailChange} required/>
+              <MDInput type="email" label="이메일" variant="standard" fullWidth defaultValue={oauthEmail ? oauthEmail : ""} onChange={handleEmailChange}  disabled={!!oauthEmail}/>
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="비밀번호" variant="standard" fullWidth value={password} onChange={handlePasswordChange} required/>
@@ -124,6 +144,7 @@ function Cover() {
             <MDBox mt={4} mb={1} textAlign="center">
               <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
               component={Link} to={"/authentication/sign-up/create-group"} state = {{
+                  provider: provider,
                   name: name,
                   nickname: nickname,
                   position: position,
@@ -137,6 +158,7 @@ function Cover() {
               <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
               component={Link} to={"/authentication/sign-up/join-group"}
                 state = {{
+                  provider,
                   name,
                   nickname,
                   position,

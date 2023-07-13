@@ -9,19 +9,16 @@ import { Comments, Title } from './Styles';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
-  fetchIssue: PropTypes.func.isRequired,
+  fetchedMemo: PropTypes.func.isRequired,
 };
 
 
 
-const ProjectBoardIssueDetailsComments = ({ issue, fetchIssue }) => (
+const ProjectBoardIssueDetailsComments = ({issue,memo,setMemo}) => (
   <Comments>
-    
-    <Create issueId={issue.memoId} fetchIssue={fetchIssue} />
-   
-
-    {sortByNewest(issue, 'createdAt').map(comment => (
-      <Comment key={comment.memoId} comment={comment} fetchIssue={fetchIssue} />
+    <Create issue={issue} fetchedMemo={memo} setMemo={setMemo}  />
+    {sortByNewest(memo, 'createdAt').map(comment => (
+      <Comment key={comment.id} comment={comment} fetchedMemo={memo} />
     ))}
   </Comments>
 );

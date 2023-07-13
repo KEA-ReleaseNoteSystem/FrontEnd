@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, Router } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -47,6 +47,10 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+
+import CreateRelease from "layouts/release/create";
+import SocialLogin from "layouts/authentication/social-login";
+
 import ViewRelease from "layouts/release/modify";
 
 export default function App() {
@@ -166,7 +170,9 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/home" />} />
-        <Route path="/release/:releaseId" element={<ViewRelease />} />
+        <Route path="/social-login" element={<SocialLogin />} />
+        <Route path="/release/:releaseId" element={ isAuthenticated ? <CreateRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
+
       </Routes>
     </ThemeProvider>
   );

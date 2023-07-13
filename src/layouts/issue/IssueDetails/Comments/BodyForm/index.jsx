@@ -20,7 +20,7 @@ const ProjectBoardIssueDetailsCommentsBodyForm = ({
   onSubmit,
   onCancel,
 }) => {
-  const $textareaRef = useRef();
+
 
   const handleSubmit = () => {
       onSubmit();
@@ -33,7 +33,7 @@ const ProjectBoardIssueDetailsCommentsBodyForm = ({
         placeholder="Add a comment..."
         value={value}
         onChange={onChange}
-        ref={$textareaRef}
+        
       />
       <Actions>
         <FormButton variant="primary" isWorking={isWorking} onClick={handleSubmit}>

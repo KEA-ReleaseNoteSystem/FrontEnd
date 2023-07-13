@@ -271,7 +271,8 @@ function CreateRelease() {
                                                     <MDTypography variant="h6">진행률</MDTypography>
                                                     <MDProgress
                                                         value={info.progress}
-                                                        color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} />
+                                                        color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" 
+                                                        label={info.progress} />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
