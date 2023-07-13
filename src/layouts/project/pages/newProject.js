@@ -18,7 +18,6 @@ import { Menu, MenuItem } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
-const token = localStorage.getItem("ACCESS_TOKEN");
 const NewProject = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -29,6 +28,7 @@ const NewProject = () => {
   const [isLoading, setIsLoading] = useState(false); // Added loading state
 
   const handleFormSubmit = (event) => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
     event.preventDefault();
     setIsLoading(true); // Start loading
 
