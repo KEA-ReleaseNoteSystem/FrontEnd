@@ -90,9 +90,9 @@ export default function Data() {
   
     return {
       version: release.version,
-      releaseDate: release.releaseDate.slice(0, 10),
+      releaseDate: release.releaseDate && release.releaseDate.slice(0, 10),
       author: release.member.username,
-      createDate: release.createdAt.slice(0, 10),
+      createDate: release.releaseDate && release.createdAt.slice(0, 10),
       status: release.status,
       option: (
         <div>
