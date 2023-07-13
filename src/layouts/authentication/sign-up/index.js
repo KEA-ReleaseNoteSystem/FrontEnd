@@ -78,7 +78,7 @@ function Cover() {
   const isNameEmpty = name === "";
   const isNicknameEmpty = nickname === "";
   const isPositionEmpty = position === "";
-  const isEmailEmpty = (email === "") || !(email.includes("@"));
+  const isEmailEmpty = (email === "") || !(email && email.includes("@"));
   const isPasswordEmpty = password === "";
 
   return (
