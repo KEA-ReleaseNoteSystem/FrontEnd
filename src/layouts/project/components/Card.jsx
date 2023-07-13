@@ -10,7 +10,7 @@ import 'animate.css';
 
 
 
-const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) => {
+const Card = ({ key, itemId, id, title, date ,status, startdate, enddate, currentdate}) => {
   console.log("시작일",startdate);
   const [isCopied, setIsCopied] = useState(false);
   const token = localStorage.getItem('ACCESS_TOKEN');
@@ -59,14 +59,14 @@ const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) 
             클립보드 복사완료
           </div>
         )}
-         <Link to={`/modifysurvey/${encodeURIComponent(id)}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+         <Link to={`/dashboard`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <img className="img-fluid" src={brain} alt="" style={{ width: '100%' }} /></Link>
 
       
       <div className="p-5" style={{ height: '200px',width: '100%', backgroundColor: '#F8F9FA', boxShadow: '0 0 20px 5px rgba(0, 0, 0, 0.2)' }}>
-      {surveyStatus(startdate,enddate,currentdate)}<br></br>
+      {projectStatus(status)}<br></br>
         <h5 className="fw-bold  card-title">
-        <Link to={`/modifysurvey/${encodeURIComponent(id)}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/dashboard`} style={{ textDecoration: 'none', color: 'inherit' }}>
           {title}</Link> </h5>
         
         <ReactBootstrapDropdown>
@@ -94,10 +94,8 @@ const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) 
           </ReactBootstrapDropdown.Menu>
         </ReactBootstrapDropdown>
         <br />
-
-
             <i className="far fa-user text-primary me-1"/>
-            <a style={{fontSize:'15px'}}>{itemId}</a> &nbsp;
+            <a style={{fontSize:'15px', marginRight:"15px"}}>{itemId}</a> &nbsp;
           
             
             <i className=" far fa-calendar-alt text-primary me-" />
@@ -109,18 +107,26 @@ const Card = ({ key, itemId, id, title, date ,startdate, enddate, currentdate}) 
   );
 };
 
-function surveyStatus(startdate, enddate, currentdate) {
-  // parse startdate and enddate to ensure they are in correct format
-  let parsedStart = new Date(startdate);
-  let parsedEnd = new Date(enddate);
-
-  if(currentdate >= parsedStart && currentdate <= parsedEnd) {
+function projectStatus(status) {
+  console.log(status);
+  if(status == "In-progress") {
     return ( <Badge bg="primary" style={{ fontSize: '12px' }}>
    '진행중'
     </Badge>);
-  } else {
-    return (<Badge bg="danger" style={{ fontSize: '12px' }}>
-    '종료'
+  } 
+  else if(status == "Completed") {
+    return ( <Badge bg="success" style={{ fontSize: '12px' }}>
+   '완료'
+    </Badge>);
+  }
+  if(status == "Stopped") {
+    return ( <Badge bg="danger" style={{ fontSize: '12px' }}>
+   '중단함'
+    </Badge>);
+  } 
+  else {
+    return (<Badge bg="warning" style={{ fontSize: '12px' }}>
+    '시작 전'
      </Badge>);
   }
 }

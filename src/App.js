@@ -47,8 +47,11 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+
 import CreateRelease from "layouts/release/create";
 import SocialLogin from "layouts/authentication/social-login";
+
+import ViewRelease from "layouts/release/modify";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -169,6 +172,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/social-login" element={<SocialLogin />} />
         <Route path="/release/:releaseId" element={ isAuthenticated ? <CreateRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
+
       </Routes>
     </ThemeProvider>
   );

@@ -243,7 +243,7 @@ function CreateRelease() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>전체 저장</h6></MDButton>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} component={Link} to={"/release"}><h6>생성</h6></MDButton>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Card>
@@ -271,7 +271,8 @@ function CreateRelease() {
                                                     <MDTypography variant="h6">진행률</MDTypography>
                                                     <MDProgress
                                                         value={info.progress}
-                                                        color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} />
+                                                        color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" 
+                                                        label={info.progress} />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>

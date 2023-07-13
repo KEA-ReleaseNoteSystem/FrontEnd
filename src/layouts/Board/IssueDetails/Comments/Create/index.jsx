@@ -24,12 +24,24 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
   const handleCommentCreate = async () => {
     try {
       setCreating(true);
-      await api.post(`/comments`, { body, issueId, userId: currentUser.id });
-      await fetchIssue();
+      await Axios.post("/api/memo/1/1/new", {
+        memberId: 1,
+        issueId: 1,
+        content: body,
+        createdAt: currentDateTime,
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // 요청 본문의 타입을 지정합니다.
+        }
+      });
+
       setFormOpen(false);
       setCreating(false);
+      setFetchedMemo([...fetchedMemo, response.data]);
       setBody('');
     } catch (error) {
+      console.error('Error making the request:', error.message);
+      console.error('Full error object:', error);
       toast.error(error);
     }
   };

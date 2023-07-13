@@ -41,6 +41,7 @@ const defaultFilters = {
   recent: false,
 };
 
+
 const currentUserIdMock = 1;
 
 const updateLocalProjectIssuesMock = (issueId, fields) => {

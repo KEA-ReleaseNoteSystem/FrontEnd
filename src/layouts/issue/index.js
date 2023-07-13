@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./index.css"
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -8,31 +8,64 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import MDButton from 'components/MDButton';
 import MDProgress from 'components/MDProgress';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
-import IssueDetail from "layouts/issue/IssueDetails/index";
-import IssueEdit from "layouts/issue/IssueEditing";
 import MDInput from 'components/MDInput';
-import InputLabel from '@mui/material/InputLabel';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
 import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
-import PostViewPage from 'layouts/issue/page/PostViewPage'
+
+import axios from 'axios';
 
 function IssueSearch() {
-  const { issues, users } = window.projectMock;
-  console.log("window", window.projectMock);
-  console.log("issues:", issues);
-  console.log("users:", users);
+  const { users } = window.projectMock;
+  const [fetchedIssues, setFetchedIssues] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const projectId = 1;
+
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const response = await axios.get(`/api/${projectId}/issues`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setFetchedIssues(response.data.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchIssues();
+  }, [projectId]);
+
+  
+  
+  if (isLoading) {
+    return <div>
+      <DashboardLayout>
+        <DashboardNavbar />
+        <MDBox pt={6} pb={3}>
+          <Stack direction="row" spacing={6}>
+            <IssueList issues={fetchedIssues} users={users} isLoading={isLoading} />
+          </Stack>
+        </MDBox>
+        <Footer />
+      </DashboardLayout>
+    </div>;
+
+  }
+
+
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Stack direction="row" spacing={6}>
-          <IssueList issues={issues} users={users} />
+          <IssueList issues={fetchedIssues} users={users} projectId={projectId} />
         </Stack>
       </MDBox>
       <Footer />
@@ -42,18 +75,41 @@ function IssueSearch() {
 
 
 
-function IssueList({ issues, users }) {
+
+function IssueList({ issues, users, isLoading, projectId }) {
   const [issueDetail, setIssueDetail] = useState("");
+  const [fetchedMemo, setFetchedMemo] = useState([]);
+
   const updateIssue = updatedFields => {
     (currentIssue => ({ ...currentIssue, ...updatedFields }));
   };
 
-  console.log("123",updateIssue)
-
+  console.log("123", updateIssue)
 
   const handleClick = (issue) => {
     setIssueDetail(issue);
+
   };
+
+  useEffect(() => {
+    const fetchMemo = async () => {
+      try {
+        console.log(`Fetching memo for projectId=${projectId}, issueId=${issueDetail.id}`);
+        const response = await axios.get(`/api/memo/${projectId}/${issueDetail.id}`);
+        console.log('Response:', response.data.data);
+        setFetchedMemo(response.data.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    if (issueDetail.id) {
+      fetchMemo();
+    }
+  }, [issueDetail.id]);
+
+
+
 
   return (
     <Grid container spacing={3}>
@@ -74,36 +130,51 @@ function IssueList({ issues, users }) {
             </MDTypography>
           </MDBox>
           <MDBox pt={3} pr={2} pl={2} fullWidth>
-            {issues.map((issue, index) => (
-              <div onClick={() => handleClick(issue)}>
-                <ProjectBoardListIssue
-                  key={issue.id}
-                  projectUsers={users}
-                  issue={issue}
-                  index={index}
-                />
-              </div>
-            ))}
+            {isLoading == true ? (
+              <MDTypography>there is no issues</MDTypography>
+            ) : (
+              issues.map((issue, index) => (
+                <div key={issue.id} onClick={() => handleClick(issue)}>
+                  <ProjectBoardListIssue
+                    projectUsers={users}
+                    issue={issue}
+                    index={index}
+                  />
+                </div>
+              ))
+            )}
+
           </MDBox>
         </Card>
       </Grid>
 
-      <Grid item xs={5 }>
-        <IssueEditing info={issueDetail} updateIssue={updateIssue} />
+      <Grid item xs={5}>
+        <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
       </Grid>
 
       <Grid item xs={4}>
-        <IssueDetails info={issueDetail} />
+        <IssueDetails issue={issueDetail} />
       </Grid>
     </Grid>
   );
 }
 
 
-function IssueEditing({ info,updateIssue }) {
+function IssueEditing({ issue, updateIssue, fetchedMemo }) {
 
-  console.log("updateIssue",updateIssue);
-  console.log("info",info);
+
+  // console.log("updateIssue",updateIssue);
+
+  const [Memo, setMemo] = useState(fetchedMemo);
+
+  useEffect(() => {
+    setMemo(fetchedMemo);
+  }, [updateIssue]);
+
+  console.log("issue",issue);
+  console.log("fetchedMemo",Memo)
+
+
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
       <Card>
@@ -121,15 +192,12 @@ function IssueEditing({ info,updateIssue }) {
             이슈 편집
           </MDTypography>
         </MDBox>
-
-        {/* <IssueDetail /> */}
-
         <Grid item xs={12} >
 
           <MDBox pt={2} px={2}>
             <MDTypography variant="h6">
               이슈 :&nbsp;
-              <MDInput variant="standard" defaultValue={info.title} multiline fullWidth />
+              <MDInput variant="standard" defaultValue={issue.title} multiline fullWidth />
             </MDTypography>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
@@ -140,8 +208,7 @@ function IssueEditing({ info,updateIssue }) {
                 </MDTypography>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="body2">
-                    {/* <MDInput variant="standard" defaultValue={info.description} multiline fullWidth /> */}
-                    <Description issue={info} updateIssue={updateIssue} />
+                    <Description issue={issue} updateIssue={updateIssue} />
                   </MDTypography>
                 </MDBox>
               </MDBox>
@@ -154,40 +221,30 @@ function IssueEditing({ info,updateIssue }) {
                   <Grid item xs={11} >
                     <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
-                      
                     </MDTypography>
-                    {info.length == 0 ?  null : <Comments issue={info} />}
-                    
-                  
-                  </Grid>
-                  
-                 
+                    {issue.length == 0 ?  null : <Comments issue={issue} memo={Memo} fetchedMemo={fetchedMemo} setMemo={setMemo} />}
+                  </Grid> 
                   <Grid item xs={8}>
                   </Grid>
                   <Grid item xs={2}>
                     <MDTypography variant="button">
-
                     </MDTypography>
                   </Grid>
                 </Grid>
                 <MDBox pt={2} px={2}>
-
                 </MDBox>
               </MDBox>
             </Card>
           </MDBox>
-
         </Grid>
-
       </Card>
     </Grid>
   );
 }
 
-function IssueDetails({ info }) {
-  console.log("iii", info)
+function IssueDetails({ issue }) {
   return (
-    <Grid container xs={12} id="right"  direction="column" lg={200}>
+    <Grid container xs={12} id="right" direction="column" lg={200}>
       <Card>
         <MDBox
           mx={2}
@@ -211,27 +268,27 @@ function IssueDetails({ info }) {
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">생성 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{info.updatedAt}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.updatedAt}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={12}>{info.updatedAt}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={12}>{issue.updatedAt}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">담당자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{info.id}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.id}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">진행률</MDTypography>
-                  <MDProgress
+                  {/* <MDProgress
                     value={info.progress}
-                    color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} />
+                    color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} /> */}
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
