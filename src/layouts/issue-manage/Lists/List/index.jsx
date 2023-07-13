@@ -68,7 +68,7 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
   const filteredIssues = filterIssues(project.issues, filters, currentUserId);
   const filteredListIssues = getSortedListIssues(project.issues, status);
   const allListIssues = getSortedListIssues(project.issues, status);
-  console.log("filteredListIssues", filteredListIssues)
+  console.log("filteredListIssues!!", filteredListIssues)
 
   const [anchorEl, setAnchorEl] = useState(null);
 
