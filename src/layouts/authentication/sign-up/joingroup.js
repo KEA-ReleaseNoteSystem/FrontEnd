@@ -48,7 +48,7 @@ function JoinGroup() {
   const [groupName, setGroupName] = useState("");
 
   const location = useLocation();
-  const { name, nickname, position, email, password } = location.state;
+  const { name, nickname, position, email, password, provider } = location.state;
 
   const handleGroupCodeChange = (event) => {
     setGroupName(event.target.value);
@@ -60,6 +60,7 @@ function JoinGroup() {
       name: name,
       nickname: nickname,
       position: position,
+      provider: provider,
       email: email,
       password: password,
       groupName: groupName,

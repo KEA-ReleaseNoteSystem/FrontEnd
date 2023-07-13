@@ -48,7 +48,7 @@ function CreateGroup() {
     const [groupName, setGroupName] = useState("");
 
     const location = useLocation();
-    const { name, nickname, position, email, password } = location.state;
+    const { name, nickname, position, email, password, provider } = location.state;
 
     const navigate = useNavigate(); 
 
@@ -62,6 +62,7 @@ function CreateGroup() {
           name: name,
           nickname: nickname,
           position: position,
+          provider: provider,
           email: email,
           password: password,
           groupName: groupName,
