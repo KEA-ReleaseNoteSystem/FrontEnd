@@ -165,7 +165,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/home/manage-project" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/release/:releaseId" element={<ViewRelease />} />
       </Routes>
     </ThemeProvider>

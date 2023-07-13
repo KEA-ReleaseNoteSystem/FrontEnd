@@ -88,7 +88,6 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
         setSelectedProject(projectData);
     };
 
-    console.log(projectData);
     return (
         <PageLayout>
             <NavigationBar />
@@ -109,7 +108,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
                     <div className="row g-3">
                         {projectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
                             <div className="col-lg-3" key={project.id}>
-                                <Card itemId={project.id} id={project.id} title={project.name} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)} currentdate={currentdate} />
+                                <Card id={project.id} title={project.name} pmname = {project.pmname} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)}/>
                             </div>
                         ))}
                     </div>
@@ -119,7 +118,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
                     <div className="row g-3">
                         {groupProjectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
                             <div className="col-lg-3" key={project.id}>
-                                <CardResponse itemId={project.id} id={project.id} title={project.name} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)} currentdate={currentdate} />
+                                <CardResponse id={project.id} title={project.name} pmname = {project.pmname} status = {project.status} date={project.updatedAt.slice(0, 10)}/>
                             </div>
                         ))}
                     </div>
