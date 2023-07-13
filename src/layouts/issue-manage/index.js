@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route, useMatch, useNavigate } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import useMergeState from 'shared/hooks/mergeState';
 import { Breadcrumbs, Modal } from 'shared/components';
 
@@ -189,10 +189,17 @@ const fetchProjectMock = () => {
 };
 
 
-const ProjectBoard = ({ project = { projectMock },
+const ProjectBoard = (
+  // const [issue, setIssue] = useState(null);
+
+  { project = { projectMock },
   fetchProject = { fetchProjectMock }
   , updateLocalProjectIssues = { updateLocalProjectIssuesMock } }) => {
 
+    useEffect(async ()=>{
+      const response = await axios.get(`/api/1/issues`);    // d
+      console.log('== response: ', response.data.data);
+    });
 
   // const [filters, mergeFilters] = useMergeState(defaultFilters);
 
