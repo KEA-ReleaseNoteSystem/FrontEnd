@@ -13,82 +13,90 @@ import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 import MDInput from 'components/MDInput';
 import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
-
+import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import axios from 'axios';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {IssueStatus,IssueStatusCopy,IssueType,IssueTypeCopy} from "shared/constants/issues"
 
 function IssueSearch() {
   const { users } = window.projectMock;
   const [fetchedIssues, setFetchedIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const projectId = 1;
-
   const token = localStorage.getItem('ACCESS_TOKEN');
+  const [issueDetail, setIssueDetail] = useState("");
+  const [fetchedMemo, setFetchedMemo] = useState([]);
+  const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
 
   useEffect(() => {
-    const fetchIssues = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/${projectId}/issues`, {
+        const issuesResponse = await axios.get(`/api/${projectId}/issues`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setFetchedIssues(response.data.data);
+        setFetchedIssues(issuesResponse.data.data);
+  
+        const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMembersData(membersResponse.data.data);
+  
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchIssues();
-  }, [projectId]);
+  
+    fetchData();
+  }, [projectId, token]);
+
+
 
   
+
   
-  if (isLoading) {
-    return <div>
-      <DashboardLayout>
-        <DashboardNavbar />
-        <MDBox pt={6} pb={3}>
-          <Stack direction="row" spacing={6}>
-            <IssueList issues={fetchedIssues} users={users} isLoading={isLoading} />
-          </Stack>
-        </MDBox>
-        <Footer />
-      </DashboardLayout>
-    </div>;
+    const updateIssue = async (updatedFields) => {
+    try {
+      // API를 호출하여 이슈 업데이트
+      const response = await axios.put(`/api/${projectId}/issues/${issueDetail.id}`, updatedFields, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("updatedFields",updatedFields);
 
-  }
+      // 업데이트된 이슈를 반영하기 위해 fetchedIssues 배열에서 해당 이슈를 찾아 업데이트
+      const updatedIssues = fetchedIssues.map((issue) => {
+        if (issue.id === issueDetail.id) {
+          return {
+            ...issue,
+            ...updatedFields
+          };
+        }
+        return issue;
+      });
 
+      console.log("updatedIssues new",updatedIssues);
 
+      // 업데이트된 이슈 목록을 설정
+      setFetchedIssues(updatedIssues);
 
-  return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        <Stack direction="row" spacing={6}>
-          <IssueList issues={fetchedIssues} users={users} projectId={projectId} />
-        </Stack>
-      </MDBox>
-      <Footer />
-    </DashboardLayout>
-  );
-}
-
-
-
-
-function IssueList({ issues, users, isLoading, projectId }) {
-  const [issueDetail, setIssueDetail] = useState("");
-  const [fetchedMemo, setFetchedMemo] = useState([]);
-
-  const updateIssue = updatedFields => {
-    (currentIssue => ({ ...currentIssue, ...updatedFields }));
+      // 이슈 상세 정보 업데이트
+      setIssueDetail((prevIssue) => ({
+        ...prevIssue,
+        ...updatedFields
+      }));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log("123", updateIssue)
+
 
   const handleClick = (issue) => {
     setIssueDetail(issue);
-
   };
 
   useEffect(() => {
@@ -110,52 +118,58 @@ function IssueList({ issues, users, isLoading, projectId }) {
 
 
 
-
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={3} id="left">
-        <Card>
-          <MDBox
-            mx={2}
-            mt={-3}
-            py={3}
-            px={2}
-            variant="gradient"
-            bgColor="info"
-            borderRadius="lg"
-            coloredShadow="info"
-          >
-            <MDTypography variant="h6" color="white">
-              이슈 목록
-            </MDTypography>
-          </MDBox>
-          <MDBox pt={3} pr={2} pl={2} fullWidth>
-            {isLoading == true ? (
-              <MDTypography>there is no issues</MDTypography>
-            ) : (
-              issues.map((issue, index) => (
-                <div key={issue.id} onClick={() => handleClick(issue)}>
-                  <ProjectBoardListIssue
-                    projectUsers={users}
-                    issue={issue}
-                    index={index}
-                  />
-                </div>
-              ))
-            )}
+    <DashboardLayout>
+      <DashboardNavbar />
+      <MDBox pt={6} pb={3}>
+        <Stack direction="row" spacing={6}>
+          <Grid container spacing={3}>
+            <Grid item xs={3} id="left">
+              <Card>
+                <MDBox
+                  mx={2}
+                  mt={-3}
+                  py={3}
+                  px={2}
+                  variant="gradient"
+                  bgColor="info"
+                  borderRadius="lg"
+                  coloredShadow="info"
+                >
+                  <MDTypography variant="h6" color="white">
+                    이슈 목록
+                  </MDTypography>
+                </MDBox>
+                <MDBox pt={3} pr={2} pl={2} fullWidth>
+                  {isLoading ? (
+                    <MDTypography>There are no issues</MDTypography>
+                  ) : (
+                    fetchedIssues.map((issue, index) => (
+                      <div key={issue.id} onClick={() => handleClick(issue)}>
+                        <ProjectBoardListIssue
+                          projectUsers={users}
+                          issue={issue}
+                          index={index}
+                        />
+                      </div>
+                    ))
+                  )}
+                </MDBox>
+              </Card>
+            </Grid>
 
-          </MDBox>
-        </Card>
-      </Grid>
+            <Grid item xs={5}>
+              <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
+            </Grid>
 
-      <Grid item xs={5}>
-        <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
-      </Grid>
-
-      <Grid item xs={4}>
-        <IssueDetails issue={issueDetail} />
-      </Grid>
-    </Grid>
+            <Grid item xs={4}>
+              <IssueDetails issue={issueDetail} membersData ={membersData} updateIssue={updateIssue}/>
+            </Grid>
+          </Grid>
+        </Stack>
+      </MDBox>
+      <Footer />
+    </DashboardLayout>
   );
 }
 
@@ -195,17 +209,12 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
         <Grid item xs={12} >
 
           <MDBox pt={2} px={2}>
-            <MDTypography variant="h6">
-              이슈 :&nbsp;
-              <MDInput variant="standard" defaultValue={issue.title} multiline fullWidth />
-            </MDTypography>
+        
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
             <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
-                <MDTypography variant="body2" fontWeight="medium">
-                  세부 설명
-                </MDTypography>
+               
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="body2">
                     <Description issue={issue} updateIssue={updateIssue} />
@@ -242,7 +251,39 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
   );
 }
 
-function IssueDetails({ issue }) {
+function IssueDetails({ issue ,membersData ,updateIssue }) {
+  
+  const [isToggled, setIsToggled] = useState(false);
+  const [memberInCharge, setmemberInCharge] = useState('');
+  const [mystatus, setStatus] = useState('');
+  const [issueType, setIssueType] = useState('');
+
+
+  console.log("memberInCharge",memberInCharge);
+  console.log("statusstatusstatus",issue.status);
+  console.log("issueType", issue.issueType );
+
+  useEffect(() => {
+    setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
+    setStatus(issue ? issue.status : '')
+    setIssueType(issue ? issue.issueType : '')
+  }, [issue,updateIssue]);
+
+
+  
+  const memberList2 = membersData && membersData.map((member) => (
+    <MenuItem value={member.name}>
+        {member.name}
+    </MenuItem>
+));
+
+  
+  const handleMemberInCharge = (event) => {
+    setmemberInCharge(event.target.value);
+};
+
+
+
   return (
     <Grid container xs={12} id="right" direction="column" lg={200}>
       <Card>
@@ -268,42 +309,87 @@ function IssueDetails({ issue }) {
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">생성 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.updatedAt}</MDTypography>
-                </MDBox>
-              </Grid>
-              <Grid item xs={6}>
-                <MDBox pt={2} px={2}>
-                  <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={12}>{issue.updatedAt}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.createdAt.slice(0, 10)}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
-                  <MDTypography variant="h6">담당자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.id}</MDTypography>
+                  <MDTypography variant="h6">수정 일자</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.updatedAt}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
-                  <MDTypography variant="h6">진행률</MDTypography>
-                  {/* <MDProgress
-                    value={info.progress}
-                    color={info.progress < 30 ? "primary" : info.progress < 60 ? "error" : info.progress < 80 ? "warning" : "info"} variant="gradient" label={info.progress} /> */}
+                  <MDTypography variant="h6">릴리즈 노트</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.releasenote}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
-                <MDBox pt={6} px={2} pb={3}>
-                  <MDTypography variant="subtitle2">
-                    백로그: 0<br />
-                    진행중: 0<br />
-                    완료: 0
+                <MDBox pt={2} px={2}>
+                  <MDTypography variant="h6">담당자  <Select
+                                                        labelId="demo-simple-select-helper-label"
+                                                        id="demo-simple-select-helper"
+                                                        value={memberInCharge}
+                                                        onChange={handleMemberInCharge}
+                                                        sx={{ minHeight: 50 }}
+                                                    >
+                                                        {memberList2}
+                                                    </Select></MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>
+                 
                   </MDTypography>
+                 
+                  {console.log("detail",issue)}
                 </MDBox>
+              </Grid>
+              <Grid item xs={12}>
+                <MDBox pt={2} px={2}>
+                  <MDTypography variant="h6">보고자  
+                  <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={memberInCharge}
+                      onChange={handleMemberInCharge}
+                      sx={{ minHeight: 50 }}
+                  >
+                      {memberList2}
+                  </Select></MDTypography>
+                 
+                </MDBox>
+              </Grid>
+              <Grid item xs={12}>    
               </Grid>
             </Grid>
           </Card>
         </Grid>
+            <Select
+      labelId="status-select-label"
+      id="status-select"
+      value={mystatus}
+      onChange={event => updateIssue({status: event.target.value })}
+      sx={{ minHeight: 50 }}
+    >
+      {Object.values(IssueStatus).map(status => (
+        <MenuItem key={status} value={status}>
+          {IssueStatusCopy[status]}
+        </MenuItem>
+      ))}
+    </Select>
+    
       </Card>
+      <Select
+      labelId="type-select-label"
+      id="type-select"
+      value={issueType}
+      onChange={event => updateIssue({issueType : event.target.value })}
+      sx={{ minHeight: 50 }}
+    >
+      {Object.values(IssueType).map(type => (
+        <MenuItem key={type} value={type}>
+          {IssueTypeCopy[type]}
+        </MenuItem>
+      ))}
+      </Select>
     </Grid>
   );
 }

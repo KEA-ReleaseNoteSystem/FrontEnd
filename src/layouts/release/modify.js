@@ -305,7 +305,7 @@ function ViewRelease() {
     };
 
     const handleMemberInCharge = (event) => {
-        setmemberInCharge(even.target.value);
+        setmemberInCharge(event.target.value);
     };
 
     const [activeModal, setActiveModal] = useState("");
