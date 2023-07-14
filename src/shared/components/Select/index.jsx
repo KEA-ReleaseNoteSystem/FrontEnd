@@ -91,7 +91,7 @@ const Select = ({
     $selectRef.current.focus();
   };
 
-  useOnOutsideClick($selectRef, isDropdownOpen, deactivateDropdown);
+
 
   const preserveValueType = newValue => {
     const areOptionValuesNumbers = options.some(option => typeof option.value === 'number');
