@@ -195,11 +195,14 @@ const ProjectBoard = (
   { project = { projectMock },
   fetchProject = { fetchProjectMock }
   , updateLocalProjectIssues = { updateLocalProjectIssuesMock } }) => {
+const getAPI = async() => {
+  const response = await axios.get(`/api/1/issues`);
+  console.log('== response: ', response.data.data);
+}
 
-    useEffect(async ()=>{
-      const response = await axios.get(`/api/1/issues`);    // d
-      console.log('== response: ', response.data.data);
-    });
+    useEffect(()=>{
+      getAPI();
+    },[]);
 
   // const [filters, mergeFilters] = useMergeState(defaultFilters);
 
