@@ -110,7 +110,7 @@ const PM = ({ projectInfo }, { project }) => {
   const handleGroupClick = () => {
     setGroupMessage("그룹 필드는 수정할 수 없습니다.");
     setTimeout(() => {
-      setGroupCodeMessage(""); // 일정 시간 후 메시지 지우기
+      setGroupMessage(""); // 일정 시간 후 메시지 지우기
     }, 2000);
   };
 
