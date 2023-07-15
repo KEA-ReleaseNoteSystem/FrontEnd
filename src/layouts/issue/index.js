@@ -16,7 +16,7 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import axios from 'axios';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {IssueStatus,IssueStatusCopy,IssueType,IssueTypeCopy} from "shared/constants/issues"
+import {IssueFilter,IssueFilterCopy,IssueStatus,IssueStatusCopy,IssueType,IssueTypeCopy} from "shared/constants/issues"
 
 function IssueSearch() {
   const { users } = window.projectMock;
@@ -27,6 +27,9 @@ function IssueSearch() {
   const [issueDetail, setIssueDetail] = useState("");
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
+  const [filter,setFilter] = useState("");
+  const [init,setInit] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,9 +97,52 @@ function IssueSearch() {
   };
 
 
+  const filterIssue = async (state,filterFields) => {
+    try {
 
+      console.log("filterFields", `/api/1/issues?${state}=${filterFields}`);
+      // API를 호출하여 이슈 업데이트
+      const response = await axios.get(`/api/1/issues?${state}=${filterFields}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("updatedFiaselds",response.data.data);
+
+      // 업데이트된 이슈 목록을 설정
+      setFetchedIssues(response.data.data);
+
+      // // 이슈 상세 정보 업데이트
+      // setIssueDetail(response.data.data);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+
+const handleFilter = (event) => {
+  const newFilter = event.target.value;
+  var state;
+
+  setFilter(newFilter);
+
+  console.log("newFilter", newFilter);
+
+  if (newFilter.toUpperCase() in IssueStatus) {
+    state = "status"
+    filterIssue(state, newFilter);
+  } 
+  else{
+    filterIssue('','');
+  }
+  
+};
+  
   const handleClick = (issue) => {
     setIssueDetail(issue);
+    setInit(false);
   };
 
   useEffect(() => {
@@ -106,6 +152,7 @@ function IssueSearch() {
         const response = await axios.get(`/api/memo/${projectId}/${issueDetail.id}`);
         console.log('Response:', response.data.data);
         setFetchedMemo(response.data.data);
+        
       } catch (error) {
         console.error('Error:', error);
       }
@@ -114,9 +161,10 @@ function IssueSearch() {
     if (issueDetail.id) {
       fetchMemo();
     }
-  }, [issueDetail.id]);
+  }, []);
 
 
+  console.log("init",init);
 
   return (
     <DashboardLayout>
@@ -137,9 +185,24 @@ function IssueSearch() {
                   coloredShadow="info"
                 >
                   <MDTypography variant="h6" color="white">
+                 
                     이슈 목록
                   </MDTypography>
                 </MDBox>
+                <Select
+                      labelId="filter-select-label"
+                      id="filter-select"
+                      value={filter}
+                      onChange={handleFilter}
+                      sx={{ minHeight: 50 }}
+                    >
+                      {Object.values(IssueFilter).map(filter => (
+                        <MenuItem key={filter} value={filter}>
+                          {IssueFilterCopy[filter]}
+                      
+                        </MenuItem>
+                      ))}
+                    </Select>
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
                   {isLoading ? (
                     <MDTypography>There are no issues</MDTypography>
@@ -253,7 +316,6 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
 
 function IssueDetails({ issue ,membersData ,updateIssue }) {
   
-  const [isToggled, setIsToggled] = useState(false);
   const [memberInCharge, setmemberInCharge] = useState('');
   const [mystatus, setStatus] = useState('');
   const [issueType, setIssueType] = useState('');
@@ -264,7 +326,7 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
   console.log("issueType", issue.issueType );
 
   useEffect(() => {
-    setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
+    // setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
     setStatus(issue ? issue.status : '')
     setIssueType(issue ? issue.issueType : '')
   }, [issue,updateIssue]);
@@ -309,7 +371,7 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">생성 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.createdAt.slice(0, 10)}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.createdAt.slice(0,10)}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
