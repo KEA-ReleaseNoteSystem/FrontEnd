@@ -233,16 +233,19 @@ function ViewRelease() {
         setFilteredIssues(filtered);
         setMenu2(null);
     };
+    
     const handleShowBacklog = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'backlog');
         setFilteredIssues(filteredIssues);
         setMenu1(null);
     };
+
     const handleShowInProgress = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'inprogress');
         setFilteredIssues(filteredIssues);
         setMenu1(null);
     };
+
     const handleShowDone = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'done');
         setFilteredIssues(filteredIssues);
