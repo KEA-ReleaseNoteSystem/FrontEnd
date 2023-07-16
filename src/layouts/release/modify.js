@@ -206,6 +206,7 @@ function ViewRelease() {
       }
 
     useEffect(() => {
+        console.log("정보를 받아와보자.")
         getReleaseNoteData(releaseId, token);
         getIssueData(releaseId, token);
         getMembersData(projectId, token);

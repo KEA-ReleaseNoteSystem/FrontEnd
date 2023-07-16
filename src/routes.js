@@ -35,6 +35,7 @@ import MyPage from "layouts/project/pages/myPage";
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
+import ViewRelease from "layouts/release/create";
 
 const routes = [
   {
@@ -149,9 +150,6 @@ const routes = [
     route: "/home",
     component: <Home />,
   },
-
-
-
   {
     type: "",
     name: "",
@@ -159,9 +157,6 @@ const routes = [
     route: "/release/create",
     component: <CreateRelease />
   },
-
-
-
   {
     type: "",
     name: "",
