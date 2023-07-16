@@ -92,7 +92,7 @@ export default function Data() {
     return {
       version: release.version,
       releaseDate: release.releaseDate && release.releaseDate.slice(0, 10),
-      author: release.member.username,
+      author: release.member && release.member.username,
       createDate: release.releaseDate && release.createdAt.slice(0, 10),
       status: release.status,
       option: (

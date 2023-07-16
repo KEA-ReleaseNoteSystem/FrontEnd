@@ -171,7 +171,7 @@ export default function App() {
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/social-login" element={<SocialLogin />} />
-        <Route path="/release/:releaseId" element={ isAuthenticated ? <CreateRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
+        <Route path="/release/:releaseId" element={ isAuthenticated ? <ViewRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
 
       </Routes>
     </ThemeProvider>

@@ -59,10 +59,8 @@ function Cover() {
     }
   }, []);
 
-  console.log("email", email);
   const handleNameChange = (event) => {
     setName(event.target.value);
-    console.log(name);
   };
 
   const handleNicknameChange = (event) => {
@@ -97,10 +95,13 @@ function Cover() {
   const isNameEmpty = name === "";
   const isNicknameEmpty = nickname === "";
   const isPositionEmpty = position === "";
-  const isEmailEmpty = (email === "") || !(email && email.includes("@"));
+  const isEmailEmpty = ((email === oauthEmail && oauthEmail === null) || email === "" ? true : false);
+  const isEmailWrong = !(email && email.includes("@"));
   const isPasswordEmpty = password === "";
+  const isPasswordUnderEight = password.length < 8;
 
-  console.log("isEmailEmpy", isEmailEmpty);
+  console.log(`oauthEmail: ${oauthEmail}, isEmailEmpty: ${isEmailEmpty}, isEmailWrong: ${isEmailWrong}`);
+
   return (
     <BasicLayout image={bgImage}>
       <br />
@@ -136,13 +137,14 @@ function Cover() {
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="email" label="이메일" variant="standard" fullWidth defaultValue={oauthEmail ? oauthEmail : ""} onChange={handleEmailChange}  disabled={!!oauthEmail}/>
+              {(!isEmailEmpty && isEmailWrong) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography>) : <MDTypography> </MDTypography>}
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="비밀번호" variant="standard" fullWidth value={password} onChange={handlePasswordChange} required/>
+              {(!isPasswordEmpty && isPasswordUnderEight) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;비밀번호는 8글자 이상입니다.</MDTypography> ) : <MDTypography> </MDTypography>}
             </MDBox>
-            {(isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty) ?  ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;제대로 입력되지 않은 칸이 존재합니다.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1} textAlign="center">
-              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
+              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isEmailWrong || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty || isPasswordUnderEight}
               component={Link} to={"/authentication/sign-up/create-group"} state = {{
                   provider: provider,
                   name: name,
@@ -155,7 +157,7 @@ function Cover() {
                 새 그룹 생성
               </MDButton>
               &nbsp;&nbsp;
-              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty}
+              <MDButton variant="gradient" color="info" type="submit" size="large" disabled={isEmailEmpty || isEmailWrong || isPositionEmpty || isNameEmpty || isNicknameEmpty || isPasswordEmpty || isPasswordUnderEight}
               component={Link} to={"/authentication/sign-up/join-group"}
                 state = {{
                   provider,

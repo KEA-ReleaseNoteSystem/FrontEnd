@@ -83,8 +83,9 @@ function Basic() {
 
 
   const isEmailEmpty = email === "";
-  const isEmailWrong = !(email.includes("@"));
+  const isEmailWrong = !(email && email.includes("@"));
   const isPasswordEmpty = password === "";
+  const isPasswordUnderEight = password.length < 8;
 
   return (
     <BasicLayout image={bgImage}>
@@ -115,6 +116,7 @@ function Basic() {
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="비밀번호" fullWidth required value={password} onChange={handlePasswordChange} />
+              {(!isPasswordEmpty && isPasswordUnderEight) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;비밀번호는 8글자 이상입니다.</MDTypography> ) : <MDTypography> </MDTypography>}
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -129,7 +131,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty} onClick={handleSubmit}>
                 로그인
               </MDButton>
             </MDBox>
