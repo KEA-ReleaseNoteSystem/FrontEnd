@@ -12,9 +12,11 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+import { React, useState, useEffect } from "react";
 
 // react-routers components
 import { Link } from "react-router-dom";
+import Modal from 'react-modal';
 
 // prop-types is library for typechecking of props
 import PropTypes from "prop-types";
@@ -32,12 +34,47 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React base styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
+import Edit from "layouts/profile/edit"
+
+const customModalStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: '1000', // add a high zIndex value
+  },
+  content: {
+    width: '60%',
+    height: '80%',
+    top: '50%',
+    left: '55%',
+    transform: 'translate(-50%, -45%)',
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 20,
+    justifyContent: 'center',
+    position: 'relative', // make sure it's a positioned element
+    zIndex: '10001',// it should be higher than overlay's zIndex to appear on top
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    borderColor: 'transparent'
+  }
+};
 
 function ProfileInfoCard({ title, description, info, social, action, shadow }) {
   const labels = [];
   const values = [];
   const { socialMediaColors } = colors;
   const { size } = typography;
+
+  const [activeModal, setActiveModal] = useState(false);
+
+  const openProfileEditModal = () => {
+    setActiveModal(true);
+  };
+
+  const closeModal = () => {
+    setActiveModal(false);
+  };
+
+
 
   // Convert this form `objectKey` of the object key in to this `object key`
   Object.keys(info).forEach((el) => {
@@ -65,18 +102,26 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
       </MDTypography>
     </MDBox>
   ));
+  
 
 
   return (
-    <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
+    <Card sx={{ height: "100%", boxShadow: !shadow && "none", width: "100%" }}>
       <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}
         </MDTypography>
         <MDTypography component={Link} to={action.route} variant="body2" color="secondary">
-          <Tooltip title={action.tooltip} placement="top">
+          <Tooltip title={action.tooltip} placement="top" onClick={openProfileEditModal}>
             <Icon>edit</Icon>
           </Tooltip>
+          <Modal
+            isOpen={activeModal}
+            onRequestClose={closeModal}
+            style={customModalStyles}
+          >
+            <Edit info={info} description={description}/>
+          </Modal>
         </MDTypography>
       </MDBox>
       <MDBox p={2}>

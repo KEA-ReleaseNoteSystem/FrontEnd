@@ -88,12 +88,13 @@ function Overview() {
               <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
               <ProfileInfoCard
                 title="profile information"
-                description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+                description={memberInfo.introduce}
                 info={{
                   fullName: memberInfo.name,
+                  nickname: memberInfo.nickname,
                   team: memberInfo.groupName,
                   position: memberInfo.position,
-                  email: memberInfo.email
+                  email: memberInfo.email,
                 }}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
