@@ -29,6 +29,16 @@ function IssueSearch() {
   const [filter,setFilter] = useState("");
   const [init,setInit] = useState(true);
 
+  const [firstfilter,setFirstfilter] = useState();
+  const [secfilter,setSecfilter] = useState();
+  const [thirdfilter,setThridfilter] = useState();
+
+  const memberList2 = membersData && membersData.map((member) => (
+    <MenuItem value={member.name}>
+        {member.name}
+    </MenuItem>
+));
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,53 +106,128 @@ function IssueSearch() {
   };
 
 
-  const filterIssue = async (state,filterFields) => {
+  // const filterIssue = async (state1, state2,state3, filterFields1, filterFields2,filterFields3) => {
+  //   try {
+  //     console.log("state1",state1)
+  //     console.log("state2",state2)
+  //     console.log("filterFields2",filterFields2)
+  //     console.log("filterFields2",filterFields3)
+  //     let url = null;
+
+  //     if (state1 != null && state2 != null  ) {
+  //       url = `/api/1/issues?${state1}=${filterFields1}&${state2}=${filterFields2}`;
+  //     } else if(state1 != null && state2 != null && state3 != null){
+  //       url = `/api/1/issues?${state1}=${filterFields1}&${state2}=${filterFields2}&${state3}=${filterFields3}`
+  //     }
+  //     else {
+  //       url = `/api/1/issues?${state1}=${filterFields1}`;
+  //     }
+  
+  //     console.log("url", url);
+  //     // API를 호출하여 이슈 업데이트
+  //     const response = await axios.get(url, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log("updatedFields", response.data.data);
+  
+  //     // 업데이트된 이슈 목록을 설정
+  //     setFetchedIssues(response.data.data);
+  
+  //     // 이슈 상세 정보 업데이트
+  //     // setIssueDetail(response.data.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const filterIssue = async (url) => {
     try {
-
-      console.log("filterFields", `/api/1/issues?${state}=${filterFields}`);
-      // API를 호출하여 이슈 업데이트
-      const response = await axios.get(`/api/1/issues?${state}=${filterFields}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log("updatedFiaselds",response.data.data);
-
-      // 업데이트된 이슈 목록을 설정
-      setFetchedIssues(response.data.data);
-
-      // // 이슈 상세 정보 업데이트
-      // setIssueDetail(response.data.data);
       
+      // URL에서 마지막 '&' 문자 제거
+      url = url.slice(0, -1);
+  
+      console.log("url", url);
+  
+      // API 호출하여 이슈 업데이트
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      console.log("updatedFields", response.data.data);
+  
+      // 업데이트된 이슈 목록 설정
+      setFetchedIssues(response.data.data);
+  
+      // 이슈 상세 정보 업데이트
+      // setIssueDetail(response.data.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   
-
-const handleFilter = (event) => {
-  const newFilter = event.target.value;
-  var state;
-
-  setFilter(newFilter);
-
-  console.log("newFilter", newFilter);
-
-  if (newFilter.toUpperCase() in IssueStatus) {
-    state = "status"
-    filterIssue(state, newFilter);
-  } 
-  else if(newFilter.toUpperCase() in IssueType){
-    state = "type"
-    filterIssue(state, newFilter);
+  const handleFilterstatus = (event) =>{
+    const selectedValue = event.target.value;
+    setFirstfilter(selectedValue)
   }
-  else{
-    filterIssue('','');
+
+  
+
+  const handleFiltertype = (event) =>{
+    const selectedValue = event.target.value;
+    setSecfilter(selectedValue)
   }
+
+  const handleFiltermember = (event) =>{
+    const selectedValue = event.target.value;
+    setThridfilter(selectedValue)
+  }
+
+
+  const handleFilter = (event) => {
+    const selectedValue = event.target.value;
+    const newFilter = [...filter, selectedValue];
+    setFilter((prevFilters) => [...prevFilters, selectedValue]);
+    console.log("Filter",filter)
+      
+    console.log("membersData", membersData);
+    console.log("newFilter", newFilter);
+    
+    var filters = {
+      status: null,
+      type: null,
+      username: null,
+    };
   
-};
+    for (let i = 0; i < newFilter.length; i++) {
+      if (newFilter[i].toUpperCase() in IssueStatus) {
+        filters.status = newFilter[i];
+      } else if (newFilter[i].toUpperCase() in IssueType) {
+        filters.type = newFilter[i];
+      } else if (membersData.some(member => member.name === newFilter[i])) {
+        console.log("ture");
+        filters.username = newFilter[i];
+      }
+    }
+    
+    let url = "/api/1/issues?";
+    
+    for (const [key, value] of Object.entries(filters)) {
+      console.log("key , value", key , value);
+      if(value == null){
+        continue;
+      }
+      url += `${key}=${value}&`;
+    }
+    console.log("add url", url)
   
+    filterIssue(url);
+  };
+
   const handleClick = (issue) => {
     setIssueDetail(issue);
     setInit(false);
@@ -177,12 +262,15 @@ const handleFilter = (event) => {
       <Select
           labelId="filter-select-label"
           id="filter-select"
-          value={filter}
-          onChange={handleFilter}
+          value={firstfilter}
+          onChange={(event) => {
+            handleFilter(event);
+            handleFilterstatus(event);
+          }}
           sx={{ minHeight: 50 }}
           displayEmpty 
         >
-        <MenuItem disabled value="">
+        <MenuItem disabled>
       상태 필터
     </MenuItem>
       {Object.values(IssueStatus).map(status => (
@@ -190,25 +278,28 @@ const handleFilter = (event) => {
           {IssueStatusCopy[status]}
         </MenuItem>
       ))}     
-      <MenuItem disabled value="">
+      {/* <MenuItem disabled value="">
       타입 필터
     </MenuItem>
     {Object.values(IssueType).map(type => (
             <MenuItem key={type} value={type}>
               {IssueTypeCopy[type]}
         </MenuItem>
-      ))} 
+      ))}  */}
     </Select>
 
-        {/* <Select
+        <Select
           labelId="type-filter-select-label"
           id="type-filter-select"
-          value={filter}
-          onChange={handleFilter}
+          value={secfilter}
+          onChange={(event) => {
+            handleFilter(event);
+            handleFiltertype(event);
+          }}
           sx={{ minHeight: 50 }}
           displayEmpty 
         >
-            <MenuItem disabled value="">
+            <MenuItem disabled>
           타입 필터
         </MenuItem>
           {Object.values(IssueType).map(type => (
@@ -216,9 +307,24 @@ const handleFilter = (event) => {
               {IssueTypeCopy[type]}
             </MenuItem>
           ))}
-        </Select> */}
+        </Select>
 
-
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={thirdfilter}
+          onChange={(event) => {
+            handleFilter(event);
+            handleFiltermember(event);
+          }}
+          displayEmpty 
+          sx={{ minHeight: 50 }}
+          >
+              <MenuItem disabled>
+            해당 이슈 담당자
+          </MenuItem>
+          {memberList2}
+                </Select>
                     </MDBox>
         <Stack direction="row" spacing={6}>
           <Grid container spacing={3}>
