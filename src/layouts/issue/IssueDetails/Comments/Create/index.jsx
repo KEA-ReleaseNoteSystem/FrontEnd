@@ -33,7 +33,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issue, fetchedMemo, setMemo })
     try {
       setCreating(true);
       var now = new Date().toISOString();
-      let result = await Axios.post(`/api/memo/1/${issue.id}/new`, {
+      let result = await Axios.post(`/api/memo/1/${issue.id}`, {
         issueId: issue.id,
         content: body,
         createdAt: now

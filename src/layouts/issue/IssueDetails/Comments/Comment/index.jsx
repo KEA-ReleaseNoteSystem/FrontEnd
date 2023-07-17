@@ -35,7 +35,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
     try {
       console.log("comment.issueId", comment.issueId);
       console.log("comment.id", comment.id);
-      let result = await Axios.delete(`/api/memo/1/${comment.issueId}/${comment.id}/delete`);
+      let result = await Axios.delete(`/api/memo/1/${comment.issueId}/${comment.id}`);
       setDeleted(true); // 삭제 상태로 설정
     } catch (error) {
       console.error('Error making the request:', error.message);
@@ -49,7 +49,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
     try {
       setUpdating(true);
       var now = new Date().toISOString();
-      let result = await Axios.patch(`/api/memo/1/${comment.issueId}/${comment.id}/patch`, {
+      let result = await Axios.patch(`/api/memo/1/${comment.issueId}/${comment.id}`, {
         memoId : comment.id,
         content: body,
         updatedAt: now

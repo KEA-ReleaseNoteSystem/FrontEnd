@@ -5,9 +5,13 @@ export const IssueType = {
 };
 
 export const IssueFilter = {
+  ALL : 'all',
   DONE: 'done',
   INPROGRESS: 'inprogress',
-  ALL : 'all'
+
+  TASK: 'task',
+  BUG: 'bug',
+  STORY: 'story',
 };
 
 export const IssueStatus = {
@@ -31,9 +35,14 @@ export const IssuePriority = {
 
 
 export const IssueFilterCopy = {
+  [IssueFilter.ALL]: 'all',
   [IssueFilter.DONE] : 'done',
   [IssueFilter.INPROGRESS]: 'inprogress',
-  [IssueFilter.ALL]: 'all',
+  
+  [IssueFilter.TASK] : 'task',
+  [IssueFilter.BUG] : 'bug',
+  [IssueFilter.STORY]: 'story',
+  
 };
 
 export const IssueTypeCopy = {

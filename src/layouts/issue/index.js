@@ -7,7 +7,6 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import MDProgress from 'components/MDProgress';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 import MDInput from 'components/MDInput';
@@ -134,6 +133,10 @@ const handleFilter = (event) => {
     state = "status"
     filterIssue(state, newFilter);
   } 
+  else if(newFilter.toUpperCase() in IssueType){
+    state = "type"
+    filterIssue(state, newFilter);
+  }
   else{
     filterIssue('','');
   }
@@ -169,10 +172,58 @@ const handleFilter = (event) => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
+      <MDBox pt={0.5} pb={3}>
+      <MDBox pt={0} pb={6}>
+      <Select
+          labelId="filter-select-label"
+          id="filter-select"
+          value={filter}
+          onChange={handleFilter}
+          sx={{ minHeight: 50 }}
+          displayEmpty 
+        >
+        <MenuItem disabled value="">
+      상태 필터
+    </MenuItem>
+      {Object.values(IssueStatus).map(status => (
+        <MenuItem key={status} value={status}>
+          {IssueStatusCopy[status]}
+        </MenuItem>
+      ))}     
+      <MenuItem disabled value="">
+      타입 필터
+    </MenuItem>
+    {Object.values(IssueType).map(type => (
+            <MenuItem key={type} value={type}>
+              {IssueTypeCopy[type]}
+        </MenuItem>
+      ))} 
+    </Select>
+
+        {/* <Select
+          labelId="type-filter-select-label"
+          id="type-filter-select"
+          value={filter}
+          onChange={handleFilter}
+          sx={{ minHeight: 50 }}
+          displayEmpty 
+        >
+            <MenuItem disabled value="">
+          타입 필터
+        </MenuItem>
+          {Object.values(IssueType).map(type => (
+            <MenuItem key={type} value={type}>
+              {IssueTypeCopy[type]}
+            </MenuItem>
+          ))}
+        </Select> */}
+
+
+                    </MDBox>
         <Stack direction="row" spacing={6}>
           <Grid container spacing={3}>
             <Grid item xs={3} id="left">
+            
               <Card>
                 <MDBox
                   mx={2}
@@ -185,24 +236,10 @@ const handleFilter = (event) => {
                   coloredShadow="info"
                 >
                   <MDTypography variant="h6" color="white">
-                 
-                    이슈 목록
+                    이슈 목록 &nbsp;
                   </MDTypography>
                 </MDBox>
-                <Select
-                      labelId="filter-select-label"
-                      id="filter-select"
-                      value={filter}
-                      onChange={handleFilter}
-                      sx={{ minHeight: 50 }}
-                    >
-                      {Object.values(IssueFilter).map(filter => (
-                        <MenuItem key={filter} value={filter}>
-                          {IssueFilterCopy[filter]}
-                      
-                        </MenuItem>
-                      ))}
-                    </Select>
+                
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
                   {isLoading ? (
                     <MDTypography>There are no issues</MDTypography>
@@ -219,7 +256,9 @@ const handleFilter = (event) => {
                   )}
                 </MDBox>
               </Card>
+              
             </Grid>
+            
 
             <Grid item xs={5}>
               <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
@@ -231,7 +270,7 @@ const handleFilter = (event) => {
           </Grid>
         </Stack>
       </MDBox>
-      <Footer />
+     
     </DashboardLayout>
   );
 }
@@ -393,8 +432,11 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
                                                         id="demo-simple-select-helper"
                                                         value={memberInCharge}
                                                         onChange={handleMemberInCharge}
-                                                        sx={{ minHeight: 50 }}
-                                                    >
+                                                        displayEmpty 
+                                                        >
+                                                            <MenuItem disabled value="">
+                                                          해당 이슈 담당자
+                                                        </MenuItem>
                                                         {memberList2}
                                                     </Select></MDTypography>
                   <MDTypography variant="subtitle2" ml={10}>
@@ -412,8 +454,12 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
                       id="demo-simple-select-helper"
                       value={memberInCharge}
                       onChange={handleMemberInCharge}
-                      sx={{ minHeight: 50 }}
-                  >
+                       displayEmpty 
+                    >
+                        <MenuItem disabled value="">
+                      해당 이슈 보고자
+                    </MenuItem>
+                  
                       {memberList2}
                   </Select></MDTypography>
                  
@@ -424,13 +470,22 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
             </Grid>
           </Card>
         </Grid>
-            <Select
+           
+      </Card>
+      <br/>
+     
+      <Select
       labelId="status-select-label"
       id="status-select"
       value={mystatus}
       onChange={event => updateIssue({status: event.target.value })}
       sx={{ minHeight: 50 }}
-    >
+      displayEmpty 
+      >
+          <MenuItem disabled value="">
+        이슈 상태 변경
+      </MenuItem>
+                  
       {Object.values(IssueStatus).map(status => (
         <MenuItem key={status} value={status}>
           {IssueStatusCopy[status]}
@@ -438,20 +493,25 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
       ))}
     </Select>
     
-      </Card>
-      <Select
+    <Select
       labelId="type-select-label"
       id="type-select"
       value={issueType}
       onChange={event => updateIssue({issueType : event.target.value })}
       sx={{ minHeight: 50 }}
-    >
+      displayEmpty 
+      >
+          <MenuItem disabled value="">
+        이슈 타입 변경
+      </MenuItem>
+    
       {Object.values(IssueType).map(type => (
         <MenuItem key={type} value={type}>
           {IssueTypeCopy[type]}
         </MenuItem>
       ))}
       </Select>
+
     </Grid>
   );
 }
