@@ -60,8 +60,9 @@ function IssueSearch() {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMembersData(membersResponse.data.data);
-        setIssueDetail(issuesResponse.data.data[0])
-        {!issuesResponse ? setIsLoading(true) : setIsLoading(false)}
+        setIssueDetail(issuesResponse.data.data[0]);
+
+        {!issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false)}
         
       } catch (error) {
         console.error(error);
@@ -366,7 +367,6 @@ function IssueSearch() {
                     >
                 
                       <ProjectBoardListIssue 
-                        
                         issue={issue}
                         index={index}
                         selected={selectedIssueIndex === index} 
@@ -387,7 +387,7 @@ function IssueSearch() {
               {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} /> }
             </Grid>
             <Grid item xs={4}>
-              {isLoading ? null :<IssueDetails issue={issueDetail} membersData ={membersData} updateIssue={updateIssue}/> }
+              {isLoading ? null : <IssueDetails issue={issueDetail} membersData ={membersData} updateIssue={updateIssue}/> }
             </Grid>
           </Grid>
         </Stack>
