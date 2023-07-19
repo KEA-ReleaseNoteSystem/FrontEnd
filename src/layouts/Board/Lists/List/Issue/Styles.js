@@ -10,10 +10,12 @@ export const IssueLink = styled(Link)`
 `;
 
 export const Issue = styled.div`
+  margin: 10px;
+  background-color: ${props => props.selected ? '#e3f2fd' : '#FFFF'};
   padding: 10px;
-  border-radius: 3px;
-  background: #fff;
-  box-shadow: 0px 1px 2px 0px rgba(9, 30, 66, 0.25);
+  border-radius: 8px;
+ 
+  box-shadow: 1.5px 1.5px 2px 1px rgba(9, 30, 66, 0.25);
   transition: background 0.1s;
   ${mixin.clickable}
   @media (max-width: 1100px) {

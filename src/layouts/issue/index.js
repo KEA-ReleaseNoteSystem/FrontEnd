@@ -15,7 +15,10 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
 import axios from 'axios';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {IssueFilter,IssueFilterCopy,IssueStatus,IssueStatusCopy,IssueType,IssueTypeCopy} from "shared/constants/issues"
+import {IssueSearchBar,IssueSearchBarCopy,IssueStatus,IssueStatusCopy,IssueType,IssueTypeCopy} from "shared/constants/issues"
+import Button from '@mui/material/Button';
+import { FilterComponent } from './FilterComponent';
+
 
 function IssueSearch() {
   const { users } = window.projectMock;
@@ -23,15 +26,19 @@ function IssueSearch() {
   const [isLoading, setIsLoading] = useState(true);
   const projectId = 1;
   const token = localStorage.getItem('ACCESS_TOKEN');
-  const [issueDetail, setIssueDetail] = useState("");
+  const [issueDetail, setIssueDetail] = useState([]);
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
   const [filter,setFilter] = useState("");
-  const [init,setInit] = useState(true);
+  const [init,setInit] = useState(false);
+  
+  const [searchBar,setSearchBar] = useState();
+  const [searchFilter,setSearchFilter] = useState();
+  const [firstfilter,setFirstfilter] = useState("");
+  const [secfilter,setSecfilter] = useState("");
+  const [thirdfilter,setThridfilter] = useState("");
+  const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
 
-  const [firstfilter,setFirstfilter] = useState();
-  const [secfilter,setSecfilter] = useState();
-  const [thirdfilter,setThridfilter] = useState();
 
   const memberList2 = membersData && membersData.map((member) => (
     <MenuItem value={member.name}>
@@ -49,13 +56,14 @@ function IssueSearch() {
           }
         });
         setFetchedIssues(issuesResponse.data.data);
-  
+      
         const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMembersData(membersResponse.data.data);
-  
-        setIsLoading(false);
+        setIssueDetail(issuesResponse.data.data[0])
+        {!issuesResponse ? setIsLoading(true) : setIsLoading(false)}
+        
       } catch (error) {
         console.error(error);
       }
@@ -77,7 +85,7 @@ function IssueSearch() {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log("updatedFields",updatedFields);
+
 
       // 업데이트된 이슈를 반영하기 위해 fetchedIssues 배열에서 해당 이슈를 찾아 업데이트
       const updatedIssues = fetchedIssues.map((issue) => {
@@ -89,8 +97,6 @@ function IssueSearch() {
         }
         return issue;
       });
-
-      console.log("updatedIssues new",updatedIssues);
 
       // 업데이트된 이슈 목록을 설정
       setFetchedIssues(updatedIssues);
@@ -104,52 +110,14 @@ function IssueSearch() {
       console.error(error);
     }
   };
-
-
-  // const filterIssue = async (state1, state2,state3, filterFields1, filterFields2,filterFields3) => {
-  //   try {
-  //     console.log("state1",state1)
-  //     console.log("state2",state2)
-  //     console.log("filterFields2",filterFields2)
-  //     console.log("filterFields2",filterFields3)
-  //     let url = null;
-
-  //     if (state1 != null && state2 != null  ) {
-  //       url = `/api/1/issues?${state1}=${filterFields1}&${state2}=${filterFields2}`;
-  //     } else if(state1 != null && state2 != null && state3 != null){
-  //       url = `/api/1/issues?${state1}=${filterFields1}&${state2}=${filterFields2}&${state3}=${filterFields3}`
-  //     }
-  //     else {
-  //       url = `/api/1/issues?${state1}=${filterFields1}`;
-  //     }
   
-  //     console.log("url", url);
-  //     // API를 호출하여 이슈 업데이트
-  //     const response = await axios.get(url, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     console.log("updatedFields", response.data.data);
-  
-  //     // 업데이트된 이슈 목록을 설정
-  //     setFetchedIssues(response.data.data);
-  
-  //     // 이슈 상세 정보 업데이트
-  //     // setIssueDetail(response.data.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const filterIssue = async (url) => {
     try {
       
       // URL에서 마지막 '&' 문자 제거
       url = url.slice(0, -1);
-  
-      console.log("url", url);
-  
+
       // API 호출하여 이슈 업데이트
       const response = await axios.get(url, {
         headers: {
@@ -157,13 +125,12 @@ function IssueSearch() {
         },
       });
   
-      console.log("updatedFields", response.data.data);
-  
-      // 업데이트된 이슈 목록 설정
+      // 필터링된 이슈 목록 설정
       setFetchedIssues(response.data.data);
-  
-      // 이슈 상세 정보 업데이트
-      // setIssueDetail(response.data.data);
+      setInit(true);
+      setSelectedIssueIndex(0);
+      setIssueDetail(response.data.data[0])
+      {response.data.data[0] == undefined  ? setIsLoading(true) : setIsLoading(false)}
     } catch (error) {
       console.error(error);
     }
@@ -192,10 +159,7 @@ function IssueSearch() {
     const selectedValue = event.target.value;
     const newFilter = [...filter, selectedValue];
     setFilter((prevFilters) => [...prevFilters, selectedValue]);
-    console.log("Filter",filter)
-      
-    console.log("membersData", membersData);
-    console.log("newFilter", newFilter);
+
     
     var filters = {
       status: null,
@@ -209,29 +173,48 @@ function IssueSearch() {
       } else if (newFilter[i].toUpperCase() in IssueType) {
         filters.type = newFilter[i];
       } else if (membersData.some(member => member.name === newFilter[i])) {
-        console.log("ture");
         filters.username = newFilter[i];
       }
     }
     
     let url = "/api/1/issues?";
     
+
     for (const [key, value] of Object.entries(filters)) {
-      console.log("key , value", key , value);
+
       if(value == null){
         continue;
       }
       url += `${key}=${value}&`;
     }
-    console.log("add url", url)
+
   
     filterIssue(url);
   };
 
-  const handleClick = (issue) => {
-    setIssueDetail(issue);
-    setInit(false);
+  const handleRefresh = () => {
+    setFirstfilter("");
+    setSecfilter("");
+    setThridfilter("");
+    filterIssue("/api/1/issues?"); 
+  }
+
+
+  const handleSearchFilterChange = (event) => {
+    setSearchFilter(event.target.value);
   };
+
+  const handleSearchBarChange = (event) => {
+    setSearchBar(event.target.value);
+  };
+  
+  const handleClick = (issue,issueIndex) => {
+    setIssueDetail(issue);
+    setSelectedIssueIndex(issueIndex);
+    setInit(false);
+    
+  };
+  
 
   useEffect(() => {
     const fetchMemo = async () => {
@@ -246,10 +229,11 @@ function IssueSearch() {
       }
     };
 
-    if (issueDetail.id) {
+   
       fetchMemo();
-    }
-  }, []);
+    
+  }, [!issueDetail ? null : issueDetail.id]);
+
 
 
   console.log("init",init);
@@ -259,7 +243,31 @@ function IssueSearch() {
       <DashboardNavbar />
       <MDBox pt={0.5} pb={3}>
       <MDBox pt={0} pb={6}>
-      <Select
+          <Select
+              labelId="searchbar-select-label"
+              id="searchbar-select"
+              value={searchFilter}
+              onChange={
+                handleSearchFilterChange
+              }
+              sx={{ minHeight: 40 }}
+              displayEmpty 
+            >
+            <MenuItem disabled>
+          이슈 검색 필터
+        </MenuItem>
+          {Object.values(IssueSearchBar).map(status => (
+            <MenuItem key={status} value={status}>
+              {IssueSearchBarCopy[status]}
+            </MenuItem>
+          ))}     
+        </Select>
+        
+        <MDInput variant="standard" defaultValue={searchBar} onChange={handleSearchBarChange} style={{ paddingTop: '12px' }}/>
+           
+        &nbsp; &nbsp; &nbsp;
+
+        <Select
           labelId="filter-select-label"
           id="filter-select"
           value={firstfilter}
@@ -267,8 +275,9 @@ function IssueSearch() {
             handleFilter(event);
             handleFilterstatus(event);
           }}
-          sx={{ minHeight: 50 }}
+          sx={{ minHeight: 40 }}
           displayEmpty 
+          renderValue={(value) => value === "" ? "상태" : `상태 : ${value}`}
         >
         <MenuItem disabled>
       상태 필터
@@ -278,36 +287,31 @@ function IssueSearch() {
           {IssueStatusCopy[status]}
         </MenuItem>
       ))}     
-      {/* <MenuItem disabled value="">
-      타입 필터
-    </MenuItem>
-    {Object.values(IssueType).map(type => (
-            <MenuItem key={type} value={type}>
-              {IssueTypeCopy[type]}
-        </MenuItem>
-      ))}  */}
     </Select>
+    &nbsp; &nbsp;
 
-        <Select
-          labelId="type-filter-select-label"
-          id="type-filter-select"
-          value={secfilter}
-          onChange={(event) => {
-            handleFilter(event);
-            handleFiltertype(event);
-          }}
-          sx={{ minHeight: 50 }}
-          displayEmpty 
+          <Select
+        labelId="type-filter-select-label"
+        id="type-filter-select"
+        value={secfilter}
+        onChange={(event) => {
+          handleFilter(event);
+          handleFiltertype(event);
+        }}
+        sx={{ minHeight: 40 }}
+        displayEmpty
+        renderValue={(value) => value === "" ? "타입" : `타입 : ${value}`}
         >
-            <MenuItem disabled>
-          타입 필터
-        </MenuItem>
+          <MenuItem disabled>
+            타입 필터
+          </MenuItem>
           {Object.values(IssueType).map(type => (
             <MenuItem key={type} value={type}>
               {IssueTypeCopy[type]}
             </MenuItem>
           ))}
         </Select>
+        &nbsp; &nbsp;
 
         <Select
           labelId="demo-simple-select-helper-label"
@@ -318,13 +322,15 @@ function IssueSearch() {
             handleFiltermember(event);
           }}
           displayEmpty 
-          sx={{ minHeight: 50 }}
+          renderValue={(value) => value === "" ? "담당자" : `담당자 : ${value}`}
+          sx={{ minHeight: 40 }}
           >
               <MenuItem disabled>
             해당 이슈 담당자
           </MenuItem>
           {memberList2}
                 </Select>
+          <Button onClick={handleRefresh}>새로고침</Button>
                     </MDBox>
         <Stack direction="row" spacing={6}>
           <Grid container spacing={3}>
@@ -347,17 +353,24 @@ function IssueSearch() {
                 </MDBox>
                 
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
-                  {isLoading ? (
-                    <MDTypography>There are no issues</MDTypography>
-                  ) : (
-                    fetchedIssues.map((issue, index) => (
-                      <div key={issue.id} onClick={() => handleClick(issue)}>
-                        <ProjectBoardListIssue
-                          projectUsers={users}
-                          issue={issue}
-                          index={index}
-                        />
-                      </div>
+                {console.log("isLoading",isLoading)}
+                {isLoading ? (
+                  <MDTypography>There are no issues</MDTypography>
+                ) : (
+                  fetchedIssues.map((issue, index) => (
+                    <div
+                      key={issue.id}
+                      onClick={() => handleClick(issue,index)}
+                    >
+                
+                      <ProjectBoardListIssue 
+                        projectUsers={users}
+                        issue={issue}
+                        index={index}
+                        selected={selectedIssueIndex === index} 
+
+                      />
+                    </div>
                     ))
                   )}
                 </MDBox>
@@ -365,13 +378,14 @@ function IssueSearch() {
               
             </Grid>
             
-
+            {console.log("issueDetail1",issueDetail)}
+            {console.log("updateIssue1",updateIssue)}
+            {console.log("fetchedMemo1",fetchedMemo)}
             <Grid item xs={5}>
-              <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />
+              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} /> }
             </Grid>
-
             <Grid item xs={4}>
-              <IssueDetails issue={issueDetail} membersData ={membersData} updateIssue={updateIssue}/>
+              {isLoading ? null :<IssueDetails issue={issueDetail} membersData ={membersData} updateIssue={updateIssue}/> }
             </Grid>
           </Grid>
         </Stack>
@@ -392,10 +406,6 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
   useEffect(() => {
     setMemo(fetchedMemo);
   }, [updateIssue]);
-
-  console.log("issue",issue);
-  console.log("fetchedMemo",Memo)
-
 
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
@@ -439,7 +449,7 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
                     <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       댓글
                     </MDTypography>
-                    {issue.length == 0 ?  null : <Comments issue={issue} memo={Memo} fetchedMemo={fetchedMemo} setMemo={setMemo} />}
+                     <Comments issue={issue} memo={Memo} fetchedMemo={fetchedMemo} setMemo={setMemo}/>
                   </Grid> 
                   <Grid item xs={8}>
                   </Grid>
@@ -466,9 +476,6 @@ function IssueDetails({ issue ,membersData ,updateIssue }) {
   const [issueType, setIssueType] = useState('');
 
 
-  console.log("memberInCharge",memberInCharge);
-  console.log("statusstatusstatus",issue.status);
-  console.log("issueType", issue.issueType );
 
   useEffect(() => {
     // setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');

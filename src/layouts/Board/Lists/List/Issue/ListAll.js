@@ -13,9 +13,8 @@ const propTypes = {
   index: PropTypes.number.isRequired,
 };
 
-const ProjectBoardListIssue = ({ projectUsers, issue, index }) => {
+const ProjectBoardListIssue = ({ projectUsers, issue, index,selected }) => {
 
-  const [selectedIssue, setSelectedIssue] = useState(null);
 
   // const assignees = issue.map(userId => projectUsers.find(user => user.id === userId));
 
@@ -68,7 +67,7 @@ const getPriorityColor = (priority) => {
       </IssueLink>
        */}
 
-<Issue>
+<Issue selected={selected}>
     <Title>#{issue.issueNum} {issue.title}
         
     </Title>
