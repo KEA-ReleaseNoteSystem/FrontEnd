@@ -462,7 +462,7 @@ function ViewRelease() {
                     </MDBox>
                     <MDBox pt={1} pl={1} pr={1}>
                         <MDTypography variant="caption" color="info" sx={{ml:1}}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
-                        {otherIssueData.map((issue) => (
+                        {otherIssueData && otherIssueData.map((issue) => (
                             <Issue>
                                 <Title>#{issue.issueNum} {issue.title}
                                     <MDBadge
