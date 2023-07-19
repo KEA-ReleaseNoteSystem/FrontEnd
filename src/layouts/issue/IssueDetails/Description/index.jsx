@@ -40,7 +40,7 @@ const ProjectBoardIssueDetailsDescription = ( {issue,updateIssue} ) => {
 
   const isDescriptionEmpty = getTextContentsFromHtmlString(description).trim().length === 0;
 
-  console.log("title123",title);
+  
 
   const handleUpdate = () => {
   setEditing(false);

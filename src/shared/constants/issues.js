@@ -1,3 +1,9 @@
+
+export const IssueSearchBar = {
+  TITLE: '제목',
+  USERNAME: '담당자',
+};
+
 export const IssueType = {
   TASK: 'task',
   BUG: 'bug',
@@ -32,6 +38,13 @@ export const IssuePriority = {
   LOW: '2',
   LOWEST: '1',
 };
+
+
+export const IssueSearchBarCopy = {
+  [IssueSearchBar.TITLE]: '제목',
+  [IssueSearchBar.USERNAME]: '담당자',
+};
+
 
 
 export const IssueFilterCopy = {
