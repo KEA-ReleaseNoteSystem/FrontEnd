@@ -142,16 +142,16 @@ function ViewRelease() {
             setIssueData(response.data.data);
             setFilteredIssues(response.data.data);
 
-            (response.data.data).forEach((issue) => {
-                if (issue.status === 'backlog') {
-                    counts[0]++;
-                } else if (issue.status === 'inprogress') {
-                    counts[1]++;
-                } else if (issue.status === 'done') {
-                    counts[2]++;
-                }
-            });
-            setStatusNo(counts);
+            // (response.data.data).forEach((issue) => {
+            //     if (issue.status === 'backlog') {
+            //         counts[0]++;
+            //     } else if (issue.status === 'inprogress') {
+            //         counts[1]++;
+            //     } else if (issue.status === 'done') {
+            //         counts[2]++;
+            //     }
+            // });
+            // setStatusNo(counts);
 
         } catch (error) {
             console.error(error);
@@ -331,7 +331,7 @@ function ViewRelease() {
     const addIssue = (id) => {
         filterReset();
         const selectedIssue = otherIssueData.filter((issue) => issue.id === id);
-        const addedIssues = issueData.concat(selectedIssue);
+        const addedIssues = issueData ? issueData.concat(selectedIssue) : selectedIssue;
         const removedIssues = otherIssueData.filter((issue) => issue.id !== id);
         setIssueData(addedIssues);
         setFilteredIssues(addedIssues);
@@ -343,7 +343,7 @@ function ViewRelease() {
         filterReset();
         const removedIssues = issueData.filter((issue) => issue.id !== id);
         const selectedIssue = filteredIssues.filter((issue) => issue.id === id);
-        const addedIssues = otherIssueData.concat(selectedIssue);
+        const addedIssues = issueData ? otherIssueData.concat(selectedIssue) : selectedIssue;
         setIssueData(removedIssues);
         setFilteredIssues(removedIssues);
         setOtherIssueData(addedIssues);
