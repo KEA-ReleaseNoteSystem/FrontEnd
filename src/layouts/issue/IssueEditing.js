@@ -9,14 +9,25 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 
 
 function IssueEditing({ issue, updateIssue, fetchedMemo }) {
-
-
     // console.log("updateIssue",updateIssue);
-  
     const [Memo, setMemo] = useState(fetchedMemo);
+    const [childIssues, setChildIssues] = useState([]);
+
+
+    async function getChildIssues(issueId, token) {
+      try {
+          const response = await axios.get(`/api/childIssues/${encodeURIComponent(issueId)}`, {
+              headers: { Authorization: `Bearer ${token}` }
+          });
+          setChildIssues(response.data.data);
+      } catch (error) {
+          console.error(error);
+      }
+  }
   
     useEffect(() => {
       setMemo(fetchedMemo);
+      getChildIssues()
     }, [updateIssue]);
   
     return (
@@ -37,19 +48,32 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
             </MDTypography>
           </MDBox>
           <Grid item xs={12} >
-  
             <MDBox pt={2} px={2}>
-          
             </MDBox>
             <MDBox pt={2} px={2} mb={2}>
               <Card sx={{ backgroundColor: '#F0EDEE' }}>
                 <MDBox pt={2} px={2} pb={2}>
-                 
                   <MDBox pt={2} px={2}>
                     <MDTypography variant="body2">
                       <Description issue={issue} updateIssue={updateIssue} />
                     </MDTypography>
                   </MDBox>
+                </MDBox>
+              </Card>
+            </MDBox>
+            <MDBox pt={2} px={2} mb={2}>
+              <Card sx={{ backgroundColor: '#F0EDEE' }}>
+                <MDBox pt={2} px={2} pb={2}>
+                  <Grid container spacing={0}>
+                    <Grid item xs={11} >
+                      <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
+                        하위 이슈 관리
+                      </MDTypography>
+                    </Grid>
+                    <Grid item xs={8} sx={{m:3}}>
+                      테스트
+                    </Grid>
+                  </Grid>
                 </MDBox>
               </Card>
             </MDBox>
