@@ -37,7 +37,8 @@ function IssueSearch() {
   const [secfilter, setSecfilter] = useState("");
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
-
+  const [currentIds, setCurrentIds] = useState([]);
+  const [otherIssue, setOtherIssue] = useState([]);
 
   const memberList2 = membersData && membersData.map((member) => (
     <MenuItem value={member.name}>
@@ -91,6 +92,8 @@ function IssueSearch() {
     fetchMemo();
 
   }, [!issueDetail ? null : issueDetail.id]);
+
+
 
 
 
@@ -197,6 +200,8 @@ function IssueSearch() {
     const selectedValue = event.target.value;
     setFirstfilter(selectedValue)
   }
+
+
 
 
 
@@ -381,7 +386,7 @@ function IssueSearch() {
             {console.log("updateIssue1", updateIssue)}
             {console.log("fetchedMemo1", fetchedMemo)}
             <Grid item xs={5}>
-              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} />}
+              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId}/>}
             </Grid>
             <Grid item xs={4}>
               {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} />}

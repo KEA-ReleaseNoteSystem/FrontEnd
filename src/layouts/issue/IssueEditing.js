@@ -9,6 +9,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
+import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+import axios from "axios";
 
 const customModalStyles = {
   overlay: {
@@ -31,36 +33,112 @@ const customModalStyles = {
 };
 
 
-function IssueEditing({ issue, updateIssue, fetchedMemo }) {
+function IssueEditing({ issue, updateIssue, fetchedMemo,projectId }) {
   // console.log("updateIssue",updateIssue);
   const [Memo, setMemo] = useState(fetchedMemo);
   const [childIssues, setChildIssues] = useState([]);
   const [activeModal, setActiveModal] = useState("");
+  const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
+
+  const [currentIds, setCurrentIds] = useState([issue.id]);
+  const [otherIssue, setOtherIssue] = useState([]);
+  const [isLoading,setIsLoading] = useState(true);
+
+
 
   const openIssueAddModal = () => {
     setActiveModal("addChildIssue");
   };
-
+ 
   const closeModal = () => {
+    setCurrentIds([issue.id]);
     setActiveModal(null);
+    console.log("이슈id",issue.id);
   };
 
 
-  async function getChildIssues(issueId, token) {
+  const handleClick = (issue, issueIndex) => {
+    setSelectedIssueIndex(issueIndex);
+
+  };
+
+
+
+  //
+
+
+  // const getOtherIssue = async (excludeissues) => {
+  //   try {
+  //     console.log("시발");
+  //     const response = await axios.get(`/api/${projectId}/issues?exclude=${excludeissues.join(',')}` , { headers : {
+  //       Authorization: `Bearer ${token}`
+  //     }});
+  //     console.log('Response other:', response.data.data);
+  //     setOtherIssue(response.data.data);
+  //     setIsLoading(false);
+
+    
+  //   } 
+  //   catch (error) {
+  //   console.error(error);
+  //   }
+  // };
+
+  
+  const getOtherIssue = async (excludeissues) => {
     try {
-      const response = await axios.get(`/api/childIssues/${encodeURIComponent(issueId)}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setChildIssues(response.data.data);
-    } catch (error) {
-      console.error(error);
+      console.log("시발롬아!",`/api/${projectId}/issues?exclude=${excludeissues.join(',')}`);
+      const response = await axios.get(`/api/${projectId}/issues?exclude=${excludeissues.join(',')}`);
+
+      console.log('Response other:', response.data.data);
+      setOtherIssue(response.data.data);
+      setIsLoading(false);
+
+    
+    } 
+    catch (error) {
+    console.error(error);
     }
-  }
+  };
+
+
+  
+
+  // const handleCurrentIds = (id) => {
+  //   setCurrentIds(prevState => {
+  //     if (prevState.includes(id)) {
+  //       return prevState;
+  //     } else {
+  //       return [...prevState, id];
+  //     }
+  //   });
+  // };
+  
+
+
+  // async function getChildIssues(issueId, token) {
+  //   try {
+  //     const response = await axios.get(`/api/childIssues/${encodeURIComponent(issueId)}`, {
+  //       headers: { Authorization: `Bearer ${token}` }
+  //     });
+  //     setChildIssues(response.data.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   useEffect(() => {
     setMemo(fetchedMemo);
-    getChildIssues()
+    
+    // getChildIssues()
   }, [updateIssue]);
+
+
+  useEffect(() => {
+    setCurrentIds([issue.id])
+    
+    // getChildIssues()
+  }, [issue.id]);
 
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
@@ -103,9 +181,50 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
                     </MDTypography>
                   </Grid>
                   <Grid item xs={4}>
-                    <MDButton size="small" color="black" onClick={openIssueAddModal}>
+                    <MDButton size="small" color="black"  onClick={() => { openIssueAddModal(); getOtherIssue(currentIds);}}>
                       <AddCircleOutlineIcon color="white" />&nbsp; 추가
                     </MDButton>
+                    <Modal
+        isOpen={activeModal === "addChildIssue"}
+        onRequestClose={closeModal}
+        style={customModalStyles}
+      >
+        <Card>
+          <MDBox
+            mx={2}
+            mt={-3}
+            py={3}
+            px={2}
+            variant="gradient"
+            bgColor="info"
+            borderRadius="lg"
+            coloredShadow="info"
+          >
+            <MDTypography variant="h6" color="white">
+              하위 이슈 추가
+            </MDTypography>
+          </MDBox>
+          <MDBox pt={1} pl={1} pr={1}>
+            <MDTypography variant="caption" color="info" sx={{ ml: 1 }}>연결된 하위 이슈를 추가할 수 있습니다.</MDTypography>
+            {isLoading ? (
+                    <MDTypography>There are no issues</MDTypography>
+                  ) : (
+                    otherIssue.map((issue, index) => (
+                      <div
+                        key={issue.id}
+                        onClick={() => {handleClick(issue, index)}}
+                      >
+                        <ProjectBoardListIssue
+                          issue={issue}
+                          index={index}
+                          selected={selectedIssueIndex === index}
+                        />
+                      </div>
+                    ))
+                  )}
+          </MDBox>
+        </Card>
+      </Modal>
                   </Grid>
                   <Grid item xs={8} sx={{ m: 3 }}>
                     테스트
@@ -138,31 +257,7 @@ function IssueEditing({ issue, updateIssue, fetchedMemo }) {
           </MDBox>
         </Grid>
       </Card>
-      <Modal
-        isOpen={activeModal === "addChildIssue"}
-        onRequestClose={closeModal}
-        style={customModalStyles}
-      >
-        <Card>
-          <MDBox
-            mx={2}
-            mt={-3}
-            py={3}
-            px={2}
-            variant="gradient"
-            bgColor="info"
-            borderRadius="lg"
-            coloredShadow="info"
-          >
-            <MDTypography variant="h6" color="white">
-              하위 이슈 추가
-            </MDTypography>
-          </MDBox>
-          <MDBox pt={1} pl={1} pr={1}>
-            <MDTypography variant="caption" color="info" sx={{ ml: 1 }}>연결된 하위 이슈를 추가할 수 있습니다.</MDTypography>
-          </MDBox>
-        </Card>
-      </Modal>
+   
     </Grid>
   );
 }
