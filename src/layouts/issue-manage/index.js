@@ -39,134 +39,61 @@ const defaultFilters = {
   recent: false,
 };
 
+/*
+   // {
+    //   id: 1,
+    //   name: 'Project 1',
+    //   users: [
+    //     { id: 1, name: 'User 1', email: 'user1@example.com', avatarUrl: 'avatar1url' },
+    //     { id: 2, name: 'User 2', email: 'user2@example.com', avatarUrl: 'avatar2url' },
+    //   ],
+    //   issues: [
+    //     {
+    //         id: 3,
+    //         title: 'Issue 3',
+    //         type: 'task',
+    //         description: 'Description for Issue 1',
+    //         status: 'backlog',
+    //         comments : [
+    //           {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 3"}
+    //       ],
+    //         listPosition: 3,
+    //         priority: 90,
+    //         userIds: [1],
+    //         createdAt: '2023-06-28',
+    //     },
+    //     {
+    //       id: 4,
+    //       title: 'Issue 4',
+    //       type: 'task',
+    //       description: 'Description for Issue 2',
+    //       status: 'backlog',
+    //       comments : [
+    //         {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 4"}
+    //     ],
+    //       listPosition: 4,
+    //       priority: 99,
+    //       userIds: [2],
+    //       createdAt: '2023-06-29',
+    //     },
+    //     {
+    //       id: 6,
+    //       title: 'Issue 6',
+    //       type: 'task',
+    //       description: 'Description for Issue 2',
+    //       status: 'inprogress',
+    //       comments : [
+    //         {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 6"}
+    //     ],
+    //       listPosition: 2,
+    //       priority: 10,
+    //       userIds: [2],
+    //       createdAt: '2023-06-29',
+    //     },
+    //   ],
+    // }
+*/
 
-
-
-window.projectMock = {
-  id: 1,
-  name: 'Project 1',
-  users: [
-    { id: 1, name: 'User 1', email: 'user1@example.com', avatarUrl: 'avatar1url' },
-    { id: 2, name: 'User 2', email: 'user2@example.com', avatarUrl: 'avatar2url' },
-  ],
-  issues: [
-    {
-      id: 1,
-      title: 'Issue 1',
-      type: 'task',
-      description: 'Description for Issue 1',
-      status: 'backlog',
-      listPosition: 1,
-      comments : [
-        {user : {id :"1",name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 1"}
-    ],
-      priority: 23,
-      userIds: [1],
-      createdAt: '2023-06-28',
-    },
-    {
-      id: 2,
-      title: 'Issue 2',
-      type: 'task',
-      description: 'Description for Issue 2',
-      status: 'backlog',
-      listPosition: 2,
-      priority: 50,
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 2"}
-    ],
-      userIds: [2],
-      createdAt: '2023-06-29',
-    },
-    //... more issues as needed
-    {
-      id: 3,
-      title: 'Issue 3',
-      type: 'task',
-      description: 'Description for Issue 1',
-      status: 'backlog',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 3"}
-    ],
-      listPosition: 3,
-      priority: 90,
-      userIds: [1],
-      createdAt: '2023-06-28',
-    },
-    {
-      id: 4,
-      title: 'Issue 4',
-      type: 'task',
-      description: 'Description for Issue 2',
-      status: 'backlog',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 4"}
-    ],
-      listPosition: 4,
-      priority: 99,
-      userIds: [2],
-      createdAt: '2023-06-29',
-    },
-    //... more issues as needed
-    {
-      id: 5,
-      title: 'Issue 5',
-      type: 'task',
-      description: 'Description for Issue 1',
-      status: 'inprogress',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 5"}
-    ],
-      listPosition: 1,
-      priority: 73,
-      userIds: [1],
-      createdAt: '2023-06-28',
-    },
-    {
-      id: 6,
-      title: 'Issue 6',
-      type: 'task',
-      description: 'Description for Issue 2',
-      status: 'inprogress',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 6"}
-    ],
-      listPosition: 2,
-      priority: 10,
-      userIds: [2],
-      createdAt: '2023-06-29',
-    },
-    //... more issues as needed
-    {
-      id: 7,
-      title: 'Issue 7',
-      type: 'task',
-      description: 'Description for Issue 2',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 7"}
-    ],
-      status: 'done',
-      listPosition: 1,
-      priority: 55,
-      userIds: [2],
-      createdAt: '2023-06-29',
-    },
-    {
-      id: 8,
-      title: 'Issue 8',
-      type: 'task',
-      description: 'Description for Issue 2',
-      comments : [
-        {user : {name:"park", avatarUrl:'avatar1url'}, createdAt:"2023-06-29",body:"댓글 8"}
-    ],
-      status: 'done',
-      listPosition: 2,
-      priority: 35,
-      userIds: [2],
-      createdAt: '2023-06-29',
-    },
-  ],
-};
 
 const filtersMock = {
   searchTerm: 'issue',
@@ -189,22 +116,19 @@ const fetchProjectMock = () => {
 };
 
 
-const ProjectBoard = (
-  // const [issue, setIssue] = useState(null);
+const ProjectBoard = () => {
+  const [projectMock, setProjectMock] = useState();
 
-  { project = { projectMock },
-  fetchProject = { fetchProjectMock }
-  , updateLocalProjectIssues = { updateLocalProjectIssuesMock } }) => {
-const getAPI = async() => {
-  const response = await axios.get(`/api/1/issues`);
-  console.log('== response: ', response.data.data);
-}
+  const getAPI = async () => {
+    const response = await axios.get(`/api/project/111/issues/management`);
+    console.log('== response == : ', response.data.data);
+    setProjectMock(response.data.data);
 
-    useEffect(()=>{
-      getAPI();
-    },[]);
+  }
 
-  // const [filters, mergeFilters] = useMergeState(defaultFilters);
+  useEffect(() => {
+    getAPI();
+  }, []);
 
   return (
 
@@ -228,21 +152,28 @@ const getAPI = async() => {
                   Issue
                 </MDTypography>
               </MDBox>
+
               <MDBox pt={3}>
                 <Filters
-                  projectUsers={projectMock.users}
+                  // projectUsers={projectMock.users}
                   //defaultFilters={filtersMock} // You should have this defined somewhere
                   filters={filtersMock}
                   mergeFilters={() => { }} // This should be a function that merges the filters
                 />
-                </MDBox>
-                <MDBox pt={3}>
-                <Lists
-                  project={projectMock}
-                  filters={filtersMock}
-                  updateLocalProjectIssues={updateLocalProjectIssuesMock}
-                />
               </MDBox>
+
+              <MDBox pt={3}>
+                {!projectMock ? null :
+                  <>
+                    <Lists
+                      project={projectMock}
+                      filters={filtersMock}
+                      updateLocalProjectIssues={updateLocalProjectIssuesMock}
+                    />
+                  </>
+                }
+              </MDBox>
+
             </Card>
           </Grid>
         </Grid>

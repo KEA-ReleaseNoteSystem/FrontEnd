@@ -13,7 +13,7 @@ import MDBadge from "components/MDBadge";
 
 
 const propTypes = {
-  projectUsers: PropTypes.array.isRequired,
+  // projectUsers: PropTypes.array.isRequired,
   issue: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
 };
@@ -39,7 +39,8 @@ const customModalStyles = {
 };
 
 
-const addIssue = ({ projectUsers, issue, index }) => {
+// const addIssue = ({ projectUsers, issue, index }) => {
+  const addIssue = ({ issue, index }) => {
   const [activeModal, setActiveModal] = useState("");
 
   const openIssueDetailModal = () => {
@@ -53,7 +54,7 @@ const addIssue = ({ projectUsers, issue, index }) => {
 
 
   console.log("index", index);
-  const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
+  // const assignees = issue.userIds.map(userId => projectUsers.find(user => user.id === userId));
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -108,7 +109,7 @@ const addIssue = ({ projectUsers, issue, index }) => {
                   />
 
                 </div>
-                <Assignees>
+                {/* <Assignees>
                   {assignees.map(user => (
                     <AssigneeAvatar
                       key={user.id}
@@ -117,7 +118,7 @@ const addIssue = ({ projectUsers, issue, index }) => {
                       name={user.name}
                     />
                   ))}
-                </Assignees>
+                </Assignees> */}
               </Bottom>
             </Issue>
           </div>

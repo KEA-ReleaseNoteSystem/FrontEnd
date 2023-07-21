@@ -12,7 +12,6 @@ import { Lists } from './Styles';
 import { Button } from '@mui/material';
 
 
-
 const propTypes = {
   project: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
@@ -23,24 +22,27 @@ const currentUserIdMock = 1;
 
 const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
-
-
   const [updatedProject, setUpdatedProject] = useState(project);
-
 
   const { currentUserId } = currentUserIdMock;
 
   const handleIssueDrop = ({ draggableId, destination, source }) => {
+    /*
+    console.log("draggableId: ", draggableId);
+    console.log("destination: ", destination);
+    console.log("source: ", source);
+
+    이거 가지고 수정 API 날리면 됨
+    */
+
 
     if (!isPositionChanged(destination, source)) return;
 
     const issueId = Number(draggableId);
 
-
     const updateLocalProjectIssuesMock = (issueId, fields) => {
-      
+
       const issueToUpdate = project.issues.find(issue => issue.id === issueId);
-    
 
       if (issueToUpdate) {
         issueToUpdate.status = fields.status;
@@ -55,11 +57,10 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     };
 
     updateLocalProjectIssuesMock(issueId, {
-      status: destination.droppableId, 
+      status: destination.droppableId,
       position:
         calculateIssueListPosition(updatedProject.issues, destination, source, issueId)
     });
-
   };
 
   return (
@@ -90,10 +91,10 @@ const isPositionChanged = (destination, source) => {
 
 const calculateIssueListPosition = (...args) => {
   const { prevIssue, nextIssue } = getAfterDropPrevNextIssue(...args);
-  
+
   let position;
 
-  if ((!prevIssue && !nextIssue) || (prevIssue===undefined && nextIssue===undefined)) {
+  if ((!prevIssue && !nextIssue) || (prevIssue === undefined && nextIssue === undefined)) {
     position = 1;
   } else if (!prevIssue || prevIssue === undefined) {
     position = nextIssue.listPosition - 1;
@@ -111,37 +112,36 @@ const getAfterDropPrevNextIssue = (allIssues, destination, source, droppedIssueI
 
   let droppedIssue = [];
   let diffIssue = [];
-  for(let i=0; i< allIssues.length; i++){
-    if(allIssues[i].status === destination.droppableId)
-    droppedIssue.push(allIssues[i]);
-    else if(allIssues[i].id === droppedIssueId)
-    diffIssue.push(allIssues[i]);
+  for (let i = 0; i < allIssues.length; i++) {
+    if (allIssues[i].status === destination.droppableId)
+      droppedIssue.push(allIssues[i]);
+    else if (allIssues[i].id === droppedIssueId)
+      diffIssue.push(allIssues[i]);
   }
   const isSameList = destination.droppableId === source.droppableId;
 
   let afterDropDestinationIssues = null;
-  if(isSameList){
+  if (isSameList) {
     afterDropDestinationIssues = moveItemWithinArray(beforeDropDestinationIssues, droppedIssue, destination.index);
     console.log(afterDropDestinationIssues[destination.index])
-    if(source.index > destination.index){
+    if (source.index > destination.index) {
       return {
-        prevIssue: afterDropDestinationIssues[destination.index-1],
-        nextIssue: afterDropDestinationIssues[destination.index ],
+        prevIssue: afterDropDestinationIssues[destination.index - 1],
+        nextIssue: afterDropDestinationIssues[destination.index],
       };
-    }else{
+    } else {
       return {
         prevIssue: afterDropDestinationIssues[destination.index],
         nextIssue: afterDropDestinationIssues[destination.index + 2],
       };
     }
-  }else{
+  } else {
     afterDropDestinationIssues = insertItemIntoArray(beforeDropDestinationIssues, diffIssue, destination.index);
     return {
-      prevIssue: afterDropDestinationIssues[destination.index-1],
+      prevIssue: afterDropDestinationIssues[destination.index - 1],
       nextIssue: afterDropDestinationIssues[destination.index + 1],
     };
   }
-
 };
 
 const getSortedListIssues = (issues, status) =>
