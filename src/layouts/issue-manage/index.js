@@ -120,7 +120,7 @@ const ProjectBoard = () => {
   const [projectMock, setProjectMock] = useState();
 
   const getAPI = async () => {
-    const response = await axios.get(`/api/project/111/issues/management`);
+    const response = await axios.get(`/api/project/1/issues/management`);
     console.log('== response == : ', response.data.data);
     setProjectMock(response.data.data);
 
@@ -128,6 +128,14 @@ const ProjectBoard = () => {
 
   useEffect(() => {
     getAPI();
+    // 5초마다 getAPI를 호출하는 인터벌 생성
+    const intervalId = setInterval(getAPI, 5000);
+    console.log("5초가 지났으니 정보를 다시 받아와보아요!")
+
+    // 컴포넌트가 언마운트될 때 인터벌 정리
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
