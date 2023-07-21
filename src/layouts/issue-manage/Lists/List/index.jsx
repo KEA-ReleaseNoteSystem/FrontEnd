@@ -64,10 +64,11 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
     setActiveModal(null);
   };
 
+  const filteredListIssues = getSortedListIssues(project?.issues ?? [], status);
 
-  const filteredIssues = filterIssues(project.issues, filters, currentUserId);
-  const filteredListIssues = getSortedListIssues(project.issues, status);
-  const allListIssues = getSortedListIssues(project.issues, status);
+  const allListIssues = getSortedListIssues(project?.issues ?? [], status);
+
+
   console.log("filteredListIssues!!", filteredListIssues)
 
   const [anchorEl, setAnchorEl] = useState(null);
