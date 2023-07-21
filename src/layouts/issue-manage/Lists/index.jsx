@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
+import axios from 'axios';
 
 import useCurrentUser from 'shared/hooks/currentUser';
 // import api from 'shared/utils/api';
@@ -22,18 +23,25 @@ const currentUserIdMock = 1;
 
 const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
+  // console.log("projectId: ", project);
+  console.log("projectId: ", project.id);
   const [updatedProject, setUpdatedProject] = useState(project);
 
   const { currentUserId } = currentUserIdMock;
 
-  const handleIssueDrop = ({ draggableId, destination, source }) => {
+  const handleIssueDrop = async ({ draggableId, destination, source }) => {
     /*
     console.log("draggableId: ", draggableId);
     console.log("destination: ", destination);
     console.log("source: ", source);
-
-    이거 가지고 수정 API 날리면 됨
+    // 이거 가지고 수정 API 날리면 됨
     */
+    
+  await axios.post(`/api/project/${project.id}/issues/management/dragndrop`, {
+    issueId : Number(draggableId),
+    destinationStatus: destination.droppableId,
+    sourceStatus: source.droppableId
+  });
 
 
     if (!isPositionChanged(destination, source)) return;
