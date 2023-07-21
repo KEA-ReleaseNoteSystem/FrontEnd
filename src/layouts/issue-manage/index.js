@@ -123,7 +123,6 @@ const ProjectBoard = () => {
     const response = await axios.get(`/api/project/1/issues/management`);
     console.log('== response == : ', response.data.data);
     setProjectMock(response.data.data);
-
   }
 
   useEffect(() => {
