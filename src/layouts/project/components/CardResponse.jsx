@@ -113,13 +113,11 @@ const Card = ({ key, itemId, id, title, pmname, status, date }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-        <br />
-        <i className="far fa-user text-primary me-2" />
-        {pmname}
-        <i className=" far fa-calendar-alt text-primary me-" style={{ paddingLeft: "10px" }} />
-        <a style={{ fontSize: '17px' }}>&nbsp;&nbsp;{date}</a>
-
-
+        <MDTypography variant="body2">
+          <i className="far fa-user text-primary me-2" />{pmname}
+          <br />
+          <i className=" far fa-calendar-alt text-primary me-" />&nbsp;&nbsp;{date}
+        </MDTypography>
       </div>
     </div>
   );
