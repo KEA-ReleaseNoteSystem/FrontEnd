@@ -37,6 +37,7 @@ function MyPage() {
                                     description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
                                     info={{
                                         fullName: "서강덕",
+                                        nickName: "으엑",
                                         team: "kakao99%",
                                         mobile: "010-8731-2312",
                                         email: "rkdejr2321naver.com",
