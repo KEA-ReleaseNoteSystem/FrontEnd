@@ -34,6 +34,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   const { currentUserId } = currentUserIdMock;
 
   const handleIssueDrop = async ({ draggableId, destination, source }) => {
+
     /*
     console.log("draggableId: ", draggableId);
     console.log("destination: ", destination);
@@ -43,7 +44,8 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     await axios.post(`/api/project/1/issues/management/dragndrop`, {
       issueId: Number(draggableId),
       destinationStatus: destination.droppableId,
-      sourceStatus: source.droppableId
+      sourceStatus: source.droppableId,
+      listPosition : calculateIssueListPosition(updatedProject.issues, destination, source, Number(draggableId))
     });
 
 
