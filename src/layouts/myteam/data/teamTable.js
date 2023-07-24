@@ -7,68 +7,49 @@ import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 
+import { useState, useEffect } from "react";
+import axios from 'axios';
+
 // Images
 import team2 from "assets/images/team-2.jpg";
 
-const Team = [
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "offline",
-    employed: "23/04/18",
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    status: "online",
-    employed: "23/04/18",
-  },
-];
+const projectId = 1;
+
+const getProjectMemberData = async (projectId, token) => {
+  try {
+    const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    
+    if (response.data.length === 0) {
+      return [];
+    } else {
+      return response.data.data;
+    }
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
 export default function data() {
+  const [memberList, setMemberList] = useState([]);
+
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProjectMemberData(projectId, token);
+      setMemberList(data);
+    }
+    fetchData();
+  }, []);
+
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      <MDAvatar src={team2} name={name} size="sm" />
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
@@ -90,14 +71,14 @@ export default function data() {
     { Header: "팀원", accessor: "author", width: "45%", align: "left" },
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
-    { Header: "채용일", accessor: "employed", align: "center" },
+    { Header: "가입일", accessor: "createdAt", align: "center" },
   ];
 
-  const rows = Team.map((member) => ({
+  const rows = memberList.map((member) => ({
     author: (
-      <Author image={member.author.image} name={member.author.name} email={member.author.email} />
+      <Author image={team2} name={member.name} email={member.email} />
     ),
-    function: <Job title={member.job.title} description={member.job.description} />,
+    function: <Job title={member.role} description={member.position} />,
     status: (
       <MDBox ml={-1}>
         <MDBadge
@@ -108,9 +89,9 @@ export default function data() {
         />
       </MDBox>
     ),
-    employed: (
+    createdAt: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {member.employed}
+        {member && member.createdAt.slice(0, 10)}
       </MDTypography>
     ),
   }));

@@ -13,6 +13,8 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useState, useEffect } from "react";
+import axios from "axios";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -31,9 +33,41 @@ import DataTable from "examples/Tables/DataTable";
 import teamTable from "layouts/myteam/data/teamTable";
 import projectsTableData from "layouts/myteam/data/projectsTableData";
 
+const projectId = 1;
+
 function Tables() {
   const { columns, rows } = teamTable();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  const [ projectName, setProjectName ] = useState("");
+
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
+  const getProjectName = async (projectId, token) => {
+    try {
+      const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/name`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.length === 0) {
+        return "";
+      } else {
+        return response.data.data.name;
+      }
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProjectName(projectId, token);
+      setProjectName(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -53,7 +87,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Team Kakao99
+                  {projectName}
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
