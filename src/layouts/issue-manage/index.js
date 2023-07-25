@@ -138,7 +138,7 @@ const ProjectBoard = () => {
   }, []);
 
   return (
-
+<>
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
@@ -186,6 +186,7 @@ const ProjectBoard = () => {
       </MDBox>
       <Footer />
     </DashboardLayout>
+    </>
   );
 };
 

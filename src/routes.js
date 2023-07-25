@@ -30,6 +30,7 @@ import CreateRelease from "layouts/release/create";
 
 import NewProject from "layouts/project/pages/newProject";
 import MyPage from "layouts/project/pages/myPage";
+import HomeCustom from "./layouts/homepage/index";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -142,14 +143,14 @@ const routes = [
     route: "/authentication/sign-up/join-group",
     component: <JoinGroup />,
   },
-  {
-    type: "",
-    name: "",
-    key: "home",
-    icon: "",
-    route: "/home",
-    component: <Home />,
-  },
+  // {
+  //   type: "",
+  //   name: "",
+  //   key: "home",
+  //   icon: "",
+  //   route: "/home",
+  //   component: <Home />,
+  // },
   {
     type: "",
     name: "",
@@ -179,6 +180,14 @@ const routes = [
     icon: "",
     route: "/home/mypage",
     component: <MyPage />,
+  },
+  {
+    type: "",
+    name: "home",
+    key: "home",
+    icon: "",
+    route: "/home",
+    component: <HomeCustom />,
   },
 ];
 

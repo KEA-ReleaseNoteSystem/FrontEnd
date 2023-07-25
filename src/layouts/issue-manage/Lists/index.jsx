@@ -40,7 +40,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
   await axios.post(`/api/project/${project.id}/issues/management/dragndrop`, {
     issueId : Number(draggableId),
     destinationStatus: destination.droppableId,
-    sourceStatus: source.droppableId
+    sourceStatus: source.droppableId,
   });
 
 
