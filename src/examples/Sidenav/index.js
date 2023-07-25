@@ -55,6 +55,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   let textColor = "white";
 
+
   if (transparentSidenav || (whiteSidenav && !darkMode)) {
     textColor = "dark";
   } else if (whiteSidenav && darkMode) {

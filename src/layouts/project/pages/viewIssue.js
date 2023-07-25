@@ -28,9 +28,12 @@ import MDBadge from "components/MDBadge";
 import axios from 'axios';
 import { StarRateOutlined } from '@mui/icons-material';
 
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
+
 
 const ViewIssue = ({releaseId}) =>{
+    const [projectId, setProjectId] = useRecoilState(projectIdState);
     console.log(releaseId);
     const [releaseNoteData, setReleaseNoteData] = useState([]); //해당 릴리즈노트 정보
     const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보

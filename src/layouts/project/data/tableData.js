@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ViewIssue from '../pages/viewIssue';
+
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
+
 const getReleaseNoteData = async (projectId, token) => {
   try {
     const response = await axios.get(`/api/release?projectId=${encodeURIComponent(projectId)}`, {
@@ -31,7 +35,7 @@ export default function Data() {
   const [releaseList, setReleaseList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const token = localStorage.getItem('ACCESS_TOKEN');
-  const projectId = 1;
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
 
 
   const handleDetailClick = () => {

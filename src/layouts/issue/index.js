@@ -20,11 +20,14 @@ import Button from '@mui/material/Button';
 import IssueDetails from './IssueDetails';
 import IssueEditing from './IssueEditing';
 
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+
 
 function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const projectId = 1;
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const token = localStorage.getItem('ACCESS_TOKEN');
   const [issueDetail, setIssueDetail] = useState([]);
   const [fetchedMemo, setFetchedMemo] = useState([]);
