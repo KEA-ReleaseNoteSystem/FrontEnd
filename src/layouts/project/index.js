@@ -11,8 +11,6 @@ import PageLayout from "examples/LayoutContainers/PageLayout";
 import NavigationBar from './components/NavigationBar';
 
 const PAGE_SIZE = 1; // You can adjust this to change how many projects are shown per page
-
-
 const ManagementPage = () => {
 
 

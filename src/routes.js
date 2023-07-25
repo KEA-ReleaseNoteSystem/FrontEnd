@@ -57,7 +57,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Member's Project",
+    name: "Members' Project",
     key: "memberproject",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/members-project",
@@ -66,7 +66,7 @@ const routes = [
 
   {
     type: "collapse",
-    name: "IssueSearch",
+    name: "Search Issues",
     key: "issueSearch",
     icon: <Icon fontSize="small">search</Icon>,
     route: "/issuesearch",
@@ -74,7 +74,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "IssueManagement",
+    name: "Manage Issues",
     key: "issuemenage",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issuemanagement",
@@ -101,7 +101,7 @@ const routes = [
     name: "PM",
     key: "pm",
     icon: <ManageAccountsIcon fontSize="small">pm</ManageAccountsIcon>,
-    route: "/pm",
+    route: "/PM",
     component: <Pm />,
   },
   {

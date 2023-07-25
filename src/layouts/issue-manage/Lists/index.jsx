@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import useCurrentUser from 'shared/hooks/currentUser';
 // import api from 'shared/utils/api';
 import { moveItemWithinArray, insertItemIntoArray } from 'shared/utils/javascript';
-import { IssueStatus } from 'shared/constants/issues';
+import { IssueStatus } from   'shared/constants/issues';
 
 import List from './List';
 import { Lists } from './Styles';
@@ -23,13 +23,18 @@ const currentUserIdMock = 1;
 
 const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
 
-  // console.log("projectId: ", project);
-  console.log("projectId: ", project.id);
-  const [updatedProject, setUpdatedProject] = useState(project);
+  console.log("project: ", project);
+  //console.log("projectId: ", project.id);
+  const [updatedProject, setUpdatedProject] = useState('');
+
+  useEffect(() => {
+    setUpdatedProject(project);
+  })
 
   const { currentUserId } = currentUserIdMock;
 
   const handleIssueDrop = async ({ draggableId, destination, source }) => {
+
     /*
     console.log("draggableId: ", draggableId);
     console.log("destination: ", destination);
@@ -42,6 +47,7 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     destinationStatus: destination.droppableId,
     sourceStatus: source.droppableId,
   });
+
 
 
     if (!isPositionChanged(destination, source)) return;

@@ -170,15 +170,11 @@ const ProjectBoard = () => {
               </MDBox>
 
               <MDBox pt={3}>
-                {!projectMock ? null :
-                  <>
                     <Lists
                       project={projectMock}
                       filters={filtersMock}
                       updateLocalProjectIssues={updateLocalProjectIssuesMock}
                     />
-                  </>
-                }
               </MDBox>
             </Card>
           </Grid>
