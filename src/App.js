@@ -52,6 +52,7 @@ import CreateRelease from "layouts/release/create";
 import SocialLogin from "layouts/authentication/social-login";
 
 import ViewRelease from "layouts/release/modify";
+import { RecoilRoot } from "recoil";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -150,6 +151,7 @@ export default function App() {
   }
 
   return (
+    <RecoilRoot>
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
       {layout === "dashboard" && (
@@ -175,5 +177,6 @@ export default function App() {
 
       </Routes>
     </ThemeProvider>
+    </RecoilRoot>
   );
 }

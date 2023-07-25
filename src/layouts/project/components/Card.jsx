@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../index.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Dropdown as ReactBootstrapDropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import proj from '../../../assets/images/survey.png';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -16,6 +16,8 @@ import MDTypography from "components/MDTypography";
 import Grid from "@mui/material/Grid";
 import Cardm from "@mui/material/Card";
 
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 
 const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
@@ -30,6 +32,17 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
     handleDelete();
   };
   const navigate = useNavigate();
+
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+
+  const onClickHandleRecoil = useCallback((id) => {
+    setProjectId(id);
+    console.log(projectId);
+  }, [setProjectId]);
+
+  useEffect(() => {
+    console.log(projectId); // projectId가 변경될 때마다 로그가 출력될 것입니다.
+  }, [projectId]);
 
   const handleClick = () => {
     navigate('/PM', {
@@ -65,14 +78,18 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
     <div className="col-lg-3A wow slideInUp" data-wow-delay="0.2s" >
 
       <div style={{ position: 'relative' }}>
-        <Link to={`/dashboard`} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <img className="img-fluid" src={proj} alt="" style={{ width: '100%' }} /></Link>
+        <Link to={{ pathname: `/dashboard` }} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <img className="img-fluid" src={proj} alt="" style={{ width: '100%' }} onClick={() => onClickHandleRecoil(id)}/></Link>
 
         <div className="p-5" style={{ height: '200px', width: '100%', backgroundColor: '#F8F9FA', boxShadow: '0 0 20px 5px rgba(0, 0, 0, 0.2)' }}>
           {projectStatus(status)}<br></br>
-          <h5 className="fw-bold  card-title">
-            <Link to={`/dashboard`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              {title}</Link> </h5>
+          <h5 className="fw-bold card-title" onClick={() => onClickHandleRecoil(id)}>
+            <Link to={{
+              pathname: `/dashboard`,
+            }} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {title}
+            </Link>
+          </h5>
 
           <ReactBootstrapDropdown>
             <ReactBootstrapDropdown.Toggle variant="secondary" id="dropdown-basic" className="btn btn-info dropdown-toggle">
