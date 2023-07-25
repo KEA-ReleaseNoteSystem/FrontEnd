@@ -41,12 +41,13 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     console.log("source: ", source);
     // 이거 가지고 수정 API 날리면 됨
     */
-    await axios.post(`/api/project/1/issues/management/dragndrop`, {
-      issueId: Number(draggableId),
-      destinationStatus: destination.droppableId,
-      sourceStatus: source.droppableId,
-      listPosition : calculateIssueListPosition(updatedProject.issues, destination, source, Number(draggableId))
-    });
+    
+  await axios.post(`/api/project/${project.id}/issues/management/dragndrop`, {
+    issueId : Number(draggableId),
+    destinationStatus: destination.droppableId,
+    sourceStatus: source.droppableId,
+  });
+
 
 
     if (!isPositionChanged(destination, source)) return;
