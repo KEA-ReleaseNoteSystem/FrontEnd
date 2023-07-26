@@ -1,5 +1,6 @@
 .navbar-wrapper {
-    background-color: #7532F9;
+    background-color: Black;
+    height: 2%;
     /* 원하는 하늘색을 설정합니다. */
 }
 
@@ -7,6 +8,7 @@
     color: #e9ecef;
     /* 폰트 색상을 흰색(white)으로 설정합니다. */
     font-family: 'Noto Sans KR', sans-serif;
+    font-size: 17px;
 }
 
 /* 네비게이션 바 링크에 Hover 효과 추가 */
@@ -15,3 +17,16 @@
     /* Hover 효과 색상을 흰색(white)으로 설정합니다. */
 }
 
+.navbar-brand-image-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand-image {
+    height: 40px;
+    max-height: 100%;
+    max-width: 100%;
+    margin: 0 auto;   
+    /* Center the image horizontally if needed */
+}

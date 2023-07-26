@@ -33,16 +33,16 @@ function NavigationBar() {
     window.location.href="/"
   }
   return (
-    <Navbar className="navbar-wrapper navbar-light" expand="lg" >
+    <Navbar className="navbar-wrapper navbar-dark bg-dark" expand="lg" >
       <Container fluid>
         <Navbar.Brand as={Link} to="/home/manage-project">
-          <img
-            alt=""
-            src={releasy_logo}
-            width="105"
-            height="45"
-            className="d-inline-block align-top"
-          /> </Navbar.Brand>
+        <div className="navbar-brand-image-wrapper">
+            <img
+              alt=""
+              src={releasy_logo}
+              className="navbar-brand-image"
+            />
+          </div> </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto">
@@ -71,7 +71,7 @@ function NavigationBar() {
               onMouseEnter={() => handleMouseEnter(2)}
               onMouseLeave={handleMouseLeave}
             >
-              My Page
+              마이페이지
             </Nav.Link>
             {isAuthenticated ? (
               <Nav.Link onClick={logOut} style={{ cursor: 'pointer' }}>

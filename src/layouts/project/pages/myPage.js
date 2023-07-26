@@ -32,6 +32,7 @@ function MyPage() {
     const [groupMember, setGroupMember] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [selectedMemberId, setSelectedMemberId] = useState(null);
+    const [selectedMemberName, setSelectedMemberName] = useState(null);
     const Author = ({ image, name, nickname }) => (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
             <MDAvatar src={image} name={name} size="sm" />
@@ -71,7 +72,7 @@ function MyPage() {
           authority: <MDBox>{member.authority}</MDBox>,
           email: <MDBox>{member.email}</MDBox>,
           button: showButton ? (
-            <button className="styled-button" onClick={() => { setSelectedMemberId(member.id); setShowConfirmation(true);}}>
+            <button className="styled-button" onClick={() => { setSelectedMemberName(member.name); setSelectedMemberId(member.id); setShowConfirmation(true);}}>
               {'삭제'}
             </button>
           ) : <button
@@ -83,12 +84,32 @@ function MyPage() {
         };
       });
     let showDeleteButton = true;
+    const token = localStorage.getItem('ACCESS_TOKEN');
 
-    const handleDelete = (index) => {
-        
-    };
+    const handleConfirmDelete = () => {
+        axios.delete(`/api/groupMember`, { //   생성한 설문 가져오는 요청
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // JWT 토큰을 헤더에 추가합니다.
+          },
+          data: {
+            id: selectedMemberId,
+            name: selectedMemberName
+          }
+        })
+          .then(response => {
+            // 삭제 성공 후 실행할 코드를 작성합니다.
+            console.log('그룹에서 유저 삭제 성공');
+            alert(response.data.message);
+            window.location.reload();
+          })
+          .catch(error => {
+            // 삭제 실패 후 실행할 코드를 작성합니다.
+            console.error('그룹에서 유저 삭제 실패', error);
+          });
+    
+      };
 
-    console.log("dasfsaf", groupMember);
 
 
     useEffect(() => {
@@ -134,6 +155,7 @@ function MyPage() {
                                     team: memberInfo.groupName,
                                     position: memberInfo.position,
                                     email: memberInfo.email,
+                                    GroupCode: memberInfo.groupCode,
                                 }}
                                 action={{ route: "", tooltip: "Edit Profile" }}
                                 shadow={false}
@@ -177,14 +199,14 @@ function MyPage() {
               <Modal.Title>삭제 확인</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p>정말로 해당 멤버를 그룹에서 삭제하시겠습니까?</p>
+              <p>정말로 {selectedMemberName}님을 그룹에서 삭제하시겠습니까?</p>
               <p style={{ color: "red", fontSize: "15px" }}>해당 멤버는 그룹에 대한 권한을 모두 잃게 됩니다.</p>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
                 취소
               </Button>
-              <Button variant="danger" onClick={handleDelete(selectedMemberId)}>
+              <Button variant="danger" onClick={()=> handleConfirmDelete(selectedMemberId)}>
                 삭제
               </Button>
             </Modal.Footer>
