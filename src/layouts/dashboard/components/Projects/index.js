@@ -42,14 +42,14 @@ import { useNavigate } from "react-router-dom";
 function Projects() {
   const [issues, setIssues] = useState([
     {
-      name: "#00 Test issue",
+      name: "#01 Test issue",
       description: "어쩌구 되지않는 이슈",
       member: "서강덕",
       due: "2020-05-04",
       value: 20,
     },
     {
-      name: "#00 Test issue",
+      name: "#02 Test issue",
       description: "어쩌구 되지않는 이슈",
       member: "서지원",
       due: "2020-08-02",

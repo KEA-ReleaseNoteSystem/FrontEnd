@@ -30,6 +30,7 @@ import CreateRelease from "layouts/release/create";
 
 import NewProject from "layouts/project/pages/newProject";
 import MyPage from "layouts/project/pages/myPage";
+import HomeCustom from "./layouts/homepage/index";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -56,7 +57,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Member's Project",
+    name: "Members' Project",
     key: "memberproject",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/members-project",
@@ -65,7 +66,7 @@ const routes = [
 
   {
     type: "collapse",
-    name: "IssueSearch",
+    name: "Search Issues",
     key: "issueSearch",
     icon: <Icon fontSize="small">search</Icon>,
     route: "/issuesearch",
@@ -73,7 +74,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "IssueManagement",
+    name: "Manage Issues",
     key: "issuemenage",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issuemanagement",
@@ -100,7 +101,7 @@ const routes = [
     name: "PM",
     key: "pm",
     icon: <ManageAccountsIcon fontSize="small">pm</ManageAccountsIcon>,
-    route: "/pm",
+    route: "/PM",
     component: <Pm />,
   },
   {
@@ -142,14 +143,14 @@ const routes = [
     route: "/authentication/sign-up/join-group",
     component: <JoinGroup />,
   },
-  {
-    type: "",
-    name: "",
-    key: "home",
-    icon: "",
-    route: "/home",
-    component: <Home />,
-  },
+  // {
+  //   type: "",
+  //   name: "",
+  //   key: "home",
+  //   icon: "",
+  //   route: "/home",
+  //   component: <Home />,
+  // },
   {
     type: "",
     name: "",
@@ -179,6 +180,14 @@ const routes = [
     icon: "",
     route: "/home/mypage",
     component: <MyPage />,
+  },
+  {
+    type: "",
+    name: "home",
+    key: "home",
+    icon: "",
+    route: "/home",
+    component: <HomeCustom />,
   },
 ];
 

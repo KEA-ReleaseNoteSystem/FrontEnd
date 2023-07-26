@@ -22,6 +22,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
+// import backgroundImage from "assets/images/home.png";
 
 function Header({ children, info }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
@@ -84,7 +85,7 @@ function Header({ children, info }) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                {/*{info.nickname} */}
+                {/* {info.nickname} */}     {/* <- 이게 문제. 주석처리하면 됨. */}
               </MDTypography>
             </MDBox>
           </Grid>

@@ -12,6 +12,10 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+import React from 'react';
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+import { useLocation } from 'react-router-dom';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -35,8 +39,13 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
-function Dashboard() {
+function Dashboard(props) {
+
   const { sales, tasks } = reportsLineChartData;
+
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+
+  console.log("projectId=", projectId);
 
   return (
     <DashboardLayout>

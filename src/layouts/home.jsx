@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PageLayout from 'examples/LayoutContainers/PageLayout';
 import imagee from "../assets/images/release.png"
+import backgroundImage from "assets/images/home.png";
 
 function Copyright(props) {
   return (
@@ -45,7 +46,7 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: {imagee},
+              backgroundImage: {backgroundImage},
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

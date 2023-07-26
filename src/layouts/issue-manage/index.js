@@ -23,7 +23,8 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 
 const propTypes = {
@@ -118,9 +119,12 @@ const fetchProjectMock = () => {
 
 const ProjectBoard = () => {
   const [projectMock, setProjectMock] = useState();
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+
+  console.log("projectId", projectId);
 
   const getAPI = async () => {
-    const response = await axios.get(`/api/project/1/issues/management`);
+    const response = await axios.get(`/api/project/${projectId}/issues/management`);
     console.log('== response == : ', response.data.data);
     setProjectMock(response.data.data);
   }
@@ -138,7 +142,7 @@ const ProjectBoard = () => {
   }, []);
 
   return (
-
+<>
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
@@ -182,6 +186,7 @@ const ProjectBoard = () => {
       </MDBox>
       <Footer />
     </DashboardLayout>
+    </>
   );
 };
 
