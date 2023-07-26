@@ -33,9 +33,9 @@ function Counters() {
           <Grid item xs={12} md={4}>
             <DefaultCounterCard
               count={70}
-              suffix="+"
-              title="Coded Elements"
-              description="From buttons, to inputs, navbars, alerts or cards, you are covered"
+              suffix="K"
+              title="프로젝트 수"
+              description="Releasy를 통해 프로젝트가 활발히 진행되고 있습니다."
             />
           </Grid>
           <Grid item xs={12} md={4} display="flex">
@@ -43,16 +43,17 @@ function Counters() {
             <DefaultCounterCard
               count={15}
               suffix="+"
-              title="Design Blocks"
-              description="Mix the sections, change the colors and unleash your creativity"
+              title="국가 수"
+              description="Releasy는 글로벌에서 사용되고 있습니다."
             />
             <Divider orientation="vertical" sx={{ display: { xs: "none", md: "block" }, ml: 0 }} />
           </Grid>
           <Grid item xs={12} md={4}>
             <DefaultCounterCard
-              count={4}
-              title="Pages"
-              description="Save 3-4 weeks of work when you use our pre-made pages for your website"
+              count={5}
+              suffix="/5"
+              title="만족도"
+              description="Releasy는 높은 만족도를 제공하고 있습니다"
             />
           </Grid>
         </Grid>
