@@ -14,28 +14,28 @@ Coded by www.creative-tim.com
 */
 
 const imagesPrefix =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/material-design-system/presentation/pages";
+  '../../../../../../assets/images/homepage';
 
 export default [
   {
-    image: `${imagesPrefix}/about-us.jpg`,
-    name: "About Us Page",
-    route: "/pages/landing-pages/about-us",
+   
+    image: `https://raypark-personal.s3.ap-northeast-2.amazonaws.com/homepage-dashboard.png`,
+    name: "대시보드",
+    // route: "/pages/landing-pages/about-us",
   },
   {
-    image: `${imagesPrefix}/contact.jpg`,
-    name: "Contact Us Page",
-    route: "/pages/landing-pages/contact-us",
+    image: `https://raypark-personal.s3.ap-northeast-2.amazonaws.com/homepage-issueManagement.png`,
+    name: "이슈 관리",
+    // route: "/pages/landing-pages/contact-us",
   },
   {
-    image:
-      "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/material-design-system/presentation/account/signin-basic.jpg",
-    name: "Sign In Page",
-    route: "/pages/authentication/sign-in",
+    image: `https://raypark-personal.s3.ap-northeast-2.amazonaws.com/homepage-issueSearch.png`,
+    name: "이슈 검색",
+    // route: "/pages/authentication/sign-in",
   },
   {
-    image: `${imagesPrefix}/author.jpg`,
-    name: "Author Page",
-    route: "/pages/landing-pages/author",
+    image: `https://raypark-personal.s3.ap-northeast-2.amazonaws.com/homepage-memberProject.png`,
+    name: "멤버가 참여한 프로젝트",
+    // route: "/pages/landing-pages/author",
   },
 ];

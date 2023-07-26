@@ -66,16 +66,15 @@ function Information() {
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="content_copy"
-                  title="Full Documentation"
-                  description="Built by developers for developers. Check the foundation and you will find
-                    everything inside our documentation."
+                  title="성취도의 시각화"
+                  description="자신의 업무 수행량을 시각적으로 확인할 수 있어서 끊임없이 동기부여 받을 수 있습니다."
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="flip_to_front"
-                  title="MUI Ready"
-                  description="The world's most popular react components library for building user interfaces."
+                  title="Chat GPT 추천"
+                  description="업무의 중요도를 Chat GPT로부터 추천받아 자동 설정할 수 있습니다."
                 />
               </Grid>
             </Grid>
@@ -83,8 +82,8 @@ function Information() {
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="price_change"
-                  title="Save Time & Money"
-                  description="Creating your design from scratch with dedicated designers can be very expensive. Start with our Design System."
+                  title="실시간 동시 작업"
+                  description="업무 진행 및 변동 사항을 실시간으로 확인할 수 있습니다."
                 />
               </Grid>
               <Grid item xs={12} md={6}>

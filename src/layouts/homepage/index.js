@@ -55,30 +55,30 @@ function Home() {
                 }}
             >
                 <Container>
-                    <Grid container item xs={12} lg={7} justifyContent="center" mx="auto">
+                    <Grid container item xs={12} lg={7} justifyContent="center" mx="auto" >
                         <MKTypography
                             variant="h1"
                             color="ora"
                             mt={-6}
-                            mb={1}
+                            mb={2}
                             sx={({ breakpoints, typography: { size } }) => ({
                                 [breakpoints.down("md")]: {
                                     fontSize: size["3xl"],
                                 },
                             })}
                         >
-                            Releasy{" "}
+                            Releasy
                         </MKTypography>
                         <MKTypography
                             variant="body1"
                             color="ora"
                             textAlign="center"
                             px={{ xs: 6, lg: 12 }}
-                            mt={1}
+                            mt={2}
                         >
-                            Easy and fast release note creation tool for professional
+                            전문가를 위한 쉽고 빠른 릴리즈 노트 제작 툴
                             <br/>
-                            Join over 1.6 million developers around the world.
+                            전 세계 160만 명의 전문가들과 함께 협업해 보세요
                         </MKTypography>
                     </Grid>
                 </Container>
@@ -96,58 +96,8 @@ function Home() {
             >
                 <Counters />
                 <Information />
-                {/* <DesignBlocks /> */}
                 <Pages />
-                <Container sx={{ mt: 6 }}>
-                    {/* <BuiltByDevelopers /> */}
-                </Container>
-                 {/* <Container>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} lg={4}>
-                            <FilledInfoCard
-                                variant="gradient"
-                                color="info"
-                                icon="flag"
-                                title="Getting Started"
-                                description="Check the possible ways of working with our product and the necessary files for building your own project."
-                                action={{
-                                    type: "external",
-                                    // route: "https://www.creative-tim.com/learning-lab/react/overview/material-kit/",
-                                    label: "Let's start",
-                                }}
-                            />
-                        </Grid> */}
-                        {/* <Grid item xs={12} lg={4}>
-                            <FilledInfoCard
-                                color="info"
-                                icon="precision_manufacturing"
-                                title="Plugins"
-                                description="Get inspiration and have an overview about the plugins that we used to create the Material Kit."
-                                action={{
-                                    type: "external",
-                                    route: "https://www.creative-tim.com/learning-lab/react/overview/datepicker/",
-                                    label: "Read more",
-                                }}
-                            />
-                        </Grid> */}
-                        {/* <Grid item xs={12} lg={4}>
-                            <FilledInfoCard
-                                color="info"
-                                icon="apps"
-                                title="Components"
-                                description="Material Kit is giving you a lot of pre-made components, that will help you to build UI's faster."
-                                action={{
-                                    type: "external",
-                                    route: "https://www.creative-tim.com/learning-lab/react/alerts/material-kit/",
-                                    label: "Read more",
-                                }}
-                            />
-                        </Grid> 
-                    </Grid>
-                </Container> */}
-                
-                {/* <Testimonials /> */}
-                {/* <Download /> */}
+      
                 <MKBox pt={18} pb={6}>
                     <Container>
                         <Grid container spacing={3}>

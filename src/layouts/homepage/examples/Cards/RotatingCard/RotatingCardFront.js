@@ -39,7 +39,8 @@ function RotatingCardFront({ color, image, icon, title, description }) {
           `${linearGradient(
             rgba(gradients[color] ? gradients[color].main : gradients.info.main, 0.85),
             rgba(gradients[color] ? gradients[color].main : gradients.info.main, 0.85)
-          )}, url(${image})`,
+          )}, 
+          url(${image})`,
         backgroundSize: "cover",
         backfaceVisibility: "hidden",
       }}
