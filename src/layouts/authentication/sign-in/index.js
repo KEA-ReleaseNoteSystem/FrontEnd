@@ -15,9 +15,9 @@ Coded by www.creative-tim.com
 
 import { useState } from "react";
 import axios from "axios";
-// react-router-dom components
-import { Link } from "react-router-dom";
 
+// react-router-dom components
+import { Link, Navigate, useNavigate } from "react-router-dom";
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
@@ -48,7 +48,7 @@ import naverLogin from "assets/images/naver_login.png";
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
+  const navigate = useNavigate(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -70,18 +70,22 @@ function Basic() {
         console.log(response)
         alert(response.data.message); // Alert 창을 띄웁니다.
         localStorage.setItem("ACCESS_TOKEN", response.data.data);
+        if (response.data.statusCode === 401) {
+          navigate('/authentication/rejoin', {
+            state: {
+              email: email
+            }
+          }
+          )
+        } 
+        else
         window.location.href = "/home/manage-project";
-
       })
       .catch((error) => {
         // 요청이 실패한 경우의 처리
-        console.error(error);
+        console.error(error);console.error(error);
       });
   };
-
-
-
-
   const isEmailEmpty = email === "";
   const isEmailWrong = !(email && email.includes("@"));
   const isPasswordEmpty = password === "";
