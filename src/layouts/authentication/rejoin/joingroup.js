@@ -33,21 +33,16 @@ function JoinGroup() {
   const [groupName, setGroupName] = useState("");
 
   const location = useLocation();
-  const { name, nickname, position, email, password, provider } = location.state;
-
+  const {email} = location.state;
+  console.log(email);
   const handleGroupCodeChange = (event) => {
     setGroupName(event.target.value);
   };
 
   const handleSubmit = () => {
     // POST 요청을 보내는 부분
-    axios.post("/api/member/signup/group/join", {
-      name: name,
-      nickname: nickname,
-      position: position,
-      provider: provider,
+    axios.post("/api/member/rejoin/group/join", {
       email: email,
-      password: password,
       groupName: groupName,
       // 다른 데이터들도 추가로 설정할 수 있습니다.
     })

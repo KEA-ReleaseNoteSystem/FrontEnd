@@ -11,60 +11,9 @@ import MDBadge from "components/MDBadge";
 // Images
 import team2 from "assets/images/team-2.jpg";
 
-const Team = [
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    employed: "23/04/18",
-    // delete: '삭제'
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    employed: "23/04/18",
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    employed: "23/04/18",
-  },
-  {
-    author: {
-      image: team2,
-      name: "John Michael",
-      email: "john@creative-tim.com",
-    },
-    job: {
-      title: "Manager",
-      description: "Organization",
-    },
-    employed: "23/04/18",
-  },
-];
 
-export default function data() {
-  
+export default function data({ groupMember }) {
+  console.log("sdafsadf", groupMember);
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" />
@@ -97,21 +46,16 @@ export default function data() {
   const handleDelete = (index) => {
     console.log("삭제할 index: ", index);
   };
-
-  const rows = Team.map((member, index) => ({
+  
+  const rows = groupMember.map((member, index) => ({
     author: (
-      <Author image={member.author.image} name={member.author.name} email={member.author.email} />
+      <Author image={team2} name={member.name} email={member.email} />
     ),
-    job: <Job title={member.job.title} description={member.job.description} />,
+    job: <Job title={member.job.title} />,
     email: (
       <MDBox ml={-1}>
-        {member.author.email}
+        {member.email}
       </MDBox>
-    ),
-    employed: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {member.employed}
-      </MDTypography>
     ),
     button: (
     <button className="styled-button" onClick={() => handleDelete(index)}>{'삭제'}</button>

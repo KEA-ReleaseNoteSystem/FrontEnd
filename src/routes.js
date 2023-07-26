@@ -20,12 +20,16 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Rejoin from "layouts/authentication/rejoin";
 import Home from "layouts/home";
 import Pm from "layouts/pm";
 
 import Projects from "layouts/project"
 import CreateGroup from "layouts/authentication/sign-up/creategroup";
 import JoinGroup from "layouts/authentication/sign-up/joingroup";
+
+import ReCreateGroup from "layouts/authentication/rejoin/creategroup";
+import ReJoinGroup from "layouts/authentication/rejoin/joingroup";
 import CreateRelease from "layouts/release/create";
 
 import NewProject from "layouts/project/pages/newProject";
@@ -133,7 +137,7 @@ const routes = [
     name: "",
     key: "create-group",
     icon: "",
-    route: "authentication/sign-up/create-group",
+    route: "/authentication/sign-up/create-group",
     component: <CreateGroup />,
   }, {
     type: "",
@@ -143,14 +147,37 @@ const routes = [
     route: "/authentication/sign-up/join-group",
     component: <JoinGroup />,
   },
-  // {
-  //   type: "",
-  //   name: "",
-  //   key: "home",
-  //   icon: "",
-  //   route: "/home",
-  //   component: <Home />,
-  // },
+  {
+    type: "",
+    name: "",
+    key: "rejoin",
+    icon: "",
+    route: "/authentication/rejoin",
+    component: <Rejoin />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "rejoin",
+    icon: "",
+    route: "/authentication/rejoin/create-group",
+    component: <ReCreateGroup />,
+  }, {
+    type: "",
+    name: "",
+    key: "join-group",
+    icon: "",
+    route: "/authentication/rejoin/join-group",
+    component: <ReJoinGroup />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "home",
+    icon: "",
+    route: "/home",
+    component: <Home />,
+  },
   {
     type: "",
     name: "",
