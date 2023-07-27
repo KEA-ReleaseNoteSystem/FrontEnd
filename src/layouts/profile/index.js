@@ -1,6 +1,4 @@
 import { React, useState, useEffect } from "react";
-import { useRecoilState } from 'recoil';
-import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 import axios from "axios";
 
 // @mui material components
@@ -44,10 +42,6 @@ import team4 from "assets/images/team-4.jpg";
 function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
 
-  const [projectId, setProjectId] = useRecoilState(projectIdState);
-
-  console.log("projectId=", projectId);
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,7 +106,6 @@ function Overview() {
                   description={project.description}
                   action={{
                     type: "internal",
-                    route: "#",
                     color: "info",
                     label: "view project",
                   }}

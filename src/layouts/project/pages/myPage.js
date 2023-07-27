@@ -26,6 +26,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 // Images
 import team2 from "assets/images/team-2.jpg";
+import DefaultNavbar from 'layouts/homepage/examples/Navbars/DefaultNavbar';
+import routes from '../data/home.routes.js';
 
 function MyPage() {
     const [memberInfo, setMemberInfo] = useState([]);
@@ -122,10 +124,11 @@ function MyPage() {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                console.log(response.data.data.groupMember);
+                console.log(response.data.data);
                 setMemberInfo(response.data.data);
-                setGroupMember(response.data.data.groupMember);
-
+                if (Array.isArray(response.data.data.groupMember)) {
+                  setGroupMember(response.data.data.groupMember);
+              }
             } catch (error) {
                 console.error(error);
             }
@@ -138,9 +141,12 @@ function MyPage() {
 
     return (
         <PageLayout>
-            <NavigationBar />
+            <DefaultNavbar
+                routes={routes}
+                sticky
+            />
             {/* <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s"> */}
-            <MDBox mb={2} />
+            <MDBox sx={{mb:2, mt:11}} />
             <Header info={{ nickname: memberInfo.nickname }}>
                 <MDBox mt={5} mb={3}>
                     <Grid container spacing={1} justifyContent="center">
@@ -166,6 +172,8 @@ function MyPage() {
                 </MDBox>
             </Header>
             <Card>
+            {rows.length > 0 ? (
+              <>
                 <MDBox
                     mx={2}
                     mt={-3}
@@ -181,18 +189,16 @@ function MyPage() {
                     </MDTypography>
                 </MDBox>
                 <MDBox pt={3}>
-                    {rows.length > 0 ? (
                         <DataTable
                             table={{ columns, rows }}
                             isSorted={false}
                             entriesPerPage={false}
                             showTotalEntries={false}
                             noEndBorder
-                        />
-                    ) : (
-                        <MDTypography variant="body1">멤버 정보가 없습니다.</MDTypography>
-                    )}
+                        />      
                 </MDBox>
+                </>
+                ) : null}
             </Card>
             <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)} >
             <Modal.Header closeButton>
