@@ -5,14 +5,20 @@ import releasy_logo from '../../../assets/images/releasy_logo.png';
 
 import Nav from 'react-bootstrap/Nav';
 import { Link, useLocation } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import LoginButton from './LoginButton';
-
+import './style/navigation.css';
 function NavigationBar() {
   const [hovered, setHovered] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    setIsAuthenticated(!!token);
+  }, []);
 
   const handleMouseEnter = (index) => {
     setHovered(index);
@@ -22,40 +28,29 @@ function NavigationBar() {
     setHovered(null);
   };
 
+  const logOut = () => {
+    localStorage.removeItem("ACCESS_TOKEN");
+    window.location.href="/"
+  }
   return (
-    <>
-      <Navbar
-        bg="white"
-        variant="blue"
-        style={{
-          height: '60px',
-          borderBottom: '1px solid #ADD8E6',
-          fontSize: '15px',
-          padding: '10px'
-        }}
-      >
-        
-          <Navbar.Brand as={Link} to="/home/manage-project">
+    <Navbar className="navbar-wrapper navbar-dark bg-dark" expand="lg" >
+      <Container fluid>
+        <Navbar.Brand as={Link} to="/home/manage-project">
+        <div className="navbar-brand-image-wrapper">
             <img
               alt=""
               src={releasy_logo}
-              width="105"
-              height="45"
-              className="d-inline-block align-top"
-            /> </Navbar.Brand> 
-            {/* {' '}
-            Releasy
-          </Navbar.Brand> */}
+              className="navbar-brand-image"
+            />
+          </div> </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto">
             <Nav.Link
               as={Link}
               to="/home/project/new" // /home/project/new 으로 수정 예정
               onMouseEnter={() => handleMouseEnter(0)}
               onMouseLeave={handleMouseLeave}
-              style={{
-                color: hovered === 0 || currentPath === '/createsurvey' ? '#A0D3F9' : 'inherit',
-                borderBottom: currentPath === '/createsurvey' ? '2px solid #A0D3F9' : 'none',
-              }}
             >
               프로젝트 생성
             </Nav.Link>
@@ -64,32 +59,36 @@ function NavigationBar() {
               to="/home/manage-project"
               onMouseEnter={() => handleMouseEnter(1)}
               onMouseLeave={handleMouseLeave}
-              style={{
-                color: hovered === 1 || currentPath === '/managesurvey' ? '#A0D3F9' : 'inherit',
-                borderBottom: currentPath === '/managesurvey' ? '2px solid #A0D3F9' : 'none',
-              }}
             >
               프로젝트 관리
             </Nav.Link>
-            
+
           </Nav>
           <Nav className="ml-auto">
-          <Nav.Link
+            <Nav.Link
               as={Link}
               to="/home/mypage"
               onMouseEnter={() => handleMouseEnter(2)}
               onMouseLeave={handleMouseLeave}
-              style={{
-                color: hovered === 2 || currentPath === '/mypage' ? '#A0D3F9' : 'inherit',
-                borderBottom: currentPath === '/mypage' ? '2px solid #A0D3F9' : 'none',
-              }}
             >
-              My Page
+              마이페이지
             </Nav.Link>
-            <LoginButton />
+            {isAuthenticated ? (
+              <Nav.Link onClick={logOut} style={{ cursor: 'pointer' }}>
+                로그아웃
+              </Nav.Link>
+            ) : (
+              <Nav.Link
+                as={Link}
+                to="/login"
+              >
+                로그인
+              </Nav.Link>
+            )}
           </Nav>
-      </Navbar>
-    </>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 

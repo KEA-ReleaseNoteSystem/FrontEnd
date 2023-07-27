@@ -1,17 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
@@ -41,7 +27,9 @@ import MDBadge from "components/MDBadge";
 
 import axios from 'axios';
 
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+
 
 const customModalStyles = {
     overlay: {
@@ -65,7 +53,7 @@ const customModalStyles = {
 
 function ViewRelease() {
     const { releaseId } = useParams();
-
+    const [projectId, setProjectId] = useRecoilState(projectIdState);
     const [releaseNoteData, setReleaseNoteData] = useState([]); //해당 릴리즈노트 정보
     const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
     const [issueData, setIssueData] = useState([]); //릴리즈노트와 연관된 이슈들 정보

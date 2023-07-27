@@ -8,11 +8,9 @@ import Pagination from 'react-bootstrap/Pagination';
 import 'bootstrap/dist/css/bootstrap.css';
 import BasicLayout from 'layouts/authentication/components/BasicLayout';
 import PageLayout from "examples/LayoutContainers/PageLayout";
-import NavigationBar from './components/NavigationBar';
-
+import DefaultNavbar from 'layouts/homepage/examples/Navbars/DefaultNavbar';
+import routes from './data/home.routes.js';
 const PAGE_SIZE = 1; // You can adjust this to change how many projects are shown per page
-
-
 const ManagementPage = () => {
 
 
@@ -90,7 +88,10 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
 
     return (
         <PageLayout>
-            <NavigationBar />
+            <DefaultNavbar
+                routes={routes}
+                sticky
+            />
         <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
             <div className="container py-5 grid-margin wow fadeInUp">
                 <div className="section-title text-center position-relative pb-3 mb-5 mx-auto" style={{ maxWidth: 5000 }}>

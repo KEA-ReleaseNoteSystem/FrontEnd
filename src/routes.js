@@ -20,16 +20,21 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Rejoin from "layouts/authentication/rejoin";
 import Home from "layouts/home";
 import Pm from "layouts/pm";
 
 import Projects from "layouts/project"
 import CreateGroup from "layouts/authentication/sign-up/creategroup";
 import JoinGroup from "layouts/authentication/sign-up/joingroup";
+
+import ReCreateGroup from "layouts/authentication/rejoin/creategroup";
+import ReJoinGroup from "layouts/authentication/rejoin/joingroup";
 import CreateRelease from "layouts/release/create";
 
 import NewProject from "layouts/project/pages/newProject";
 import MyPage from "layouts/project/pages/myPage";
+import HomeCustom from "./layouts/homepage/index";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -56,7 +61,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Member's Project",
+    name: "Members' Project",
     key: "memberproject",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/members-project",
@@ -65,7 +70,7 @@ const routes = [
 
   {
     type: "collapse",
-    name: "IssueSearch",
+    name: "Search Issues",
     key: "issueSearch",
     icon: <Icon fontSize="small">search</Icon>,
     route: "/issuesearch",
@@ -73,7 +78,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "IssueManagement",
+    name: "Manage Issues",
     key: "issuemenage",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issuemanagement",
@@ -100,7 +105,7 @@ const routes = [
     name: "PM",
     key: "pm",
     icon: <ManageAccountsIcon fontSize="small">pm</ManageAccountsIcon>,
-    route: "/pm",
+    route: "/PM",
     component: <Pm />,
   },
   {
@@ -132,7 +137,7 @@ const routes = [
     name: "",
     key: "create-group",
     icon: "",
-    route: "authentication/sign-up/create-group",
+    route: "/authentication/sign-up/create-group",
     component: <CreateGroup />,
   }, {
     type: "",
@@ -145,10 +150,25 @@ const routes = [
   {
     type: "",
     name: "",
-    key: "home",
+    key: "rejoin",
     icon: "",
-    route: "/home",
-    component: <Home />,
+    route: "/authentication/rejoin",
+    component: <Rejoin />,
+  },
+  {
+    type: "",
+    name: "",
+    key: "rejoin",
+    icon: "",
+    route: "/authentication/rejoin/create-group",
+    component: <ReCreateGroup />,
+  }, {
+    type: "",
+    name: "",
+    key: "join-group",
+    icon: "",
+    route: "/authentication/rejoin/join-group",
+    component: <ReJoinGroup />,
   },
   {
     type: "",
@@ -179,6 +199,14 @@ const routes = [
     icon: "",
     route: "/home/mypage",
     component: <MyPage />,
+  },
+  {
+    type: "",
+    name: "home",
+    key: "home",
+    icon: "",
+    route: "/home",
+    component: <HomeCustom />,
   },
 ];
 

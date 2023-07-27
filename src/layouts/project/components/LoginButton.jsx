@@ -4,8 +4,6 @@ import '../index.css'; // 스타일 파일 import
 
 const customModalStyles = {
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    
     zIndex: '1000', // add a high zIndex value
 },
 content: {
@@ -47,13 +45,13 @@ const LoginButton = () => {
   if (isAuthenticated) {
     return (
         <>
-          <button className="login-button" onClick={logOut}>로그아웃</button>
+          <button onClick={logOut} style={{ backgroundColor: '#212529', color: 'white' }}>로그아웃</button>
         </>
       );
   } else {
     return (
         <>
-          <button className="login-button" onClick={openModal}>로그인</button>
+          <button  onClick={openModal} style={{ backgroundColor: '#212529' , color: 'white'}} >로그인</button>
           <Modal
             isOpen={isOpen}
             onRequestClose={closeModal}

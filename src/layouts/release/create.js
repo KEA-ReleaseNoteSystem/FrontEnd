@@ -42,7 +42,10 @@ import MDBadge from "components/MDBadge";
 
 import axios from 'axios';
 
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+
+
 
 const customModalStyles = {
     overlay: {
@@ -65,6 +68,8 @@ const customModalStyles = {
 };
 
 function ViewRelease() {
+
+    const [projectId, setProjectId] = useRecoilState(projectIdState);
     const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
     const [issueData, setIssueData] = useState([]); //릴리즈노트와 연관된 이슈들 정보
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
