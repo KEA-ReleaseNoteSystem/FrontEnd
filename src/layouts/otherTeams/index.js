@@ -1,8 +1,9 @@
-import "./index.css"
+import { useState, useEffect } from "react";
+import axios from "axios";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import Stack from '@mui/material/Stack';
+
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -14,86 +15,115 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import authorsTableData from "./data/authorsTableData";
-import projectsTableData from "./data/projectsTableData";
+import memberprojectTable from "layouts/myteam/data/memberprojectTable";
+import projectsTableData from "layouts/myteam/data/projectsTableData";
+
+const projectId = 1;
 
 function OtherTeams() {
-  const { columns, rows } = authorsTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
+  const [selectedMemberId, setSelectedMemberId] = useState(null);
+  const { columns, rows } = memberprojectTable(setSelectedMemberId);
+  const { columns: pColumns, rows: pRows } = projectsTableData(selectedMemberId);
+  const [ projectName, setProjectName ] = useState("");
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
+
+
+  const getProjectName = async (projectId, token) => {
+    try {
+      const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/name`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+
+      console.log("response",response.data.data);
+      
+      if (response.data.length === 0) {
+        return "";
+      } else {
+        return response.data.data.name;
+      }
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+  
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProjectName(projectId, token);
+      setProjectName(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        {/* <Grid container spacing={6} id="total"  */}
-        <Stack direction="row" spacing={6}>
-          <Grid item xs={12} id="left" 
-            container
-            direction="row"
-            justifyContent="left"
-            alignItems="left">
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Authors Table
-                </MDTypography>
-              </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
-            </Card>
-          </Grid>
+    <DashboardNavbar />
+    <MDBox pt={6} pb={3}>
+      <Grid container spacing={6}>
+        <Grid item xs={12} lg={6}>
+          <Card>
+            <MDBox
+              mx={2}
+              mt={-3}
+              py={3}
+              px={2}
+              variant="gradient"
+              bgColor="info"
+              borderRadius="lg"
+              coloredShadow="info"
+            >
+              <MDTypography variant="h6" color="white">
+                {projectName}
+              </MDTypography>
+            </MDBox>
+            <MDBox pt={3}>
+              <DataTable
+                table={{ columns, rows }}
+                isSorted={false}
+                entriesPerPage={false}
+                showTotalEntries={false}
+                noEndBorder
+              />
+            </MDBox>
+          </Card>
+        </Grid>
 
-          <Grid item xs={12} id="right" container
-            direction="row"
-            lg={200}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Projects Table
-                </MDTypography>
-              </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: pColumns, rows: pRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
-            </Card>
-          </Grid>
-          </Stack>
-          </MDBox>
-          
-      <Footer />
-
-    </DashboardLayout>
+        <Grid item xs={12} lg={6}>
+          <Card>
+            <MDBox
+              mx={2}
+              mt={-3}
+              py={3}
+              px={2}
+              variant="gradient"
+              bgColor="info"
+              borderRadius="lg"
+              coloredShadow="info"
+            >
+              <MDTypography variant="h6" color="white">
+                Projects Table
+              </MDTypography>
+            </MDBox>
+            <MDBox pt={3}>
+              <DataTable
+                table={{ columns: pColumns, rows: pRows }}
+                isSorted={false}
+                entriesPerPage={false}
+                showTotalEntries={false}
+                noEndBorder
+              />
+            </MDBox>
+          </Card>
+        </Grid>
+      </Grid>
+    </MDBox>
+    <Footer />
+  </DashboardLayout>
   );
 }
 
