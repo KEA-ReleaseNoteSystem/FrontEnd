@@ -10,9 +10,10 @@ import ViewIssue from '../pages/viewIssue';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
 
-const getReleaseNoteData = async (projectId, token) => {
+const getReleaseNoteData = async (id, token) => {
   try {
-    const response = await axios.get(`/api/release?projectId=${encodeURIComponent(projectId)}`, {
+    console.log("요청 시작");
+    const response = await axios.get(`/api/release?projectId=${encodeURIComponent(id)}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -29,13 +30,13 @@ const getReleaseNoteData = async (projectId, token) => {
   }
 };
 
-export default function Data() {
+export default function Data({id}) {
+  console.log("aaaa",id);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReleaseId, setSelectedReleaseId] = useState(null);
   const [releaseList, setReleaseList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const token = localStorage.getItem('ACCESS_TOKEN');
-  const [projectId, setProjectId] = useRecoilState(projectIdState);
 
 
   const handleDetailClick = () => {
@@ -54,11 +55,11 @@ export default function Data() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getReleaseNoteData(projectId, token);
+      const data = await getReleaseNoteData(id, token);
       setReleaseList(data);
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   const handleClick = (event, releaseId) => {
     setSelectedReleaseId(releaseId); // 선택한 releaseId 설정

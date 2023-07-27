@@ -228,7 +228,7 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
       </Modal>
                   </Grid> 
                   <Grid item xs={8} sx={{ m: 3 }}>
-                    
+{/*                     
                     {!childIssues ? (
                     <MDTypography>지정된 하위 이슈가 없습니다.</MDTypography>
                   ) : (
@@ -244,7 +244,7 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
                         />
                       </div>
                     ))
-                  )}
+                  )} */}
                   </Grid>    
                   </Grid>  
                 {/* ) :(

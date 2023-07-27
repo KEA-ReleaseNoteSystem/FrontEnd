@@ -102,7 +102,7 @@ function Overview(info, description) {
                   <MDInput type="text" label="Position" value={member.position} onChange={(e) => setMember({ ...member, position: e.target.value })} fullWidth/>
                 </MDBox>
                 <MDBox mb={2}>
-                  <MDInput type="text" label="introduce" value={member.in} onChange={(e) => setMember({ ...member, introduce: e.target.value })} fullWidth/>
+                  <MDInput type="text" label="introduce" value={member.introduce} onChange={(e) => setMember({ ...member, introduce: e.target.value })} fullWidth/>
                 </MDBox>
                 <MDBox mt={4} mb={1} display="flex" justifyContent="center">
                   <MDButton variant="gradient" color="info" onClick={handleOnClickEdit}>

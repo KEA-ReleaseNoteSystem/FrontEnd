@@ -18,6 +18,9 @@ import MDButton from "components/MDButton";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
+
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
 
@@ -118,6 +121,7 @@ function MDIssueType({ label, value, onChange }) {
 
 
 function Overview() {
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [valueFromChild, setValueFromChild] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -158,16 +162,25 @@ function Overview() {
   }
 
   const handleOnClickCreateIssue = async () => {
-    await axios.post(`api/project/1/issue`, {
-      title: title,
-      writerName : writerName,
-      type: issueType,
-      description: description,
-      date: String(selectedDate),
-      userId: Number(1)
-    });
+    try {
+      // axios.post를 이용하여 API 호출
+      const response = await axios.post(`api/project/${projectId}/issue`, {
+        title: title,
+        writerName: writerName,
+        type: issueType,
+        description: description,
+        date: String(selectedDate),
+        userId: Number(1),
+      });
+      
+      if (response.data.statusCode === 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      // 오류 처리
+      console.error("API 요청 중 오류 발생:", error.message);
+    }
 
-    handleClose();
   }
 
   const handleChildValueChange = (value) =>{

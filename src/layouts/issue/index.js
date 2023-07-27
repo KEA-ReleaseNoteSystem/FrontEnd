@@ -260,10 +260,6 @@ function IssueSearch() {
     setFirstfilter(selectedValue)
   }
 
-
-
-
-
   const handleFiltertype = (event) => {
     const selectedValue = event.target.value;
     setSecfilter(selectedValue)
@@ -273,9 +269,6 @@ function IssueSearch() {
     const selectedValue = event.target.value;
     setThridfilter(selectedValue)
   }
-
-
-
 
   const handleRefresh = () => {
     setFirstfilter("");
@@ -444,7 +437,9 @@ function IssueSearch() {
               {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} setRefresh={setRefresh}/>}
             </Grid>
             <Grid item xs={4}>
-              {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} />}
+
+              {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} 
+              memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
               {isLoading ? null : <MyTree issue={issueDetail} refresh={refresh} setRefresh={setRefresh} />}
 
             </Grid>

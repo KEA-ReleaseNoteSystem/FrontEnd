@@ -37,6 +37,7 @@
     "react-bootstrap": "^2.8.0",
     "react-chartjs-2": "5.2.0",
     "react-content-loader": "^6.2.1",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-countup": "^6.4.2",
     "react-d3-tree": "^3.6.1",
     "react-datepicker": "^4.15.0",

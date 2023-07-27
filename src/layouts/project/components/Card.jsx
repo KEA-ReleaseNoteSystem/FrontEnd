@@ -22,8 +22,8 @@ import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
 
-  const { columns, rows } = tableData();
-  const project = "Project name";
+  console.log("id", id);
+  const project = "릴리즈 노트 조회";
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showReleaseNoteModal, setShowReleaseNoteModal] = useState(false);
   const token = localStorage.getItem('ACCESS_TOKEN');
@@ -34,14 +34,13 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
   const navigate = useNavigate();
 
   const [projectId, setProjectId] = useRecoilState(projectIdState);
-
+  const { columns, rows } = tableData({id});
   const onClickHandleRecoil = useCallback((id) => {
     setProjectId(id);
-    console.log(projectId);
   }, [setProjectId]);
 
   useEffect(() => {
-    console.log(projectId); // projectId가 변경될 때마다 로그가 출력될 것입니다.
+    console.log("프로젝트 id", projectId); // projectId가 변경될 때마다 로그가 출력될 것입니다.
   }, [projectId]);
 
   const handleClick = () => {
@@ -96,7 +95,7 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
               <span className="fas fa-ellipsis-v ellipsis-icon"></span>
             </ReactBootstrapDropdown.Toggle>
             <ReactBootstrapDropdown.Menu style={{ maxHeight: '300px', overflowY: 'no' }}>
-              <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() => setShowReleaseNoteModal(true)}>
+              <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() => {onClickHandleRecoil(id); setShowReleaseNoteModal(true);}}>
                 릴리즈노트 조회
               </ReactBootstrapDropdown.Item>
               <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={handleClick}>
@@ -112,9 +111,7 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
           </ReactBootstrapDropdown>
           {/* Modal for Release Note */}
           <Modal size="lg" show={showReleaseNoteModal} onHide={() => setShowReleaseNoteModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>릴리즈노트 조회</Modal.Title>
-            </Modal.Header>
+            <Modal.Header closeButton />
             <Modal.Body >
               {/* Add the content for release note here */}
               <MDBox pt={6} pb={3}>

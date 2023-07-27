@@ -79,15 +79,15 @@ function Overview(issue) {
               <MDInput type="text" label="제목" defaultValue={issue.issue.title} disabled fullWidth />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="보고자" defaultValue="서강덕" disabled fullWidth />
+              <MDInput type="text" label="보고자" defaultValue={issue.issue.memberReport.name} disabled fullWidth />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="담당자" defaultValue="안해빈" disabled fullWidth />
+              <MDInput type="text" label="담당자" defaultValue={issue.issue.memberIdInCharge.name} disabled fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDInput
                 label="타입"
-                value={issue.issue.type}
+                value={issue.issue.issueType}
                 disabled
               />
               <MDInput
@@ -100,7 +100,7 @@ function Overview(issue) {
               <MDInput
                 label="생성일"
                 disabled
-                defaultValue={issue.issue.updatedAt}
+                defaultValue={issue.issue.createdAt}
 
               />
             </MDBox>
