@@ -34,13 +34,13 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
   const navigate = useNavigate();
 
   const [projectId, setProjectId] = useRecoilState(projectIdState);
-  const { columns, rows } = tableData(id={id});
+  const { columns, rows } = tableData({id});
   const onClickHandleRecoil = useCallback((id) => {
     setProjectId(id);
   }, [setProjectId]);
 
   useEffect(() => {
-    console.log(projectId); // projectId가 변경될 때마다 로그가 출력될 것입니다.
+    console.log("프로젝트 id", projectId); // projectId가 변경될 때마다 로그가 출력될 것입니다.
   }, [projectId]);
 
   const handleClick = () => {
