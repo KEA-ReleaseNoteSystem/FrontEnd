@@ -23,7 +23,7 @@ import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
 
   const { columns, rows } = tableData();
-  const project = "Project name";
+  const project = "릴리즈 노트 조회";
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showReleaseNoteModal, setShowReleaseNoteModal] = useState(false);
   const token = localStorage.getItem('ACCESS_TOKEN');
@@ -112,9 +112,7 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
           </ReactBootstrapDropdown>
           {/* Modal for Release Note */}
           <Modal size="lg" show={showReleaseNoteModal} onHide={() => setShowReleaseNoteModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>릴리즈노트 조회</Modal.Title>
-            </Modal.Header>
+            <Modal.Header closeButton />
             <Modal.Body >
               {/* Add the content for release note here */}
               <MDBox pt={6} pb={3}>
