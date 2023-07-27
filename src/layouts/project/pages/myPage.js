@@ -41,6 +41,7 @@ function MyPage() {
 
   const handleCopy = () => {
     setCopied(true);
+    alert("그룹 코드가 클립보드에 복사되었습니다.");
     setTimeout(() => setCopied(false), 3000);
   };
 
