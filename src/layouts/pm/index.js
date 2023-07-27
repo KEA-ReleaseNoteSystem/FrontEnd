@@ -351,6 +351,7 @@ const PM = ({ projectInfo }, { project }) => {
 }
 function Overview() {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
+  console.log("projectId in PM", projectId);
   const [projectInfo, setProjectInfo] = useState(null);
   const token = localStorage.getItem('ACCESS_TOKEN');
   const location = useLocation();
