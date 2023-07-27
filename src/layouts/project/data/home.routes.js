@@ -46,7 +46,7 @@ const routes = [
     name: "프로젝트 생성",
     key: "memberinfo",
     icon: <Icon fontSize="small">groups</Icon>,
-    href:"/home/project/new",
+    route:"/home/project/new",
     component: <NewProject />,
   },
   {
@@ -54,7 +54,7 @@ const routes = [
     name: "마이페이지",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    href: "/home/mypage",
+    route: "/home/mypage",
     component: <MyPage />,
   },
   {
