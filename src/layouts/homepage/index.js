@@ -103,10 +103,10 @@ function Home() {
                         <Grid container spacing={3}>
                             <Grid item xs={12} lg={5} ml="auto" sx={{ textAlign: { xs: "center", lg: "left" } }}>
                                 <MKTypography variant="h4" fontWeight="bold" mb={0.5}>
-                                    Thank you for your visit!
+                                    최고의 가치를 전달하겠습니다.
                                 </MKTypography>
                                 <MKTypography variant="body1" color="text">
-                                    We deliver the best Service for Professional
+                                    지금 바로 경험해보세요.
                                 </MKTypography>
                             </Grid>
                             <Grid
@@ -135,7 +135,7 @@ function Home() {
                                     sx={{ mr: 1 }}
                                 >
                                     <i className="fab fa-facebook" />
-                                    &nbsp;Share
+                                    &nbsp;Facebook
                                 </MKSocialButton>
                                 <MKSocialButton
                                     component="a"

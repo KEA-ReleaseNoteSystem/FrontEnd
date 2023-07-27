@@ -15,6 +15,7 @@ import team2 from "assets/images/team-2.jpg";
 
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 import { token } from "stylis";
 
 import { useRecoilState } from 'recoil';
@@ -22,12 +23,14 @@ import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
 
 
 const getProjectMemberData = async (token) => {
+
   try {
     const response = await axios.get(`/api/group/members`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
+
 
     if (response.data.length === 0) {
       return [];
@@ -74,13 +77,16 @@ const handleOnClickAddMember = (projectId, memberId) => {
 export default function data() {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   console.log(projectId);
+
   const [memberList, setMemberList] = useState([]);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
     async function fetchData() {
+      
       const data = await getProjectMemberData(token);
+
       setMemberList(data);
     }
     fetchData();
@@ -138,6 +144,7 @@ export default function data() {
       <IconButton onClick={() => handleOnClickAddMember(projectId, member.id)}>
         <AddCircleOutlineIcon color="info" />
       </IconButton>
+
     )
   }));
 
