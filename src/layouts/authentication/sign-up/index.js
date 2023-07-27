@@ -18,7 +18,7 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import CreateGroup from "./creategroup";
 
 // Images
-import bgImage from "assets/images/bgtmp.png";
+import bgImage from "assets/images/homepage/sign-in-background.png";
 
 function Cover() {
 
