@@ -45,7 +45,7 @@ const routes = [
     name: "회원가입",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    href: "/authentication/sign-up",
+    route: "/authentication/sign-up",
     component: <Dashboard />,
   },
   {
@@ -53,7 +53,7 @@ const routes = [
     name: "로그인",
     key: "memberinfo",
     icon: <Icon fontSize="small">groups</Icon>,
-    href:"/authentication/sign-in",
+    route:"/authentication/sign-in",
     component: <Members />,
   },
 ];
