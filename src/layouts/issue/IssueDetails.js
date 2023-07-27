@@ -7,14 +7,17 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import { MenuItem } from "@mui/material";
 import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 import { IssueStatus, IssueStatusCopy, IssueType, IssueTypeCopy } from "shared/constants/issues"
 
 
-function IssueDetails({ issue, membersData, updateIssue }) {
+function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCharge }) {
 
-  const [memberInCharge, setmemberInCharge] = useState('');
+  const [memberInCharge, setmemberInCharge] = useState(memberCharge);
   const [mystatus, setStatus] = useState('');
   const [issueType, setIssueType] = useState('');
+
+  console.log("asdasdassd", memberCharge, memberReport);
 
 
 
@@ -81,19 +84,15 @@ function IssueDetails({ issue, membersData, updateIssue }) {
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
+                <FormControl>
                   <MDTypography variant="h6">담당자 &nbsp;&nbsp;
                     <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="demo-simple-select-helper"
                       value={memberInCharge}
                       onChange={handleMemberInCharge}
-                      displayEmpty
                     >
-                      <MenuItem disabled value="">
-                        해당 이슈 담당자
-                      </MenuItem>
                       {memberList2}
                     </Select></MDTypography>
+                    </FormControl>
                   <MDTypography variant="subtitle2" ml={10}>
 
                   </MDTypography>
@@ -103,21 +102,7 @@ function IssueDetails({ issue, membersData, updateIssue }) {
               </Grid>
               <Grid item xs={12}>
                 <MDBox pt={2} px={2} sx={{ mb: 3 }}>
-                  <MDTypography variant="h6">보고자 &nbsp;&nbsp;
-                    <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="demo-simple-select-helper"
-                      value={memberInCharge}
-                      onChange={handleMemberInCharge}
-                      displayEmpty
-                    >
-                      <MenuItem disabled value="">
-                        해당 이슈 보고자
-                      </MenuItem>
-
-                      {memberList2}
-                    </Select></MDTypography>
-
+                  <MDTypography variant="h6">보고자: {memberReport}</MDTypography>
                 </MDBox>
               </Grid>
               <Grid item xs={12}>
