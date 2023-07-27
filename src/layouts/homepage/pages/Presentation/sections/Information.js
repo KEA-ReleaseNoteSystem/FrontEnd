@@ -27,8 +27,9 @@ import RotatingCardBack from "../../../examples/Cards/RotatingCard/RotatingCardB
 import DefaultInfoCard from "../../../examples/Cards/InfoCards/DefaultInfoCard";
 
 // Images
-import bgFront from "assets/images/rotating-card-bg-front.jpeg";
-import bgBack from "assets/images/rotating-card-bg-back.jpeg";
+// import bgFront from "assets/images/rotating-card-bg-front.jpeg";
+import bgBack from "assets/images/logos/front-logo3.png";
+import bgFront from "assets/images/logos/back-logo3.png";
 
 function Information() {
   return (
@@ -42,21 +43,21 @@ function Information() {
                 icon="touch_app"
                 title={
                   <>
-                    Feel the
+                    현존하는 최고의
                     <br />
-                    Material Kit
+                    릴리즈노트 플랫폼
                   </>
                 }
-                description="All the MUI components that you need in a development have been re-design with the new look."
+                // description="All the MUI components that you need in a development have been re-design with the new look."
               />
               <RotatingCardBack
                 image={bgBack}
-                title="Discover More"
-                description="You will save a lot of time going from prototyping to full-functional code because all elements are implemented."
+                title="그것이 바로 Releasy"
+                description="with KEA"
                 action={{
                   type: "internal",
                   route: "/sections/page-sections/page-headers",
-                  label: "start with header",
+                  label: "바로 시작하기",
                 }}
               />
             </RotatingCard>
@@ -89,8 +90,8 @@ function Information() {
               <Grid item xs={12} md={6}>
                 <DefaultInfoCard
                   icon="devices"
-                  title="Fully Responsive"
-                  description="Regardless of the screen size, the website content will naturally fit the given resolution."
+                  title="체계적인 이슈 관리"
+                  description="수많은 이슈를 체계적으로 할당하고 관리할 수 있습니다."
                 />
               </Grid>
             </Grid>
