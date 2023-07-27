@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 // @mui material components
+import { useState, useEffect } from "react";
 import Icon from "@mui/material/Icon";
-
+import axios from 'axios';
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -17,37 +18,36 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 
-const projects = [
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "running",
-    date: "23/04/18",
-    completion: 100,
-  },
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "running",
-    date: "23/04/18",
-    completion: 80,
-  },
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "cancled",
-    date: "23/04/18",
-    completion: 0,
-  },
-];
 
-export default function data() {
+
+
+
+export default function data(selectedMemberId) {
+  
+const [projectMembers, setProjectMembers] = useState([]);
+
+useEffect(() => {
+  const getMemberProjectData = async () => {
+    try {
+      const response = await axios.get(`/api/project/1/members/${selectedMemberId}`
+      );
+ 
+      if (response.data.data.length === 0) {
+        setProjectMembers([]);
+      } else {
+        setProjectMembers(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+      setProjectMembers([]);
+    }
+  };
+
+  getMemberProjectData();
+}, [selectedMemberId]);
+
+
+
   const Project = ({ image, name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
@@ -74,8 +74,8 @@ export default function data() {
     { Header: "진행도", accessor: "completion", align: "center" },
   ];
 
-  const rows = projects.map((project) => ({
-    project: <Project image={project.project.image} name={project.project.name} />,
+  const rows = projectMembers.map((project) => ({
+    project: <Project  name={project.name} />,
     status: (
       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
         {project.status}
@@ -83,7 +83,7 @@ export default function data() {
     ),
     date: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {project.date}
+        {String(project.createdAt).slice(0, 10)}
       </MDTypography>
     ),
     completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,

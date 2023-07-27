@@ -33,7 +33,7 @@ const customModalStyles = {
 };
 
 
-function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIssue }) {
+function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIssue,setRefresh }) {
   // console.log("updateIssue",updateIssue);
   const [Memo, setMemo] = useState(fetchedMemo);
   const [isChild,SetIsChild] = useState(issue.child)
@@ -45,7 +45,8 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
   const [otherIssue, setOtherIssue] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
   const [parentName, setParentName] = useState();
-
+  const [selectedchildIssues,setselectedchildIssues] = useState();
+  const [shouldRefresh, setShouldRefresh] = useState(false);
 
  console.log("issue123",issue.childIssue);
  console.log("issue12",childIssues);
@@ -64,6 +65,27 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
   const handleClick = (issue, issueIndex) => {
     setSelectedIssueIndex(issueIndex);
     createChildIssue(issue);
+  };
+
+  const handleDelete = async (issue, issueIndex) => {
+    setselectedchildIssues(issue.id);
+    try {
+      let result = await axios.delete(`/api/issue/issueparentchild/${currentIds[0]}/${selectedchildIssues}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }});
+      console.log("deleted? :" ,result);
+      console.log("currentIds? :" ,currentIds[0]);
+        
+      setRefresh(true);
+      // Successfully deleted the issue, now let's remove it from childIssues.
+      setChildIssues(prevChildIssues => prevChildIssues.filter(item => item.id !== issue.id));
+      console.log(childIssues);
+    } catch (error) {
+      console.error('Error making the request:', error.message);
+      console.error('Full error object:', error);
+      console.error('Server error message:', error.response.data.message);
+    }
   };
 
 
@@ -96,13 +118,14 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
 
   useEffect(() => {
     setCurrentIds([issue.id]);
-    setChildIssues(issue.childIssue);
     SetIsChild(issue.child);
     setParentName((issue.parentIssue[0] == undefined ? " " : issue.parentIssue[0].title))
     
-    // getChildIssues()
-  }, [issue.id, createChildIssue]);
-
+    if (!childIssues) { // childIssues 상태가 아직 설정되지 않았다면
+      setChildIssues(issue.childIssue); // childIssues 상태를 issue.childIssue로 초기화
+    }
+  }, [issue.id, issue.childIssue, createChildIssue]);
+  
   console.log("childIssues",childIssues);
 
   
@@ -150,7 +173,8 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
          
             <Card sx={{ backgroundColor: '#F0EDEE' }}>
               <MDBox pt={2} px={2} pb={2}>
-              {!isChild ? (   <Grid container spacing={0}>
+              {/* {!isChild ? (  */}
+                 <Grid container spacing={0}> 
                   <Grid item xs={8}>
                     <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                       하위 이슈 관리
@@ -210,8 +234,8 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
                   ) : (
                     childIssues.map((issue, index) => (
                       <div
-                        // key={issue.id}
-                        // onClick={() => {handleClick(issue, index)}}
+                        key={issue.id}
+                        onClick={() => {handleDelete(issue, index)}}
                       >
                         <ProjectBoardListIssue
                           issue={issue}
@@ -221,13 +245,14 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
                       </div>
                     ))
                   )}
-                  </Grid>      
-                </Grid>) :(
+                  </Grid>    
+                  </Grid>  
+                {/* ) :(
                   <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
                         &nbsp; 하위 이슈입니다.<br/>
                         &nbsp; {parentName}/{issue.title} 
                     </MDTypography>
-                     )}
+                     )} */}
               </MDBox>
             </Card> 
           </MDBox>

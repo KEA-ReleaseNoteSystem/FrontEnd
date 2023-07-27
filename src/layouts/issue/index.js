@@ -19,10 +19,9 @@ import { IssueSearchBar, IssueSearchBarCopy, IssueStatus, IssueStatusCopy, Issue
 import Button from '@mui/material/Button';
 import IssueDetails from './IssueDetails';
 import IssueEditing from './IssueEditing';
-
+import MyTree from './MyTree';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
-
 
 function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
@@ -40,7 +39,8 @@ function IssueSearch() {
   const [secfilter, setSecfilter] = useState("");
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
-  
+  const [refresh, setRefresh] = useState(false);
+
 
   const createChildIssue = async (childIssue) => {
     try {
@@ -441,10 +441,12 @@ function IssueSearch() {
             {console.log("updateIssue1", updateIssue)}
             {console.log("fetchedMemo1", fetchedMemo)}
             <Grid item xs={5}>
-              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue}/>}
+              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} setRefresh={setRefresh}/>}
             </Grid>
             <Grid item xs={4}>
               {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} />}
+              {isLoading ? null : <MyTree issue={issueDetail} refresh={refresh} setRefresh={setRefresh} />}
+
             </Grid>
           </Grid>
     
