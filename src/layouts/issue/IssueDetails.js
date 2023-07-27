@@ -41,7 +41,6 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
   };
 
 
-
   return (
     <Grid container xs={12} id="right" direction="column" lg={200}>
       <Card>
@@ -59,31 +58,35 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
             세부 정보
           </MDTypography>
         </MDBox>
-
+  
         {/* Your content */}
         <Grid item xs={12}>
           <Card>
             <Grid container>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">생성 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.createdAt.slice(0, 10)}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length === 0 ? null : issue.createdAt.slice(0, 10)}</MDTypography>
                 </MDBox>
               </Grid>
-              <Grid item xs={12}>
+  
+              <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">수정 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.updatedAt}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length === 0 ? null : issue.updatedAt}</MDTypography>
                 </MDBox>
               </Grid>
+  
               <Grid item xs={12}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">릴리즈 노트</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.length == 0 ? null : issue.releasenote}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length === 0 ? null : issue.releasenote}</MDTypography>
                 </MDBox>
               </Grid>
-              <Grid item xs={12}>
+  
+              <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
+
                 <FormControl>
                   <MDTypography variant="h6">담당자 &nbsp;&nbsp;
                     <Select
@@ -105,57 +108,61 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
                   <MDTypography variant="h6">보고자: {memberReport}</MDTypography>
                 </MDBox>
               </Grid>
-              <Grid item xs={12}>
+  
+              <Grid item xs={6}>
+                <MDBox pt={2} px={2}>
+                  <MDTypography variant="h6">상태</MDTypography>
+                  <Select
+                    labelId="status-select-label"
+                    id="status-select"
+                    value={mystatus}
+                    onChange={event => updateIssue({ status: event.target.value })}
+                    sx={{ minHeight: 30, mb: 3 }}
+                    displayEmpty
+                  >
+                    <MenuItem disabled value="">
+                      이슈 상태 변경
+                    </MenuItem>
+                    {Object.values(IssueStatus).map(status => (
+                      <MenuItem key={status} value={status}>
+                        {IssueStatusCopy[status]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </MDBox>
+              </Grid>
+  
+              <Grid item xs={6}>
+                <MDBox pt={2} px={2}>
+                  <MDTypography variant="h6">타입</MDTypography>
+                  <Select
+                    labelId="type-select-label"
+                    id="type-select"
+                    value={issueType}
+                    onChange={event => updateIssue({ issueType: event.target.value })}
+                    sx={{ minHeight: 30 }}
+                    displayEmpty
+                  >
+                    <MenuItem disabled value="">
+                      이슈 타입 변경
+                    </MenuItem>
+                    {Object.values(IssueType).map(type => (
+                      <MenuItem key={type} value={type}>
+                        {IssueTypeCopy[type]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </MDBox>
               </Grid>
             </Grid>
           </Card>
         </Grid>
-
       </Card>
       <br />
-      <InputLabel id="status-select-label">상태</InputLabel>
-      <Select
-        labelId="status-select-label"
-        id="status-select"
-        value={mystatus}
-        onChange={event => updateIssue({ status: event.target.value })}
-        sx={{ minHeight: 50, mb: 3 }}
-        displayEmpty
-      >
-        <MenuItem disabled value="">
-          이슈 상태 변경
-        </MenuItem>
-
-        {Object.values(IssueStatus).map(status => (
-          <MenuItem key={status} value={status}>
-            {IssueStatusCopy[status]}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <InputLabel id="type-select-label">타입</InputLabel>
-      <Select
-        labelId="type-select-label"
-        id="type-select"
-        value={issueType}
-        onChange={event => updateIssue({ issueType: event.target.value })}
-        sx={{ minHeight: 50 }}
-        displayEmpty
-      >
-        <MenuItem disabled value="">
-          이슈 타입 변경
-        </MenuItem>
-
-        {Object.values(IssueType).map(type => (
-          <MenuItem key={type} value={type}>
-            {IssueTypeCopy[type]}
-          </MenuItem>
-        ))}
-      </Select>
-
     </Grid>
+    
   );
-}
+                    }  
 
 
 export default IssueDetails;

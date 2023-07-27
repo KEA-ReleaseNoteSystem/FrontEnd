@@ -19,10 +19,9 @@ import { IssueSearchBar, IssueSearchBarCopy, IssueStatus, IssueStatusCopy, Issue
 import Button from '@mui/material/Button';
 import IssueDetails from './IssueDetails';
 import IssueEditing from './IssueEditing';
-
+import MyTree from './MyTree';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
-
 
 function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
@@ -40,8 +39,65 @@ function IssueSearch() {
   const [secfilter, setSecfilter] = useState("");
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
-  const [currentIds, setCurrentIds] = useState([]);
-  const [otherIssue, setOtherIssue] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+
+  const createChildIssue = async (childIssue) => {
+    try {
+      var now = new Date().toISOString();
+      let result = await axios.post(`/api/${projectId}/issues/${issueDetail.id}/childissue`, {
+        parentIssueId: issueDetail.id,
+        childIssueId : childIssue.id,
+        createdAt: now
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const updatedChildIssues = [
+        ...issueDetail.childIssue, // 기존의 하위 이슈들
+        {
+          id: childIssue.id,
+          issueNum: childIssue.issueNum,
+          title: childIssue.title,
+          issueType: childIssue.issueType,
+          description: childIssue.description,
+          status: childIssue.status,
+          importance: childIssue.importance,
+          createdAt: childIssue.createdAt,
+          memberIdInCharge: {
+            name: childIssue.memberIdInCharge.name,
+            nickname: childIssue.memberIdInCharge.nickname
+          },
+          child : true
+        }
+        
+      ];
+
+      setIssueDetail(prevIssue => ({
+        ...prevIssue,
+        childIssue: updatedChildIssues
+      }));
+
+      const updatedIssues = fetchedIssues.map((issue) => {
+        if (issue.id === issueDetail.id) {
+          return {
+            ...issue,
+            childIssue: updatedChildIssues // Update the childIssue array of the issue
+          };
+        }
+        return issue;
+      });
+
+      setFetchedIssues(updatedIssues);
+     
+    } catch (error) {
+      console.error('Error making the request:', error.message);
+      console.error('Full error object:', error);
+      
+    }
+  };
 
   const memberList2 = membersData && membersData.map((member) => (
     <MenuItem value={member.name}>
@@ -53,7 +109,7 @@ function IssueSearch() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const issuesResponse = await axios.get(`/api/${projectId}/issues`, {
+        const issuesResponse = await axios.get(`/api/${encodeURIComponent(projectId)}/issues`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -65,6 +121,7 @@ function IssueSearch() {
         });
         setMembersData(membersResponse.data.data);
         setIssueDetail(issuesResponse.data.data[0]);
+        console.log("issuesResponse.data.data[0]",issuesResponse.data.data[0])
 
         { !issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false) }
 
@@ -95,7 +152,6 @@ function IssueSearch() {
     fetchMemo();
 
   }, [!issueDetail ? null : issueDetail.id]);
-
 
 
 
@@ -234,11 +290,7 @@ function IssueSearch() {
     setIssueDetail(issue);
     setSelectedIssueIndex(issueIndex);
     setInit(false);
-
   };
-
-
-
 
   console.log("init", init);
 
@@ -382,13 +434,17 @@ function IssueSearch() {
             {console.log("updateIssue1", updateIssue)}
             {console.log("fetchedMemo1", fetchedMemo)}
             <Grid item xs={5}>
-              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId}/>}
+              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} setRefresh={setRefresh}/>}
             </Grid>
             <Grid item xs={4}>
+
               {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} 
               memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
+              {isLoading ? null : <MyTree issue={issueDetail} refresh={refresh} setRefresh={setRefresh} />}
+
             </Grid>
           </Grid>
+    
         </Stack>
       </MDBox>
 

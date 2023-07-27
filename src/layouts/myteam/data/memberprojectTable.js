@@ -6,7 +6,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
-
+import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
@@ -22,7 +22,7 @@ const getProjectMemberData = async (projectId, token) => {
         Authorization: `Bearer ${token}`
       }
     });
-    
+   
     if (response.data.length === 0) {
       return [];
     } else {
@@ -34,7 +34,7 @@ const getProjectMemberData = async (projectId, token) => {
   }
 };
 
-export default function data() {
+export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
@@ -49,7 +49,7 @@ export default function data() {
 
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={team2} name={name} size="sm" />
+      <MDAvatar src={image} name={name} size="sm" />
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
@@ -72,6 +72,7 @@ export default function data() {
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
+    { Header: "버튼", accessor: "button", align: "center" }
   ];
 
   const rows = memberList.map((member) => ({
@@ -92,7 +93,11 @@ export default function data() {
     createdAt: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
         {member && member.createdAt.slice(0, 10)}
-      </MDTypography>
+      </MDTypography>),
+    button: (
+        <Button variant="contained" color="inherit" onClick={() => setSelectedMemberId(member.id)}>
+         조회
+      </Button>
     ),
   }));
 
