@@ -23,7 +23,10 @@ content: {
 const LoginButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+  useEffect(() => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    setIsAuthenticated(!!token);
+  }, []);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -32,10 +35,7 @@ const LoginButton = () => {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("ACCESS_TOKEN");
-    setIsAuthenticated(!!token);
-  }, []);
+  
 
   const logOut = () => {
     localStorage.removeItem("ACCESS_TOKEN");
