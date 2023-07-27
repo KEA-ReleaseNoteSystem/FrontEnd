@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import '../index.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Dropdown as ReactBootstrapDropdown } from 'react-bootstrap';
@@ -14,6 +14,10 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import Grid from "@mui/material/Grid";
 import Cardm from "@mui/material/Card";
+
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
+
 
 function projectStatus(status) {
   if (status == "In-progress") {
@@ -39,11 +43,18 @@ function projectStatus(status) {
 }
 
 const Card = ({ key, itemId, id, title, pmname, status, date }) => {
-
-  const { columns, rows } = tableData();
-  const project = "Project name";
+  
+  const { columns, rows } = tableData(id={id});
+  const project = "릴리즈 노트 조회";
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showReleaseNoteModal, setShowReleaseNoteModal] = useState(false);
+
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  console.log(projectId);
+  const onClickHandleRecoil = useCallback((id) => {
+    setProjectId(id);
+    console.log(projectId);
+  }, [setProjectId]);
 
   return (
     <div className="col-lg-3A wow slideInUp" data-wow-delay="0.2s" >
@@ -60,7 +71,7 @@ const Card = ({ key, itemId, id, title, pmname, status, date }) => {
           </ReactBootstrapDropdown.Toggle>
           <ReactBootstrapDropdown.Menu>
 
-            <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() => setShowReleaseNoteModal(true)}>
+            <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() =>  {onClickHandleRecoil(id); setShowReleaseNoteModal(true);}}>
               릴리즈노트 조회
             </ReactBootstrapDropdown.Item>
 
@@ -68,7 +79,6 @@ const Card = ({ key, itemId, id, title, pmname, status, date }) => {
         </ReactBootstrapDropdown>
         <Modal size="lg" show={showReleaseNoteModal} onHide={() => setShowReleaseNoteModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>릴리즈노트 조회</Modal.Title>
           </Modal.Header>
           <Modal.Body >
             {/* Add the content for release note here */}

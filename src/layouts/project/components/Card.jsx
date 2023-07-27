@@ -22,7 +22,7 @@ import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
 
-  const { columns, rows } = tableData();
+  console.log("id", id);
   const project = "릴리즈 노트 조회";
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showReleaseNoteModal, setShowReleaseNoteModal] = useState(false);
@@ -34,10 +34,9 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
   const navigate = useNavigate();
 
   const [projectId, setProjectId] = useRecoilState(projectIdState);
-
+  const { columns, rows } = tableData(id={id});
   const onClickHandleRecoil = useCallback((id) => {
     setProjectId(id);
-    console.log(projectId);
   }, [setProjectId]);
 
   useEffect(() => {
@@ -96,7 +95,7 @@ const Card = ({ key, itemId, id, title, pmname, date, status, startdate }) => {
               <span className="fas fa-ellipsis-v ellipsis-icon"></span>
             </ReactBootstrapDropdown.Toggle>
             <ReactBootstrapDropdown.Menu style={{ maxHeight: '300px', overflowY: 'no' }}>
-              <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() => setShowReleaseNoteModal(true)}>
+              <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={() => {onClickHandleRecoil(id); setShowReleaseNoteModal(true);}}>
                 릴리즈노트 조회
               </ReactBootstrapDropdown.Item>
               <ReactBootstrapDropdown.Item className="custom-dropdown-item" onClick={handleClick}>
