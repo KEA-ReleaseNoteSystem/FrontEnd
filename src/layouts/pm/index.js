@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+import Modal from 'react-modal';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -32,6 +33,32 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScrollHorizontal from 'react-scroll-horizontal';
 
 import homeDecor2 from "assets/images/team-2.jpg";
+
+import teamTable from "layouts/pm/join/memberTable";
+import DataTable from "examples/Tables/DataTable";
+
+const customModalStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: '1000', // add a high zIndex value
+  },
+  content: {
+    width: '60%',
+    height: '80%',
+    top: '50%',
+    left: '55%',
+    transform: 'translate(-50%, -45%)',
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 20,
+    justifyContent: 'center',
+    position: 'relative', // make sure it's a positioned element
+    zIndex: '10001',// it should be higher than overlay's zIndex to appear on top
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    borderColor: 'transparent'
+  }
+};
+
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -71,6 +98,17 @@ const PM = ({ projectInfo }, { project }) => {
   const [isLoading, setIsLoading] = useState(false); // Added loading state
   const [groupMessage, setGroupMessage] = useState("");
   const [groupCodeMessage, setGroupCodeMessage] = useState("");
+  const { columns, rows } = teamTable();
+
+  const [activeModal, setActiveModal] = useState(false);
+
+  const openAddMemberModal = () => {
+    setActiveModal(true);
+  };
+
+  const closeAddMemberModal = () => {
+    setActiveModal(false);
+  };
 
   const handleGroupClick = () => {
     setGroupMessage("그룹 필드는 수정할 수 없습니다.");
@@ -175,7 +213,7 @@ const PM = ({ projectInfo }, { project }) => {
               </MDBox>
               <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
                 <MDBox mb={2}>
-                  <MDInput type="text" label="프로젝트 이름" onChange={handleInputChange} name ="name" defaultValue={projectInfo.name} fullWidth />
+                  <MDInput type="text" label="프로젝트 이름" onChange={handleInputChange} name="name" defaultValue={projectInfo.name} fullWidth />
                 </MDBox>
                 <MDBox mb={2}>
                   <MDInput label="그룹" defaultValue={projectInfo.groupName} InputProps={{
@@ -221,7 +259,7 @@ const PM = ({ projectInfo }, { project }) => {
                   <MDInput
                     type="textarea"
                     label="설명"
-                    name = "description"
+                    name="description"
                     defaultValue={projectInfo.description}
                     onChange={handleInputChange}
                     fullWidth
@@ -268,22 +306,45 @@ const PM = ({ projectInfo }, { project }) => {
         </MDBox>
       </MDBox>
       <MDBox p={2}>
-          <Grid container spacing={6}>
-            {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
-              <Grid item xs={12} md={6} xl={3} key={member.id}>
-                <DefaultProjectCard
-                  image={homeDecor2}
-                  id={member.id}
-                  projectId={projectIn}
-                  name={member.name}
-                  nickname={member.nickname}
-                  email={member.email}
-                  position={member.position}
-                  role={member.role}
+        <Grid container spacing={6}>
+          {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
+            <Grid item xs={12} md={6} xl={3} key={member.id}>
+              <DefaultProjectCard
+                image={homeDecor2}
+                id={member.id}
+                projectId={projectInfo.id}
+                name={member.name}
+                nickname={member.nickname}
+                email={member.email}
+                position={member.position}
+                role={member.role}
+              />
+            </Grid>
+            
+          ))}
+
+
+            <IconButton onClick={openAddMemberModal}>
+              <AddCircleOutlineIcon color="info" />
+            </IconButton>
+
+          <Modal
+            isOpen={activeModal}
+            onRequestClose={closeAddMemberModal}
+            style={customModalStyles}
+          >
+                          <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
                 />
-              </Grid>
-            ))}
-          </Grid>
+              </MDBox>
+
+          </Modal>
+        </Grid>
       </MDBox>
     </DashboardLayout>
   );
