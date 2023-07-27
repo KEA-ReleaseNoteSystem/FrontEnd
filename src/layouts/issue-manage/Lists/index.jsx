@@ -22,7 +22,8 @@ const propTypes = {
 const currentUserIdMock = 1;
 
 const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
-
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  
   console.log("project: ", project);
   //console.log("projectId: ", project.id);
   const [updatedProject, setUpdatedProject] = useState('');
@@ -46,7 +47,10 @@ const ProjectBoardLists = ({ project, filters, updateLocalProjectIssues }) => {
     issueId : Number(draggableId),
     destinationStatus: destination.droppableId,
     sourceStatus: source.droppableId,
-  });
+  },{ 
+    headers: { 
+      Authorization: `Bearer ${token}` 
+  }});
 
 
 

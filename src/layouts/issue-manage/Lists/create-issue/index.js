@@ -18,6 +18,9 @@ import MDButton from "components/MDButton";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
+
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
 
@@ -118,6 +121,7 @@ function MDIssueType({ label, value, onChange }) {
 
 
 function Overview() {
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [valueFromChild, setValueFromChild] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -158,7 +162,7 @@ function Overview() {
   }
 
   const handleOnClickCreateIssue = async () => {
-    await axios.post(`api/project/1/issue`, {
+    await axios.post(`api/project/${projectId}/issue`, {
       title: title,
       writerName : writerName,
       type: issueType,
