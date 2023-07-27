@@ -15,17 +15,20 @@ import team2 from "assets/images/team-2.jpg";
 
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { token } from "stylis";
 
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
 
-const getProjectMemberData = async (projectId, token) => {
+
+const getProjectMemberData = async (token) => {
   try {
     const response = await axios.get(`/api/group/members`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    
+
     if (response.data.length === 0) {
       return [];
     } else {
@@ -38,14 +41,46 @@ const getProjectMemberData = async (projectId, token) => {
   }
 };
 
+const joinProjectMemberData = async (projectId, memberId) => {
+  try {
+    const token = localStorage.getItem('ACCESS_TOKEN');
+    const response = await axios.post(`/api/project/member`, {
+      projectId: projectId,
+      memberId: memberId
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (response.data.statusCode === 200) {
+      window.alert(response.data.message);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+    }
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const handleOnClickAddMember = (projectId, memberId) => {
+  console.log("추가 클릭");
+  joinProjectMemberData(projectId, memberId, token);
+}
+
 export default function data() {
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  console.log(projectId);
   const [memberList, setMemberList] = useState([]);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProjectMemberData(projectId, token);
+      const data = await getProjectMemberData(token);
       setMemberList(data);
     }
     fetchData();
@@ -100,9 +135,9 @@ export default function data() {
       </MDTypography>
     ),
     join: (
-      <IconButton>
-      <AddCircleOutlineIcon color="info" />
-    </IconButton>
+      <IconButton onClick={() => handleOnClickAddMember(projectId, member.id)}>
+        <AddCircleOutlineIcon color="info" />
+      </IconButton>
     )
   }));
 
