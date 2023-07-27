@@ -17,7 +17,8 @@ import { Select } from "@mui/material";
 import { Menu, MenuItem } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-
+import DefaultNavbar from 'layouts/homepage/examples/Navbars/DefaultNavbar';
+import routes from '../data/home.routes.js';
 const NewProject = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -81,8 +82,11 @@ const NewProject = () => {
 
   return (
     <PageLayout>
-      <NavigationBar />
-      <MDBox mb={2} />
+      <DefaultNavbar
+                routes={routes}
+                sticky
+            />
+      <MDBox sx={{mb:2, mt:15}} />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>

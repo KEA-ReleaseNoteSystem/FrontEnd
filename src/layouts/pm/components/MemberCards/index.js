@@ -30,9 +30,62 @@ import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDAvatar from "components/MDAvatar";
 
-function DefaultProjectCard({ image, name, position, action}) {
+import axios from 'axios';
+
+const token = localStorage.getItem("ACCESS_TOKEN");
+
+function DefaultProjectCard({ id, projectId,image, name, nickname,position, email, role }) {
+
+
+  const handleOnClickDelete = (id) => {
+
+    axios.delete('/api/project/member', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      data: {
+        memberId: id,
+        projectId: projectId
+      }
+    } )
+    .then(response => {
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    })
+    .catch(error => {
+      console.error('Error updating member info:', error);
+    });
+  }
+
+  const handleOnClickAssign = (id) => {
+
+    console.log(token);
+    const data = {
+      memberId: id,
+      projectId: projectId
+    };
+
+    axios.patch('/api/project/role/pm', data,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    } )
+    .then(response => {
+      if (response.status === 200) {
+        console.log(response.data);
+        window.location.href = '/dashboard';
+      }
+    })
+    .catch(error => {
+      console.error('Error updating member info:', error);
+    });
+  }
 
   return (
+    <>
     <Card
       sx={{
         display: "flex",
@@ -58,85 +111,58 @@ function DefaultProjectCard({ image, name, position, action}) {
       </MDBox>
       <MDBox mt={1} mx={0.5}>
         <MDBox mb={1}>
-          {action.type === "internal" ? (
-            <MDTypography
-              component={Link}
-              to={action.route}
-              variant="h5"
-              textTransform="capitalize"
-            >
-              {name}
-            </MDTypography>
-          ) : (
+    
             <MDTypography
               component="a"
-              href={action.route}
               target="_blank"
               rel="noreferrer"
               variant="h5"
               textTransform="capitalize"
             >
-              {name}
+              {nickname}
             </MDTypography>
-          )}
+        </MDBox>
+        <MDBox mb={1} lineHeight={0}>
+          <MDTypography variant="button" fontWeight="light" color="text">
+            {name} / {position} 
+          </MDTypography>
+        </MDBox>
+        <MDBox mb={1} lineHeight={0}>
+          <MDTypography variant="button" fontWeight="light" color="text">
+            {email}
+          </MDTypography>
         </MDBox>
         <MDBox mb={3} lineHeight={0}>
           <MDTypography variant="button" fontWeight="light" color="text">
-            {position}
+            {role}
           </MDTypography>
         </MDBox>
-        <MDBox display="flex" justifyContent="space-between" alignItems="center">
-          {action.type === "internal" ? (
-            <MDButton
-              component={Link}
-              to={action.route}
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </MDButton>
-          ) : (
+        <MDBox mb={1} display="flex" justifyContent="space-between" alignItems="center">
+          <MDButton
+            variant="outlined"
+            size="small"
+            color="info"
+            onClick={() => handleOnClickAssign(id)}
+          >
+            Assign
+          </MDButton>
+
             <MDButton
               component="a"
-              href={action.route}
               target="_blank"
               rel="noreferrer"
               variant="outlined"
               size="small"
-              color={action.color}
+              color="error"
+              onClick={() => handleOnClickDelete(id)}
             >
-              {action.label}
+              DELETE
             </MDButton>
-          )}
         </MDBox>
       </MDBox>
     </Card>
+    </>
   );
 }
-
-
-// Typechecking props for the DefaultProjectCard
-DefaultProjectCard.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  position: PropTypes.string.isRequired,
-  action: PropTypes.shape({
-    type: PropTypes.oneOf(["external", "internal"]),
-    route: PropTypes.string.isRequired,
-    color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "light",
-      "dark",
-      "white",
-    ]).isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default DefaultProjectCard;

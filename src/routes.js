@@ -173,14 +173,6 @@ const routes = [
   {
     type: "",
     name: "",
-    key: "home",
-    icon: "",
-    route: "/home",
-    component: <Home />,
-  },
-  {
-    type: "",
-    name: "",
     key: "create-release",
     route: "/release/create",
     component: <CreateRelease />
