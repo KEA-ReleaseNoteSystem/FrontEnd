@@ -39,7 +39,7 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bgtmp.png";
+import bgImage from "assets/images/homepage/sign-in-background.png";
 
 import googleLogin from "assets/images/google_login.png";
 import kakaoLogin from "assets/images/kakao_login.png";
