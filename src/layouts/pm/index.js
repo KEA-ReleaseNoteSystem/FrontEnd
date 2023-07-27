@@ -3,16 +3,12 @@ import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -20,7 +16,7 @@ import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import { Select } from "@mui/material";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, IconButton } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -28,29 +24,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import ProfilesList from "examples/Lists/ProfilesList";
 import DefaultProjectCard from "./components/MemberCards"
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-// Overview page components
-import Header from "layouts/pm/components/Header";
-import PlatformSettings from "layouts/pm/components/PlatformSettings";
-
-// Data
-import profilesListData from "layouts/profile/data/profilesListData";
-
-// Images
-import homeDecor1 from "assets/images/home-decor-1.jpg";
-import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
-import homeDecor4 from "assets/images/home-decor-4.jpeg";
-import team1 from "assets/images/team-1.jpg";
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
 
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ScrollHorizontal from 'react-scroll-horizontal';
+
+import homeDecor2 from "assets/images/team-2.jpg";
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -87,8 +68,6 @@ function MDDatePicker({ label, defaultValue, onChange }) {
 }
 
 const PM = ({ projectInfo }, { project }) => {
-  const [projects, setprojects] = useState([project])
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false); // Added loading state
   const [groupMessage, setGroupMessage] = useState("");
   const [groupCodeMessage, setGroupCodeMessage] = useState("");
@@ -289,59 +268,50 @@ const PM = ({ projectInfo }, { project }) => {
         </MDBox>
       </MDBox>
       <MDBox p={2}>
-        {/* 
-      <Grid container spacing={6}>
-        {projects.map(member => (
-          <Grid item xs={12} md={6} xl={3} key={member.id}>
-            
-            <DefaultProjectCard
-              image={member.image}
-              name={member.name}
-              position={member.position}
-              action={{
-                type: "external",
-                route: "/pages/profile/profile-overview",
-                color: "error",
-                label: "Delete",
-              }}
-             
-            />
+          <Grid container spacing={6}>
+            {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
+              <Grid item xs={12} md={6} xl={3} key={member.id}>
+                <DefaultProjectCard
+                  image={homeDecor2}
+                  id={member.id}
+                  projectId={projectIn}
+                  name={member.name}
+                  nickname={member.nickname}
+                  email={member.email}
+                  position={member.position}
+                  role={member.role}
+                />
+              </Grid>
+            ))}
           </Grid>
-          
-        ))}
-        
-      </Grid>
-      */}
       </MDBox>
     </DashboardLayout>
   );
 }
 function Overview() {
-  const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [projectInfo, setProjectInfo] = useState(null);
   const token = localStorage.getItem('ACCESS_TOKEN');
   const location = useLocation();
-  console.log(location);
-  const id = location.state?.id;
+
   useEffect(() => {
     async function fetchProjectInfo() {
       try {
-        console.log(id);
-        const response = await axios.get(`/api/project/${id}`, {
+        const response = await axios.get(`/api/project/${projectId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        console.log('프로젝트 정보 조회 성공');
-        console.log(response.data.data);
+
         setProjectInfo(response.data.data);
       } catch (error) {
-        console.error('Error fetching project:', error);
+        window.alert(error.response.data.message);
+        window.history.back();
       }
     }
 
     fetchProjectInfo();
-  }, [id, token]);
+  }, [projectId, token]);
   // projectInfo가 null일 때 null 반환
 
   if (!projectInfo) {
@@ -349,7 +319,7 @@ function Overview() {
   }
 
   return (
-    <PM projectInfo={projectInfo} project={projects} />
+    <PM projectInfo={projectInfo} />
   );
 }
 
