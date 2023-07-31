@@ -10,7 +10,6 @@ import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
-import CheckBoxList from 'layouts/Board/Lists/List/Issue/CheckBoxList';
 import axios from "axios";
 
 const customModalStyles = {
