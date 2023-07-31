@@ -73,6 +73,7 @@ export default function data(setSelectedMemberId) {
     { Header: "접속", accessor: "status", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
     { Header: "", accessor: "button", align: "center" }
+
   ];
 
   const rows = memberList.map((member) => ({

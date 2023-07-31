@@ -8,7 +8,7 @@ import Card from '@mui/material/Card';
 import MDTypography from "components/MDTypography";
 
 
-function MyTree({ issue, refresh, setRefresh }) {
+function MyTree({ issue }) {
   console.log("tree issue :",issue)
   const [data, setData] = useState({
     name: 'Root',
@@ -45,13 +45,10 @@ function MyTree({ issue, refresh, setRefresh }) {
       }
     };
 
-    if (refresh) {
+    
       getTree();
-      setRefresh(false);  // Reset the refresh state after fetching the data
-    }
-
-    getTree();
-  }, [issue,refresh]);
+   // Reset the refresh state after fetching the data
+    }, [issue]);
 
   // Function to determine the class name based on the condition
  

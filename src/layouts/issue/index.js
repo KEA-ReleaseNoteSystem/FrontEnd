@@ -39,25 +39,70 @@ function IssueSearch() {
   const [secfilter, setSecfilter] = useState("");
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
-  const [refresh, setRefresh] = useState(false);
+  const [childIssues,setChildIssues] = useState();
 
-
-  const createChildIssue = async (childIssue) => {
+  const updateChildIssues = (updatedChildIssues) => {
+    setIssueDetail((prevIssue) => ({
+      ...prevIssue,
+      childIssue: updatedChildIssues,
+    }));
+  
+    const updatedIssues = fetchedIssues.map((fetchedIssue) => {
+      if (fetchedIssue.id === issueDetail.id) {
+        return {
+          ...fetchedIssue,
+          childIssue: updatedChildIssues,
+        };
+      }
+      return fetchedIssue;
+    });
+  
+    setFetchedIssues(updatedIssues);
+    setChildIssues(updatedChildIssues);
+  };
+  
+  const deleteChild = async (issue, issueIndex) => {
+    try {
+      let result = await axios.delete(
+        `/api/project/${projectId}/issues/${issueDetail.id}/parentchild/${issue.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      // Successfully deleted the issue, now let's remove it from childIssues.
+      const updatedChildIssues = issueDetail.childIssue.filter(
+        (child) => child.id !== issue.id
+      );
+  
+      updateChildIssues(updatedChildIssues);
+    } catch (error) {
+      console.error('Error making the request:', error.message);
+      console.error('Full error object:', error);
+      console.error('Server error message:', error.response.data.message);
+    }
+  };
+  
+  const createChildIssue = async (issues) => {
     try {
       var now = new Date().toISOString();
-      let result = await axios.post(`/api/${projectId}/issues/${issueDetail.id}/childissue`, {
-        parentIssueId: issueDetail.id,
-        childIssueId : childIssue.id,
-        createdAt: now
-      },{
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      const updatedChildIssues = [
-        ...issueDetail.childIssue, // 기존의 하위 이슈들
-        {
+      const results = await Promise.all(issues.map(async (childIssue) => {
+        let result = await axios.post(
+          `/api/${projectId}/issues/${issueDetail.id}/childissue`,
+          {
+            parentIssueId: issueDetail.id,
+            childIssueId: childIssue.id,
+            createdAt: now,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return {
           id: childIssue.id,
           issueNum: childIssue.issueNum,
           title: childIssue.title,
@@ -68,34 +113,17 @@ function IssueSearch() {
           createdAt: childIssue.createdAt,
           memberIdInCharge: {
             name: childIssue.memberIdInCharge.name,
-            nickname: childIssue.memberIdInCharge.nickname
+            nickname: childIssue.memberIdInCharge.nickname,
           },
-          child : true
-        }
-        
-      ];
-
-      setIssueDetail(prevIssue => ({
-        ...prevIssue,
-        childIssue: updatedChildIssues
+          child: true,
+        };
       }));
-
-      const updatedIssues = fetchedIssues.map((issue) => {
-        if (issue.id === issueDetail.id) {
-          return {
-            ...issue,
-            childIssue: updatedChildIssues // Update the childIssue array of the issue
-          };
-        }
-        return issue;
-      });
-
-      setFetchedIssues(updatedIssues);
-     
+      const updatedChildIssues = [...issueDetail.childIssue, ...results];
+      updateChildIssues(updatedChildIssues);
+      console.log('fetchedIssues', fetchedIssues);
     } catch (error) {
       console.error('Error making the request:', error.message);
       console.error('Full error object:', error);
-      
     }
   };
 
@@ -121,6 +149,8 @@ function IssueSearch() {
         });
         setMembersData(membersResponse.data.data);
         setIssueDetail(issuesResponse.data.data[0]);
+        setChildIssues(issuesResponse.data.data[0].childIssue);
+
         console.log("issuesResponse.data.data[0]",issuesResponse.data.data[0])
 
         { !issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false) }
@@ -160,11 +190,16 @@ function IssueSearch() {
   const updateIssue = async (updatedFields) => {
     try {
       // API를 호출하여 이슈 업데이트
-      const response = await axios.put(`/api/${projectId}/issues/${issueDetail.id}`, updatedFields, {
+      const response = await axios.put(`/api/project/${projectId}/issues/${issueDetail.id}`, updatedFields, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+
+      const updatedFieldsWithDate = {
+        ...updatedFields,
+        updatedAt: new Date().toISOString()
+      };
 
 
       // 업데이트된 이슈를 반영하기 위해 fetchedIssues 배열에서 해당 이슈를 찾아 업데이트
@@ -172,7 +207,7 @@ function IssueSearch() {
         if (issue.id === issueDetail.id) {
           return {
             ...issue,
-            ...updatedFields
+            ...updatedFieldsWithDate
           };
         }
         return issue;
@@ -184,7 +219,7 @@ function IssueSearch() {
       // 이슈 상세 정보 업데이트
       setIssueDetail((prevIssue) => ({
         ...prevIssue,
-        ...updatedFields
+        ...updatedFieldsWithDate
       }));
     } catch (error) {
       console.error(error);
@@ -214,7 +249,7 @@ function IssueSearch() {
       }
     }
 
-    let url = "/api/1/issues?";
+    let url = `/api/${projectId}/issues?`;
 
 
     for (const [key, value] of Object.entries(filters)) {
@@ -274,7 +309,7 @@ function IssueSearch() {
     setFirstfilter("");
     setSecfilter("");
     setThridfilter("");
-    filterIssue("/api/1/issues?");
+    filterIssue(`/api/project/${projectId}/issues?`);
   }
 
 
@@ -289,6 +324,7 @@ function IssueSearch() {
   const handleClick = (issue, issueIndex) => {
     setIssueDetail(issue);
     setSelectedIssueIndex(issueIndex);
+    setChildIssues(issue.childIssue);
     setInit(false);
   };
 
@@ -409,7 +445,6 @@ function IssueSearch() {
                 </MDBox>
 
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
-                  {console.log("isLoading", isLoading)}
                   {isLoading ? (
                     <MDTypography>There are no issues</MDTypography>
                   ) : (
@@ -430,17 +465,15 @@ function IssueSearch() {
               </Card>
             </Grid>
 
-            {console.log("issueDetail1", issueDetail)}
-            {console.log("updateIssue1", updateIssue)}
-            {console.log("fetchedMemo1", fetchedMemo)}
             <Grid item xs={5}>
-              {isLoading ? null : <IssueEditing issue={issueDetail} updateIssue={updateIssue} fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} setRefresh={setRefresh}/>}
+              {isLoading ? null : <IssueEditing issue={issueDetail} updatedchildIssues={childIssues} updateIssue={updateIssue} deleteChild={deleteChild}
+               fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} />}
             </Grid>
             <Grid item xs={4}>
 
-              {isLoading ? null : <IssueDetails issue={issueDetail} membersData={membersData} updateIssue={updateIssue} 
+              {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
               memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
-              {isLoading ? null : <MyTree issue={issueDetail} refresh={refresh} setRefresh={setRefresh} />}
+              {isLoading ? null : <MyTree issue={issueDetail} />}
 
             </Grid>
           </Grid>
