@@ -23,10 +23,10 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 
 export default function data({issues}) {
-  const Issue = ({ name }) => (
+  const Issue = ({ name, issueNum }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDTypography variant="button" fontWeight="medium" ml={1} lineHeight={1}>
-        {name}
+        #{issueNum} {name}
       </MDTypography>
     </MDBox>
   );
@@ -34,7 +34,7 @@ export default function data({issues}) {
   const columns = [
     { Header: "이슈", accessor: "issue", width: "45%", align: "left" },
     { Header: "담당자", accessor: "member", width: "10%", align: "center" },
-    { Header: "기한", accessor: "due", align: "center" },
+    { Header: "생성일", accessor: "due", align: "center" },
     { Header: "중요도", accessor: "importance", align: "center" },
   ];
 
@@ -57,26 +57,25 @@ export default function data({issues}) {
     );
   };
   const rows = issues.map((issues) => ({
-    issue: <Issue name={issues.name} />,
+    issue: <Issue name={issues.title} issueNum={issues.issueNum}/>,
     member: (
       <MDTypography variant="caption" color="text" fontWeight="medium">
-        {issues.member}
+        {issues.memberIdInCharge.name?issues.memberIdInCharge.name:"할당되지 않음"}
       </MDTypography>
     ),
     due: (
       <MDTypography variant="caption" color="text" fontWeight="medium">
-        {issues.due}
+        {issues && issues.createdAt.slice(0,10)}
       </MDTypography>
     ),
     importance: (      
       <MDBox width="8rem" textAlign="left">
-        {renderProgress(issues.value)}
+        {renderProgress(issues && issues.importance)}
       </MDBox>
     ),
   }));
 
   return {
-    
     columns,
     rows,
   };
