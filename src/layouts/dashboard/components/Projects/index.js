@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, Link } from "react";
+import { useState, Link, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -39,60 +39,52 @@ import Gpt from "layouts/gpt"
 //GPT
 import teamTable from "layouts/myteam";
 import { useNavigate } from "react-router-dom";
+
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom.js';
+import { ConstructionOutlined } from "@mui/icons-material";
+import axios from 'axios';
+
 function Projects() {
-  const [issues, setIssues] = useState([
-    {
-      name: "#01 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "서강덕",
-      due: "2020-05-04",
-      value: 20,
-    },
-    {
-      name: "#02 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "서지원",
-      due: "2020-08-02",
-      value: 70,
-    },
-    {
-      name: "#00 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "서지원",
-      due: "2020-03-04",
-      value: 40,
-    },
-    {
-      name: "#00 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "박재석",
-      due: "2020-06-03",
-      value: null,
-    },
-    {
-      name: "#00 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "서강덕",
-      due: "2020-06-04",
-      value: null,
-    },
-    {
-      name: "#00 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "서강덕",
-      due: "2020-06-09",
-      value: null,
-    },
-    {
-      name: "#00 Test issue",
-      description: "어쩌구 되지않는 이슈",
-      member: "박도영",
-      due: "2020-06-25",
-      value: 80,
-    },
-  ]);
-  const [filteredIssues, setFilteredIssues] = useState(issues);
-  const { columns, rows } = data({ issues:filteredIssues });
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredIssues, setFilteredIssues] = useState([]);
+  const [myName, setMyName] = useState("");
+
+  async function getIssueData(projectId, token) {
+    try {
+      const response = await axios.get(`/api/${encodeURIComponent(projectId)}/issues`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setIssues(response.data.data);
+      setFilteredIssues(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getMyInfo(token) {
+    try {
+      const response = await axios.get(`/api/member`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMyName(response.data.data.name);
+      console.log("내이름", myName);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getIssueData(projectId, token);
+    getMyInfo(token);
+    
+    setLoading(false);
+  }, []);
+
+  const { columns, rows } = data({ issues: filteredIssues });
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
@@ -114,7 +106,7 @@ function Projects() {
   };
 
   const handleShowAssignedIssues = () => {
-    const filteredIssues = issues.filter((issue) => issue.member === "서지원");
+    const filteredIssues = issues.filter((issue) => issue.memberIdInCharge.name === myName);
     setFilteredIssues(filteredIssues);
     setMenu(null);
   };
@@ -124,9 +116,9 @@ function Projects() {
 
     if (sortType === "value") {
       sortedArray.sort((a, b) => {
-        if (a.value === null) return 1;
-        if (b.value === null) return -1;
-        return a.value - b.value;
+        if (a.importance === null) return -1;
+        if (b.importance === null) return 1;
+        return b.importance - a.importance;
       });
     } else if (sortType === "due") {
       sortedArray.sort((a, b) => {
@@ -139,7 +131,7 @@ function Projects() {
     setFilteredIssues(sortedArray);
     setMenu(null);
   };
-  
+
   const renderModal = (
     <Modal
       open={openModals}
@@ -147,9 +139,9 @@ function Projects() {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Box sx={{ position: "absolute",borderRadius:"100px", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
-        <Box sx={{ bgcolor: "background.paper", boxShadow: 24, p: 4, borderRadius:10}}>
-          <Gpt/>
+      <Box sx={{ position: "absolute", borderRadius: "100px", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+        <Box sx={{ bgcolor: "background.paper", boxShadow: 24, p: 4, borderRadius: 10 }}>
+          <Gpt />
         </Box>
       </Box>
     </Modal>
@@ -172,52 +164,59 @@ function Projects() {
     >
       <MenuItem onClick={() => handleShowAssignedIssues()}>나에게 배정된 Issue만 확인</MenuItem>
       <MenuItem onClick={() => handleSort("value")}>중요도 순 정렬</MenuItem>
-      <MenuItem onClick={() => handleSort("due")}>기한 순 정렬</MenuItem>
+      <MenuItem onClick={() => handleSort("due")}>생성일 순 정렬</MenuItem>
       <MenuItem onClick={onClicks}>GPT 추천</MenuItem>
-    </Menu> 
+    </Menu>
   );
-
-  return (
-    <Card>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-        <MDBox>
-          <MDTypography variant="h6" gutterBottom>
-            Issues
-          </MDTypography>
-          <MDBox display="flex" alignItems="center" lineHeight={0}>
-            <Icon
-              sx={{
-                fontWeight: "bold",
-                color: ({ palette: { info } }) => info.main,
-                mt: -0.5,
-              }}
-            >
-              done
-            </Icon>
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp; 현재 처리 중인 이슈들을 확인하세요.
+    return (
+      <Card>
+        {loading ? (
+        <MDBox display="flex" justifyContent="center" alignItems="center" height="200px">
+          로딩 중...
+        </MDBox>
+      ) : (
+        <>
+        <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          <MDBox>
+            <MDTypography variant="h6" gutterBottom>
+              Issues
             </MDTypography>
+            <MDBox display="flex" alignItems="center" lineHeight={0}>
+              <Icon
+                sx={{
+                  fontWeight: "bold",
+                  color: ({ palette: { info } }) => info.main,
+                  mt: -0.5,
+                }}
+              >
+                done
+              </Icon>
+              <MDTypography variant="button" fontWeight="regular" color="text">
+                &nbsp; 현재 처리 중인 이슈들을 확인하세요. 
+              </MDTypography>
+            </MDBox>
           </MDBox>
+          <MDBox color="text" px={2}>
+            <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
+              more_vert
+            </Icon>
+          </MDBox>
+          {renderMenu}
         </MDBox>
-        <MDBox color="text" px={2}>
-          <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
-            more_vert
-          </Icon>
+        <MDBox sx={{ overflowY: "scroll", maxHeight: "200px" }}>
+          <DataTable
+            table={{ columns, rows }}
+            showTotalEntries={false}
+            isSorted={false}
+            noEndBorder
+            entriesPerPage={false}
+          />
+          {renderModal}
         </MDBox>
-        {renderMenu}
-      </MDBox>
-      <MDBox sx={{ overflowY: "scroll",  maxHeight:"200px"}}>
-        <DataTable
-          table={{ columns, rows }}
-          showTotalEntries={false}
-          isSorted={false}
-          noEndBorder
-          entriesPerPage={false}
-        />
-        {renderModal}
-      </MDBox>
-    </Card>
-  );
+        </>)}
+      </Card>
+    );
+
 }
 
 export default Projects;
