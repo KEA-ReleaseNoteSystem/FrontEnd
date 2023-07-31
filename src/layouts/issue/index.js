@@ -39,8 +39,6 @@ function IssueSearch() {
   const [secfilter, setSecfilter] = useState("");
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
-
-  
   const [childIssues,setChildIssues] = useState();
 
   const updateChildIssues = (updatedChildIssues) => {
