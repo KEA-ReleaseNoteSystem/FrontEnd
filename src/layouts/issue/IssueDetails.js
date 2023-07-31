@@ -73,7 +73,7 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
                   <MDTypography variant="h6">수정 일자</MDTypography>
-                  <MDTypography variant="subtitle2" ml={10}>{issue.length === 0 ? null : issue.updatedAt}</MDTypography>
+                  <MDTypography variant="subtitle2" ml={10}>{issue.length === 0 || issue.updatedAt == null ? null : issue.updatedAt.slice(0, 10)}</MDTypography>
                 </MDBox>
               </Grid>
   

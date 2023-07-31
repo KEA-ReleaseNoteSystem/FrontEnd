@@ -10,6 +10,7 @@ import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+import CheckBoxList from 'layouts/Board/Lists/List/Issue/CheckBoxList';
 import axios from "axios";
 
 const customModalStyles = {
@@ -33,20 +34,20 @@ const customModalStyles = {
 };
 
 
-function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIssue,setRefresh }) {
-  // console.log("updateIssue",updateIssue);
+function IssueEditing({ issue,updatedchildIssues ,updateIssue, deleteChild,fetchedMemo,projectId,createChildIssue }) {
+    console.log("childIssues1",updatedchildIssues);
+
   const [Memo, setMemo] = useState(fetchedMemo);
-  const [isChild,SetIsChild] = useState(issue.child)
-  const [childIssues, setChildIssues] = useState(issue.childIssue);
+
+  const [childIssues, setChildIssues] = useState(updatedchildIssues);
   const [activeModal, setActiveModal] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState();
   const token = localStorage.getItem('ACCESS_TOKEN');
   const [currentIds, setCurrentIds] = useState([issue.id]);
   const [otherIssue, setOtherIssue] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
-  const [parentName, setParentName] = useState();
-  const [selectedchildIssues,setselectedchildIssues] = useState();
-  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [selectedIssues, setSelectedIssues] = useState([]);
+  
 
  console.log("issue123",issue.childIssue);
  console.log("issue12",childIssues);
@@ -64,28 +65,20 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
 
   const handleClick = (issue, issueIndex) => {
     setSelectedIssueIndex(issueIndex);
-    createChildIssue(issue);
+    setSelectedIssues(prevIssues => [...prevIssues, issue]);
+    
   };
 
+  const handleAddIssues = () => {
+    createChildIssue(selectedIssues);
+    setSelectedIssues([]); 
+    closeModal();
+  };
+  
+
   const handleDelete = async (issue, issueIndex) => {
-    setselectedchildIssues(issue.id);
-    try {
-      let result = await axios.delete(`/api/issue/issueparentchild/${currentIds[0]}/${selectedchildIssues}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }});
-      console.log("deleted? :" ,result);
-      console.log("currentIds? :" ,currentIds[0]);
-        
-      setRefresh(true);
-      // Successfully deleted the issue, now let's remove it from childIssues.
-      setChildIssues(prevChildIssues => prevChildIssues.filter(item => item.id !== issue.id));
-      console.log(childIssues);
-    } catch (error) {
-      console.error('Error making the request:', error.message);
-      console.error('Full error object:', error);
-      console.error('Server error message:', error.response.data.message);
-    }
+    deleteChild(issue);
+    setChildIssues(prevChildIssues => prevChildIssues.filter(item => item.id !== issue.id));
   };
 
 
@@ -118,23 +111,13 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
 
   useEffect(() => {
     setCurrentIds([issue.id]);
-    SetIsChild(issue.child);
-    setParentName((issue.parentIssue[0] == undefined ? " " : issue.parentIssue[0].title))
+    setChildIssues(updatedchildIssues); 
     
-    if (!childIssues) { // childIssues 상태가 아직 설정되지 않았다면
-      setChildIssues(issue.childIssue); // childIssues 상태를 issue.childIssue로 초기화
-    }
   }, [issue.id, issue.childIssue, createChildIssue]);
   
   console.log("childIssues",childIssues);
 
-  
-  // useEffect(() => {
-    
-  //   SetIsChild(true);
-  //   setParentName((issue.title));
-   
-  // }, [issue]);
+
 
   
 
@@ -224,11 +207,14 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
                     ))
                   )}
           </MDBox>
+          <MDButton size="small" color="black" onClick={handleAddIssues}>
+          <AddCircleOutlineIcon color="white" />&nbsp; 추가
+        </MDButton>
         </Card>
       </Modal>
                   </Grid> 
                   <Grid item xs={8} sx={{ m: 3 }}>
-{/*                     
+                    
                     {!childIssues ? (
                     <MDTypography>지정된 하위 이슈가 없습니다.</MDTypography>
                   ) : (
@@ -244,15 +230,9 @@ function IssueEditing({ issue, updateIssue, fetchedMemo,projectId,createChildIss
                         />
                       </div>
                     ))
-                  )} */}
+                  )}
                   </Grid>    
                   </Grid>  
-                {/* ) :(
-                  <MDTypography variant="body2" fontWeight="medium" multiline fullWidth>
-                        &nbsp; 하위 이슈입니다.<br/>
-                        &nbsp; {parentName}/{issue.title} 
-                    </MDTypography>
-                     )} */}
               </MDBox>
             </Card> 
           </MDBox>

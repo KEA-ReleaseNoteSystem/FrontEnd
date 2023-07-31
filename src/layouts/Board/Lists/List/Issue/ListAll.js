@@ -65,7 +65,7 @@ const getPriorityColor = (priority) => {
           </Bottom>
         </Issue>
       </IssueLink>
-       */}
+       */} 
 
 <Issue selected={selected}>
     <Title>#{issue.issueNum} {issue.title}
