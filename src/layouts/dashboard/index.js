@@ -90,7 +90,7 @@ function Dashboard(props) {
 
     // releaseData를 순회하며 각 월별 릴리즈 수를 셉니다
     for (const release of releaseData) {
-      const month = parseInt(release.releaseDate.split("-")[1]);
+      const month = parseInt(release.releaseDate && release.releaseDate.split("-")[1]);
       releaseCounts[month]++;
     }
 
@@ -104,7 +104,7 @@ function Dashboard(props) {
 
     // issueData를 순회하며 각 월별 릴리즈 수를 셉니다
     for (const issue of issueData) {
-      const month = parseInt(issue.updatedAt.split("-")[1]);
+      const month = parseInt(issue.updatedAt && issue.updatedAt.split("-")[1]);
       if (issue.status === "done") {
         issueCounts[month]++;
       }
