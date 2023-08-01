@@ -71,6 +71,7 @@ export default function data() {
     { Header: "팀원", accessor: "author", width: "45%", align: "left" },
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
+    { Header: "이슈 해결 점수", accessor: "exp", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
   ];
 
@@ -94,6 +95,11 @@ export default function data() {
         {member && member.createdAt.slice(0, 10)}
       </MDTypography>
     ),
+    exp: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {member && member.exp}
+      </MDTypography>
+    )
   }));
 
   return {
