@@ -81,6 +81,7 @@ function Overview() {
                   team: memberInfo.groupName,
                   position: memberInfo.position,
                   email: memberInfo.email,
+                  issueScore: memberInfo.exp,
                 }}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}

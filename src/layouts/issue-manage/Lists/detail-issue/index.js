@@ -44,16 +44,16 @@ function Overview(issue) {
       });
   }, []);
 
-  
+
 
   const handleOnClickDeleteIssue = async () => {
-    await axios.delete(`api/issue/${issue.issue.id}`,{
+    await axios.delete(`api/issue/${issue.issue.id}`, {
       headers: {
-          Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
-  });
+    });
 
-  navigate(0);
+    navigate(0);
   }
 
   return (
@@ -62,7 +62,7 @@ function Overview(issue) {
         <Grid item xs={12}>
           <MDBox
             mx={2}
-            mt={-3}
+            mt={5}
             py={3}
             px={2}
             variant="gradient"
@@ -89,7 +89,7 @@ function Overview(issue) {
                 label="타입"
                 value={issue.issue.issueType}
                 disabled
-              />
+              /> &nbsp;
               <MDInput
                 label="상태"
                 value={issue.issue.status}
@@ -101,8 +101,12 @@ function Overview(issue) {
                 label="생성일"
                 disabled
                 defaultValue={issue.issue.createdAt}
-
-              />
+              /> &nbsp;
+                <MDInput
+                  label="중요도"
+                  value={issue.issue.importance}
+                  disabled
+                />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="textarea" label="설명" defaultValue={issue.issue.description} disabled rows={4} multiline fullWidth />
