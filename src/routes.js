@@ -40,6 +40,7 @@ import HomeCustom from "./layouts/homepage/index";
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
+import ReleaseTree from "layouts/release/releaseTree"
 import ViewRelease from "layouts/release/create";
 const handleLogout = () => {
   // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
@@ -103,6 +104,14 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/release",
     component: <Release />,
+  },
+  {
+    type: "collapse",
+    name: "Release Note Tree",
+    key: "releaseTree",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/releaseTree",
+    component: <ReleaseTree />,
   },
   {
     type: "collapse",

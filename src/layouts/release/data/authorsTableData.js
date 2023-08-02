@@ -14,7 +14,7 @@ const getReleaseNoteData = async (projectId, token) => {
         Authorization: `Bearer ${token}`
       }
     });
-    
+    console.log("response",response.data.data);
     if (response.data.length === 0) {
       return [];
     } else {
