@@ -36,7 +36,7 @@ const getProjectMemberData = async (projectId, token) => {
 
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
-
+  console.log(memberList);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {

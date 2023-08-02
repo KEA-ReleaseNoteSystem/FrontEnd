@@ -94,11 +94,11 @@ function MDDatePicker({ label, defaultValue, onChange }) {
   );
 }
 
-const PM = ({ projectInfo }, { project }) => {
+const PM = ({ projectInfo }) => {
   const [isLoading, setIsLoading] = useState(false); // Added loading state
   const [groupMessage, setGroupMessage] = useState("");
   const [groupCodeMessage, setGroupCodeMessage] = useState("");
-  const { columns, rows } = teamTable();
+  const { columns, rows } = teamTable({projectInfo});
 
   const [activeModal, setActiveModal] = useState(false);
 

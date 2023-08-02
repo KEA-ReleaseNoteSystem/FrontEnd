@@ -37,6 +37,8 @@ function Basic() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const token = localStorage.getItem('ACCESS_TOKEN');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -70,6 +72,7 @@ function Basic() {
   }, []);
   
   const handleSubmit = () => {
+    setIsSubmitting(true);
     // POST 요청을 보내는 부분
     axios.post("/api/member/login", {
       email: email,
@@ -145,7 +148,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty || isSubmitting} onClick={handleSubmit}>
                 로그인
               </MDButton>
             </MDBox>

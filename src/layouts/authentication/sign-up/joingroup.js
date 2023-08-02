@@ -31,7 +31,7 @@ import { from } from "stylis";
 
 function JoinGroup() {
   const [groupName, setGroupName] = useState("");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const { name, nickname, position, email, password, provider } = location.state;
 
@@ -40,6 +40,7 @@ function JoinGroup() {
   };
 
   const handleSubmit = () => {
+    setIsSubmitting(true);
     // POST 요청을 보내는 부분
     axios.post("/api/member/signup/group/join", {
       name: name,
@@ -92,7 +93,7 @@ function JoinGroup() {
             </MDBox>
             { isGroupCodeEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 코드를 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" disabled={isGroupCodeEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" disabled={isGroupCodeEmpty || isSubmitting} onClick={handleSubmit}>
                 회원가입
               </MDButton>
             </MDBox>

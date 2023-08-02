@@ -68,25 +68,22 @@ const NewProject = () => {
       ...prevFormData,
       [name]: value,
     }));
-    // Validate input fields
-    if (name === "name" && value.trim() === "") {
-      setIsFormValid(false);
-    } else if (name === "status" && value.trim() === "") {
-      setIsFormValid(false);
-    } else if (name === "description" && value.trim() === "") {
-      setIsFormValid(false);
-    } else {
-      setIsFormValid(true);
-    }
+    const isAnyFieldEmpty =
+      formData.name.trim() === "" ||
+      formData.status.trim() === "" ||
+      formData.description.trim() === "";
+
+    // isFormValid를 하나 이상의 필드가 비어있으면 false로 설정, 그렇지 않으면 true로 설정
+    setIsFormValid(!isAnyFieldEmpty);
   };
 
   return (
     <PageLayout>
       <DefaultNavbar
-                routes={routes}
-                sticky
-            />
-      <MDBox sx={{mb:2, mt:15}} />
+        routes={routes}
+        sticky
+      />
+      <MDBox sx={{ mb: 2, mt: 15 }} />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
