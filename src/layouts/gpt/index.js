@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilState } from 'recoil';
@@ -90,11 +75,12 @@ function Tables() {
       console.log("issueData", data);
 
       const initialIssues = issueData.filter((item) => item.status !== "done").map((item) => ({
+        id: item.id,
         name: `#${item.issueNum} ${item.title}`,
         description: item.description,
         member: item.memberIdInCharge.name,
         due: new Date(item.createdAt).toISOString().split("T")[0],
-        value: item.importance,
+        importance: item.importance,
       }));
 
       setIssues(initialIssues);
@@ -119,17 +105,16 @@ function Tables() {
       } else {
         // "newImportanceValues"를 사용하여 새로운 "issues" 배열을 생성합니다.
         const updatedIssues = data.filter((item) => item.status !== "done").map((item, index) => ({
+          id: item.id,
           name: `#${item.issueNum} ${item.title}`,
           description: item.description,
           member: item.memberIdInCharge.name,
           due: new Date(item.createdAt).toISOString().split("T")[0],
-          value: newImportance[index],
+          importance: newImportance[index],
         }));
         setIssues(updatedIssues);
         console.log("updatedIssues", updatedIssues);
       }
-
-      console.log("newImportance", newImportance);
     } catch (error) {
       console.error(error);
     }
@@ -141,7 +126,7 @@ function Tables() {
     const handleNewImportanceChange = () => {
       const updatedIssues = issues.map((item, index) => ({
           ...item,
-          value: newImportance[index],
+          importance: newImportance[index],
         }));
       setIssues(updatedIssues);
       console.log("updatedIssues", updatedIssues);
@@ -151,10 +136,36 @@ function Tables() {
     handleNewImportanceChange();
   }, [newImportance]);
 
+  const saveGPTRecommend = async (projectId, token) => {
+    try {
+      const requestData = issues.map((issue) => ({
+        id: issue.id,
+        importance: issue.importance,
+      }));
+      console.log("requestData", requestData);
+      const response = await axios.post(
+        `/api/project/${encodeURIComponent(projectId)}/importance`,
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
   const handleRecommendClick = async () => {
     await getRecommend(); // 추천 정보를 가져오기 위해 getRecomend 함수 호출
   };
 
+  const handleSaveClick = async () => {
+    await saveGPTRecommend(projectId, token);
+    alert("GPT가 추천한 이슈 별 중요도가 저장되었습니다!");
+  }
 
   return (
     <MDBox pt={6} pb={3}>
@@ -191,7 +202,7 @@ function Tables() {
         </Grid>
         <Grid item xs={12} container justifyContent="center">
           <MDButton color="primary" onClick={handleRecommendClick}>Chat GPT 추천</MDButton>
-          <MDButton color="info" sx={{ ml: 2 }}>저장하기</MDButton>
+          <MDButton color="info" sx={{ ml: 2 }} onClick={handleSaveClick}>저장하기</MDButton>
         </Grid>
       </Grid>
     </MDBox>

@@ -91,9 +91,9 @@ export default function data({issues}) {
     importance: (
       <MDBox width="8rem" textAlign="right">
         <MDTypography variant="caption" color="text" fontWeight="medium">
-        {issues.value}
+        {issues.importance}
       </MDTypography>
-       {renderProgress(issues.value)}
+       {renderProgress(issues.importance)}
       </MDBox>
     ),
   }));
