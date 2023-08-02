@@ -40,7 +40,9 @@ export default function data({issues}) {
   const Issue = ({ name, description}) => (
     <MDBox display="flex" alignItems="center" lineHeight={2}>
       <MDTypography variant="button" fontWeight="medium" ml={1} lineHeight={1}>
-        {name}<br/>
+        {name}
+      </MDTypography>
+      <MDTypography variant="caption" fontWeight="light" ml={1} lineHeight={1}>
         {description}
       </MDTypography>
       
@@ -87,8 +89,11 @@ export default function data({issues}) {
       </MDTypography>
     ),
     importance: (
-      <MDBox width="8rem" textAlign="left">
-        {renderProgress(issues.value)}
+      <MDBox width="8rem" textAlign="right">
+        <MDTypography variant="caption" color="text" fontWeight="medium">
+        {issues.importance}
+      </MDTypography>
+       {renderProgress(issues.importance)}
       </MDBox>
     ),
   }));
