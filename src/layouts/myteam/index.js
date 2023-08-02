@@ -67,6 +67,7 @@ function Tables() {
       setProjectName(data);
     }
     fetchData();
+    
   }, []);
 
   return (

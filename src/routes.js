@@ -41,7 +41,11 @@ import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
 import ViewRelease from "layouts/release/create";
-
+const handleLogout = () => {
+  // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
+  console.log('로그아웃 버튼이 클릭되었습니다!');
+  // 여기서 로그아웃 처리를 할 수 있습니다. 예를 들어, API 호출이나 로컬 상태 변경 등을 수행할 수 있습니다.
+};
 const routes = [
   {
     type: "collapse",
@@ -115,6 +119,7 @@ const routes = [
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+    onClick: handleLogout,
   },
   {
     type: "",

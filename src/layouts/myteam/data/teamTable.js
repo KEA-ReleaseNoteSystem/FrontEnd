@@ -26,6 +26,7 @@ const getProjectMemberData = async (projectId, token) => {
     if (response.data.length === 0) {
       return [];
     } else {
+      console.log("aaaaa");
       return response.data.data;
     }
   } catch (error) {
@@ -45,6 +46,12 @@ export default function data() {
       setMemberList(data);
     }
     fetchData();
+    const intervalId = setInterval(fetchData, 10000);
+
+  // 컴포넌트가 언마운트되면 인터벌 정리
+  return () => {
+    clearInterval(intervalId);
+  };
   }, []);
 
   const Author = ({ image, name, email }) => (

@@ -1,19 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 // react-router-dom components
@@ -51,7 +36,7 @@ function Basic() {
   const navigate = useNavigate(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const token = localStorage.getItem('ACCESS_TOKEN');
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -59,6 +44,31 @@ function Basic() {
     setPassword(event.target.value);
   }
 
+  const logout = async () => {
+    axios.post(`/api/member/logout`, { //   생성한 설문 가져오는 요청
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // JWT 토큰을 헤더에 추가합니다.
+      }
+    })
+      .then(response => {
+        console.log('로그아웃');
+      })
+      .catch(error => {
+        // 삭제 실패 후 실행할 코드를 작성합니다.
+        console.error('로그아웃 실패', error);
+      });
+  };
+
+  useEffect(() => {
+    if (token) {
+    async function fetchData() {
+      logout();
+    }
+    fetchData();
+    }
+  }, []);
+  
   const handleSubmit = () => {
     // POST 요청을 보내는 부분
     axios.post("/api/member/login", {
