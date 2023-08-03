@@ -18,14 +18,10 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 
-
-
-
-
 export default function data(selectedMemberId) {
   
 const [projectMembers, setProjectMembers] = useState([]);
-
+console.log("asdfasdf" ,projectMembers);
 useEffect(() => {
   const getMemberProjectData = async () => {
     try {
@@ -42,7 +38,6 @@ useEffect(() => {
       setProjectMembers([]);
     }
   };
-
   getMemberProjectData();
 }, [selectedMemberId]);
 
