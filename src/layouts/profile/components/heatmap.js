@@ -1,46 +1,74 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import MDTypography from 'components/MDTypography';
 import { Grid } from '@mui/material';
+import axios from 'axios';
 
-// 사용자의 활동 데이터 (예시로 하드코딩한 데이터)
-const userActivityData = [
-    { date: '2023-01-01', count: 1 },
-    { date: '2023-01-31', count: 3 },
-    { date: '2023-02-01', count: 1 },
-    { date: '2023-02-28', count: 3 },
-    { date: '2023-03-01', count: 1 },
-    { date: '2023-03-31', count: 3 },
-    { date: '2023-04-01', count: 1 },
-    { date: '2023-04-30', count: 3 },
-    { date: '2023-05-01', count: 1 },
-    { date: '2023-05-31', count: 3 },
-    { date: '2023-06-01', count: 1 },
-    { date: '2023-06-30', count: 3 },
-    { date: '2023-07-01', count: 1 },
-    { date: '2023-07-31', count: 3 },
-    { date: '2023-08-01', count: 1 },
-    { date: '2023-08-31', count: 3 },
-    { date: '2023-09-01', count: 1 },
-    { date: '2023-09-30', count: 3 },
-    { date: '2023-10-01', count: 1 },
-    { date: '2023-10-31', count: 3 },
-    { date: '2023-11-01', count: 1 },
-    { date: '2023-11-30', count: 3 },
-    { date: '2023-12-01', count: 1 },
-    { date: '2023-12-31', count: 3 }
-    // ... 나머지 데이터는 여기에 추가하면 됩니다.
-];
+// // const getIssueData = async (token) => {
+// //     try {
+// //       const response = await axios.get(`/api/mypage/issue`, {
+// //         headers: {
+// //           Authorization: `Bearer ${token}`
+// //         }
+// //       });
+      
+// //       if (response.data.length === 0) {
+// //         return [];
+// //       } else {
+// //         console.log(response.data.data);
+// //         return response.data.data;
+// //       }
+// //     } catch (error) {
+// //       console.error(error);
+// //       return [];
+// //     }
+// //   };
+
+//   
+//   const userActivityData = getIssueData(token)
 
 const CalendarHeatmap = () => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    const [userActivityData, setUserActivityData] = useState([]);
+
+    useEffect(() => {
+        const getIssueData = async (token) => {
+            try {
+                const response = await axios.get(`/api/mypage/issue`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.data.length === 0) {
+                    setUserActivityData([]);
+                } else {
+                    setUserActivityData(response.data.data);
+                }
+            } catch (error) {
+                console.error(error);
+                setUserActivityData([]);
+            }
+        };
+
+        const token = localStorage.getItem('ACCESS_TOKEN');
+        getIssueData(token);
+    }, []);
+
+     // userActivityData가 준비되지 않은 경우, 렌더링하지 않고 null을 반환
+     if (!userActivityData || userActivityData.length === 0) {
+        return null;
+    }
+
     // 사용자의 가장 최근 커밋 날짜를 가져옵니다.
     const latestDate = userActivityData.reduce((maxDate, activity) => {
         return activity.date > maxDate ? activity.date : maxDate;
     }, userActivityData[0].date);
 
     // 달력 날짜의 시작과 끝을 계산합니다.
-    const startDate = new Date(latestDate);
-    startDate.setFullYear(startDate.getFullYear() - 1); // 최근 1년 간의 데이터만 보여줄 것이라고 가정합니다.
-    const endDate = new Date(latestDate);
+    const startYear = new Date().getFullYear();
+    const startDate = new Date(startYear, 0, 2); // 1월 1일
+    const endDate = new Date(startYear, 11, 32); // 12월 31일
 
     // 달력 날짜를 배열로 생성합니다.
     const dates = [];
