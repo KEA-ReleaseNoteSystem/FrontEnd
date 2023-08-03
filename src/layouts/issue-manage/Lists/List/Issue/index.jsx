@@ -91,7 +91,7 @@ const customModalStyles = {
         >
           <div onClick={openIssueDetailModal}>
             <Issue isBeingDragged={snapshot.isDragging && !snapshot.isDropAnimating}>
-              <Title>{issue.title}</Title>
+              <Title>#{issue.issueNum} {issue.title}</Title>
               <Bottom>
                 <div>
                   <MDBadge
