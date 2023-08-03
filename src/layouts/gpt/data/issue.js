@@ -33,9 +33,6 @@ import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 import axios from 'axios';
 
-
-
-
 export default function data({issues}) {
   const Issue = ({ name, description}) => (
     <MDBox display="flex" alignItems="center" lineHeight={2}>

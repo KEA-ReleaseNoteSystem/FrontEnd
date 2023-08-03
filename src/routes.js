@@ -84,18 +84,10 @@ const routes = [
   {
     type: "collapse",
     name: "Manage Issues",
-    key: "issuemenage",
+    key: "issue manage",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/issuemanagement",
     component: <IssueManage />,
-  },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
   },
   {
     type: "collapse",
@@ -107,11 +99,12 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Release Note Tree",
-    key: "releaseTree",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/releaseTree",
-    component: <ReleaseTree />,
+
+    name: "Profile",
+    key: "profile",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/profile",
+    component: <Profile />,
   },
   {
     type: "collapse",

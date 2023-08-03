@@ -36,7 +36,7 @@ const getProjectMemberData = async (projectId, token) => {
 
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
-
+  console.log(memberList);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function data(setSelectedMemberId) {
     </MDBox>
   );
   const columns = [
-    { Header: "팀원", accessor: "author", width: "45%", align: "left" },
+    { Header: "팀원", accessor: "author", align: "left" },
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },

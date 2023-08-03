@@ -30,7 +30,7 @@ import bgImage from "assets/images/homepage/sign-in-background.png";
 function CreateGroup() {
 
     const [groupName, setGroupName] = useState("");
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const location = useLocation();
     const { name, nickname, position, email, password, provider } = location.state;
 
@@ -41,6 +41,7 @@ function CreateGroup() {
     };
   
     const handleSubmit = (event) => {
+        setIsSubmitting(true);
         // POST 요청을 보내는 부분
         axios.post("/api/member/signup/group", {
           name: name,
@@ -62,6 +63,9 @@ function CreateGroup() {
         .catch((error) => {
           // 요청이 실패한 경우의 처리
           console.error(error);
+        })
+        .finally(() => {
+            setIsSubmitting(false); // 요청이 완료되면 버튼을 다시 활성화시킴
         });
       };
   
@@ -95,7 +99,7 @@ function CreateGroup() {
                         </MDBox>
                         { isGroupNameEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 이름을 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
                         <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" color="info" fullWidth disabled={isGroupNameEmpty} onClick={handleSubmit}>
+                            <MDButton variant="gradient" color="info" fullWidth disabled={isGroupNameEmpty||isSubmitting} onClick={handleSubmit}>
                                 회원가입
                             </MDButton>
                         </MDBox>

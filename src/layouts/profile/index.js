@@ -39,8 +39,12 @@ import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
+import CalendarHeatmap from "layouts/profile/components/heatmap.js"
+
 function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +74,7 @@ function Overview() {
       <Header info={{ nickname: memberInfo.nickname }}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
-            <Grid item xs={12} md={6} xl={12} sx={{ display: "flex" }}>
+            <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
               <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
               <ProfileInfoCard
                 title="profile information"
@@ -90,6 +94,14 @@ function Overview() {
             </Grid>
           </Grid>
         </MDBox>
+        <Grid container justifyContent="center">
+          <Grid item xs={12} sx={{display: "flex"}}>
+            <MDTypography variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
+          </Grid>
+          <MDBox>
+            <CalendarHeatmap />
+          </MDBox>
+        </Grid>
         <MDBox pt={2} px={2} lineHeight={1.25}>
           <MDTypography variant="h6" fontWeight="medium">
             Projects
