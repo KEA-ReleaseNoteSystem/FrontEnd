@@ -165,8 +165,7 @@ const PM = ({ projectInfo }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   console.log(projectInfo.id);
   console.log(projectInfo.name);
-  const defaultValue = '뇌파를 이용한 설문조사 서비스';
-
+  
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };

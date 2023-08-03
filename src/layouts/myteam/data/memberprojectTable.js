@@ -67,13 +67,13 @@ export default function data(setSelectedMemberId) {
       <MDTypography variant="caption">{description}</MDTypography>
     </MDBox>
   );
+
   const columns = [
     { Header: "팀원", accessor: "author", width: "45%", align: "left" },
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
     { Header: "", accessor: "button", align: "center" }
-
   ];
 
   const rows = memberList.map((member) => ({

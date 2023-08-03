@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -10,7 +10,7 @@ import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Icon from "@mui/material/Icon";
-
+import axios from "axios";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -20,14 +20,16 @@ import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import burceMars from "assets/images/bruce-mars.jpg";
+import defimg from "assets/images/default_avatar.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
+import MDButton from "components/MDButton";
 // import backgroundImage from "assets/images/home.png";
 
 function Header({ children, info }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
-
+  const fileInput = useRef(null)
+  const token = localStorage.getItem('ACCESS_TOKEN');
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
     function handleTabsOrientation() {
@@ -49,6 +51,52 @@ function Header({ children, info }) {
   }, [tabsOrientation]);
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+  const [image, setImage] = useState(defimg)
+  console.log("asdf", image);
+  const [profileImg, setProfileImg] = useState(new FormData());
+
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const newProfileImg = new FormData();
+      newProfileImg.append("profileImg", e.target.files[0]);
+      setProfileImg(newProfileImg);
+    } else { //업로드 취소할 시
+      setImage(defimg);
+      setProfileImg(new FormData());
+      return
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result)
+      }
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
+
+  const handleSubmit = () => {
+    profileImg.append("profileImg", image);
+    console.log("asdaaf", profileImg);
+    axios
+      .post("/api/member/uploadImage",profileImg,
+        {
+          headers: 
+          { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // 에러 처리를 합니다.
+        console.error("이미지 전송 에러:", error);
+      });
+  };
+
 
   return (
     <MDBox position="relative" mb={5}>
@@ -80,7 +128,15 @@ function Header({ children, info }) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
+            <MDAvatar src={image} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
+            <MDButton onClick={handleSubmit}>등록</MDButton>
+            <input
+              type='file'
+              style={{ display: 'none' }}
+              accept='image/jpg,image/png,image/jpeg'
+              name='profileImg'
+              onChange={onChange}
+              ref={fileInput} />
           </Grid>
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>

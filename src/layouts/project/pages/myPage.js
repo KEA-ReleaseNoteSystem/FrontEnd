@@ -10,18 +10,15 @@ import MDAvatar from "components/MDAvatar";
 
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
-import Pagination from 'react-bootstrap/Pagination';
 // import Divider from "assets/theme/components/divider";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
-import NavigationBar from "../components/NavigationBar";
 // Data
 import Header from "layouts/profile/components/Header";
 
 import { React, useState, useEffect } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import axios from "axios";
-import { CommentsDisabledOutlined } from "@mui/icons-material";
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

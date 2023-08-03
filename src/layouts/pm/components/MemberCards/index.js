@@ -132,7 +132,7 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
                 color="info"
                 onClick={() => setShowAssignModal(true)}
               >
-                Assign
+                PM 양도
               </MDButton>
             )}
             {role !== "PM" && (
@@ -145,7 +145,7 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
                 color="error"
                 onClick={() =>setShowDeleteModal(true)}
               >
-                DELETE
+                삭제
               </MDButton>
             )}
           </MDBox>
@@ -156,14 +156,14 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
           <Modal.Title>권한 양도</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to assign this member to the project?
+          정말로 PM 권한을 {name}에게 양도하시겠습니까? 
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowAssignModal(false)}>
-            Close
+            닫기
           </Button>
           <Button variant="info" onClick={() => handleOnClickAssign(id)}>
-            Assign
+            PM 양도
           </Button>
         </Modal.Footer>
       </Modal>
@@ -172,7 +172,7 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
           <Modal.Title>삭제 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete this member from the project?
+          정말로 {name} 프로젝트에서 삭제하시겠습니까?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
