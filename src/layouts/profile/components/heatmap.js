@@ -4,32 +4,27 @@ import MDTypography from 'components/MDTypography';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 
-// // const getIssueData = async (token) => {
-// //     try {
-// //       const response = await axios.get(`/api/mypage/issue`, {
-// //         headers: {
-// //           Authorization: `Bearer ${token}`
-// //         }
-// //       });
-      
-// //       if (response.data.length === 0) {
-// //         return [];
-// //       } else {
-// //         console.log(response.data.data);
-// //         return response.data.data;
-// //       }
-// //     } catch (error) {
-// //       console.error(error);
-// //       return [];
-// //     }
-// //   };
-
-//   
-//   const userActivityData = getIssueData(token)
-
 const CalendarHeatmap = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     const [userActivityData, setUserActivityData] = useState([]);
+    const [hoveredDate, setHoveredDate] = useState(null);
+    const [hoveredCount, setHoveredCount] = useState(0);
+    const [hoveredCellTop, setHoveredCellTop] = useState(0);
+    const [hoveredCellLeft, setHoveredCellLeft] = useState(0);
+    const [hoveredCellWidth, setHoveredCellWidth] = useState(0);
+
+    // 셀에 마우스 진입 이벤트를 처리하는 함수
+    const handleCellMouseEnter = (date) => {
+        const count = getActivityCount(date);
+        setHoveredDate(date.toISOString().slice(0, 10));
+        setHoveredCount(count);
+    };
+
+    // 셀에서 마우스 떠남 이벤트를 처리하는 함수
+    const handleCellMouseLeave = () => {
+        setHoveredDate(null);
+        setHoveredCount(0);
+    };
 
     useEffect(() => {
         const getIssueData = async (token) => {
@@ -102,6 +97,29 @@ const CalendarHeatmap = () => {
         height: '90px', // 12px * 7 = 84px, 사용자가 보이는 영역만 남기도록 설정
     };
 
+    
+    const tooltipStyle = {
+        position: 'absolute',
+        top: hoveredDate ? `${hoveredCellTop + 100}px` : '-9999px', // hide tooltip if not hovered
+        left: hoveredDate ? `${hoveredCellLeft - 250+ hoveredCellWidth / 2}px` : '0',
+        transform: 'translate(-50%, -100%)',
+        backgroundColor: 'black',
+        color: 'white',
+        paddingTop: '1px',
+        paddingBottom: '1px',
+        paddingLeft: '5px',
+        paddingRight: '5px',
+        borderRadius: '3px',
+        zIndex: 1,
+    };
+
+    const getHoveredCellPosition = (event) => {
+        const hoveredCell = event.target.getBoundingClientRect();
+        setHoveredCellTop(hoveredCell.top);
+        setHoveredCellLeft(hoveredCell.left);
+        setHoveredCellWidth(hoveredCell.width);
+    };
+
     return (
         <>
             <Grid container justifyContent="center">
@@ -130,12 +148,24 @@ const CalendarHeatmap = () => {
                                     width: '12px',
                                     height: '12px',
                                     background: `rgba(0, 128, 0, ${getActivityCount(date) / 10})`,
-                                    border: '1px solid #ddd', // 테두리 스타일
+                                    border: '1px solid #ddd',
+                                    position: 'relative', // 부모에 position 속성 추가
                                 }}
+                                // onMouseEnter와 onMouseLeave 이벤트 핸들러 추가
+                                onMouseEnter={(event) => {
+                                    handleCellMouseEnter(date, event);
+                                    getHoveredCellPosition(event);
+                                }}
+                                onMouseLeave={handleCellMouseLeave}
                             />
                         ))}
                     </React.Fragment>
                 ))}
+            </div>
+            {/* 호버된 날짜와 활동량을 검정 배경 말풍선으로 표시 */}
+            <div style={tooltipStyle}>
+                <MDTypography variant="caption" color="white">{hoveredDate}</MDTypography><br/>
+                <MDTypography variant="caption" color="white">{hoveredCount}개 이슈 해결</MDTypography>
             </div>
         </>
     );
