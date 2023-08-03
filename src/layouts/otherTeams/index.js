@@ -36,8 +36,6 @@ function OtherTeams() {
           Authorization: `Bearer ${token}`
         }
       });
-
-
       console.log("response",response.data.data);
       
       if (response.data.length === 0) {
@@ -64,8 +62,8 @@ function OtherTeams() {
     <DashboardLayout>
     <DashboardNavbar />
     <MDBox pt={6} pb={3}>
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={6}>
+      <Grid container spacing={1}>
+        <Grid item xs={12} lg={7}>
           <Card>
             <MDBox
               mx={2}
@@ -93,7 +91,7 @@ function OtherTeams() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={5}>
           <Card>
             <MDBox
               mx={2}

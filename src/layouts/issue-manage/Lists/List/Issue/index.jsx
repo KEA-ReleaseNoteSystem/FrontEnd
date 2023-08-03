@@ -102,8 +102,8 @@ const customModalStyles = {
                   />
 
                   <MDBadge
-                    badgeContent={issue.type}
-                    color={getPriorityColor(issue.priority)}
+                    badgeContent={issue.issueType}
+                    color={getPriorityColor(issue.importance)}
                     variant="gradient"
                     size="sm"
                   />
