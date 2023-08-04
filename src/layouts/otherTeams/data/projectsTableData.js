@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 // @mui material components
+import { useState, useEffect } from "react";
 import Icon from "@mui/material/Icon";
-
+import axios from 'axios';
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -17,46 +18,36 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 
-const projects = [
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "running",
-    date: "23/04/18",
-    version: "v 1.0.1",
-    writer: "박도영",
-    role: "pm",
-    note: "이동하기",
-  },
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "running",
-    date: "23/04/18",
-    version: "v 1.0.1",
-    writer: "박도영",
-    role: "pm",
-    note: "이동하기",
-  },
-  {
-    project: {
-      image: logoGithub,
-      name: "John Michael",
-    },
-    status: "cancled",
-    date: "23/04/18",
-    version: "v 1.0.1",
-    writer: "박도영",
-    role: "pm",
-    note: "이동하기",
-  },
-];
 
-export default function data() {
+
+
+
+export default function data(selectedMemberId) {
+  
+const [projectMembers, setProjectMembers] = useState([]);
+
+useEffect(() => {
+  const getMemberProjectData = async () => {
+    try {
+      const response = await axios.get(`/api/project/1/members/${selectedMemberId}`
+      );
+ 
+      if (response.data.data.length === 0) {
+        setProjectMembers([]);
+      } else {
+        setProjectMembers(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+      setProjectMembers([]);
+    }
+  };
+
+  getMemberProjectData();
+}, [selectedMemberId]);
+
+
+
   const Project = ({ image, name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
@@ -76,50 +67,26 @@ export default function data() {
       </MDBox>
     </MDBox>
   );
-  
   const columns = [
-    { Header: "Description", accessor: "project_", width: "30%", align: "left" },
-    { Header: "상태", accessor: "status_", align: "center" },
-    { Header: "버전", accessor: "version_", align: "center" },
-    { Header: "최근 릴리즈", accessor: "releaseDate_", align: "center" },
-    { Header: "작성자", accessor: "writer_", align: "center" },
-    { Header: "역할", accessor: "role_", align: "center" },
-    { Header: "릴리즈 노트", accessor: "note_", align: "center" },
+    { Header: "프로젝트", accessor: "project", width: "30%", align: "left" },
+    { Header: "상태", accessor: "status", align: "center" },
+    { Header: "생성일자", accessor: "date", align: "center" },
+    { Header: "진행도", accessor: "completion", align: "center" },
   ];
 
-  const rows = projects.map((project) => ({
-    project_: <Project image={project.project.image} name={project.project.name} />,
-    status_: (
+  const rows = projectMembers.map((project) => ({
+    project: <Project  name={project.name} />,
+    status: (
       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
         {project.status}
       </MDTypography>
     ),
-    version_: (
-      <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-        {project.version}
-      </MDTypography>
-    ),
-    releaseDate_: (
+    date: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {project.date}
+        {String(project.createdAt).slice(0, 10)}
       </MDTypography>
     ),
-    writer_: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {project.writer}
-      </MDTypography>
-    ),
-    role_: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {project.role}
-      </MDTypography>
-    ),
-    note_: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {project.note}
-      </MDTypography>
-    ),
-    // completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
+    completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
   }));
   return {
     columns,

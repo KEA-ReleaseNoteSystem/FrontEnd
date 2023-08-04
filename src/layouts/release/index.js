@@ -10,6 +10,11 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
 
+import { releaseView,releaseViewCopy } from "shared/constants/TableOrTree"
+import Select from '@mui/material/Select';
+import ReleaseTree from './releaseTree';
+
+
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -22,6 +27,13 @@ import authorsTableData from "layouts/release/data/authorsTableData";
 
 function Release() {
   const { columns, rows } = authorsTableData();
+
+  const [view, setView] = useState('table');
+
+  // Handler for changing the view
+  const handleViewChange = (event) => {
+    setView(event.target.value);
+  };
 
   const project = "Project name";
 
@@ -36,6 +48,26 @@ function Release() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+
+    
+      <Select
+          labelId="filter-select-label"
+          id="view-select"
+          value={view}
+          onChange={handleViewChange}
+          sx={{ minHeight: 40 , maxWidth: 60  }}
+          displayEmpty
+        >
+          <MenuItem disabled>
+            View
+          </MenuItem>
+          {Object.values(releaseView).map(view => (
+            <MenuItem key={view} value={view}>
+              {releaseViewCopy[view]}
+            </MenuItem>
+          ))}
+        </Select>
+
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -58,13 +90,17 @@ function Release() {
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                {view === 'table' ? (
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                ) : (
+                  <ReleaseTree />
+                )}
               </MDBox>
             </Card>
           </Grid>

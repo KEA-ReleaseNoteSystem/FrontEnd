@@ -90,8 +90,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
         <PageLayout>
             <DefaultNavbar
                 routes={routes}
-                sticky
-            />
+                sticky/>
         <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
             <div className="container py-5 grid-margin wow fadeInUp">
                 <div className="section-title text-center position-relative pb-3 mb-5 mx-auto" style={{ maxWidth: 5000 }}>
