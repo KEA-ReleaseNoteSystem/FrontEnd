@@ -10,26 +10,23 @@ import MDAvatar from "components/MDAvatar";
 
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
-import Pagination from 'react-bootstrap/Pagination';
 // import Divider from "assets/theme/components/divider";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
-import NavigationBar from "../components/NavigationBar";
 // Data
 import Header from "layouts/profile/components/Header";
 
 import { React, useState, useEffect } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import axios from "axios";
-import { CommentsDisabledOutlined } from "@mui/icons-material";
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 // Images
-import team2 from "assets/images/team-2.jpg";
 import DefaultNavbar from 'layouts/homepage/examples/Navbars/DefaultNavbar';
 import routes from '../data/home.routes.js';
 import MDButton from "components/MDButton";
+import defimg from "assets/images/default_avatar.jpg";
 
 function MyPage() {
   const [memberInfo, setMemberInfo] = useState([]);
@@ -38,16 +35,22 @@ function MyPage() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [selectedMemberName, setSelectedMemberName] = useState(null);
   const [copied, setCopied] = useState(false);
-
+  
   const handleCopy = () => {
     setCopied(true);
     alert("그룹 코드가 클립보드에 복사되었습니다.");
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const Author = ({ image, name, nickname }) => (
+
+  const Author = ({ image, name, nickname }) => {
+    const [avimage, setImage] = useState(image);
+    const handleImageError = () => {
+      setImage(defimg);
+    };
+    return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
@@ -55,7 +58,7 @@ function MyPage() {
         <MDTypography variant="caption">{nickname}</MDTypography>
       </MDBox>
     </MDBox>
-  );
+  )};
 
   const Job = ({ title }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -74,11 +77,11 @@ function MyPage() {
   ];
 
   const rows = groupMember.map((member, index) => {
-    const showButton = member.authority !== "GM"; // Check if the authority is not "GM"
+    const showButton = member.authority !== "GM"; 
 
     return {
       author: (
-        <Author image={team2} name={member.name} nickname={member.nickname} />
+        <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} nickname={member.nickname} />
       ),
       job: <Job title={member.position} />,
       authority: <MDBox>{member.authority}</MDBox>,
@@ -87,12 +90,7 @@ function MyPage() {
         <button className="styled-button" onClick={() => { setSelectedMemberName(member.name); setSelectedMemberId(member.id); setShowConfirmation(true); }}>
           {'삭제'}
         </button>
-      ) : <button
-        className="styled-button"
-        onClick={() => handleDissolveGroup(member.id)} // Call the handleDissolveGroup function when clicked
-      >
-        {'그룹 해산'}
-      </button>, // Render the button only if showButton is true, otherwise, render null
+      ) :  null
     };
   });
   let showDeleteButton = true;
@@ -157,7 +155,7 @@ function MyPage() {
       />
       {/* <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s"> */}
       <MDBox sx={{ mb: 2, mt: 11 }} />
-      <Header info={{ nickname: memberInfo.nickname }}>
+      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} sx={{ display: "flex" }}>

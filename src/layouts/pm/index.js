@@ -165,8 +165,7 @@ const PM = ({ projectInfo }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   console.log(projectInfo.id);
   console.log(projectInfo.name);
-  const defaultValue = '뇌파를 이용한 설문조사 서비스';
-
+  
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -310,7 +309,7 @@ const PM = ({ projectInfo }) => {
           {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
             <Grid item xs={12} md={6} xl={3} key={member.id}>
               <DefaultProjectCard
-                image={homeDecor2}
+                image={"http://localhost:8080/" + member.id + ".jpg"}
                 id={member.id}
                 projectId={projectInfo.id}
                 name={member.name}

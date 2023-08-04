@@ -20,6 +20,7 @@ import { token } from "stylis";
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
+import defimg from "assets/images/default_avatar.jpg";
 
 export default function data({ projectInfo }) {
 
@@ -94,17 +95,22 @@ export default function data({ projectInfo }) {
     fetchData();
   }, []);
 
-  const Author = ({ image, name, email }) => (
+  const Author = ({ image, name, nickname }) => {
+    const [avimage, setImage] = useState(image);
+    const handleImageError = () => {
+      setImage(defimg);
+    };
+    return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={team2} name={name} size="sm" />
+      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
         </MDTypography>
-        <MDTypography variant="caption">{email}</MDTypography>
+        <MDTypography variant="caption">{nickname}</MDTypography>
       </MDBox>
     </MDBox>
-  );
+  )};
 
   const Job = ({ title, description }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -129,7 +135,7 @@ export default function data({ projectInfo }) {
   
     return {
       author: (
-        <Author image={team2} name={member.name} email={member.email} />
+        <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} email={member.email} />
       ),
       function: <Job title={member.role} description={member.position} />,
       status: (

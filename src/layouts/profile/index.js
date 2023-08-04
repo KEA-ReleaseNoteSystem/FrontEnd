@@ -1,14 +1,9 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef} from "react";
 import axios from "axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -24,25 +19,24 @@ import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
 
 // Overview page components
 import Header from "layouts/profile/components/Header";
-import PlatformSettings from "layouts/profile/components/PlatformSettings";
-
 // Data
-import profilesListData from "layouts/profile/data/profilesListData";
-
 // Images
-import homeDecor1 from "assets/images/home-decor-1.jpg";
 import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
-import homeDecor4 from "assets/images/home-decor-4.jpeg";
-import team1 from "assets/images/team-1.jpg";
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+
 
 import CalendarHeatmap from "layouts/profile/components/heatmap.js"
 
 function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
+
+  const [Image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+  const fileInput = useRef(null)
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
+  
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear()
 
@@ -71,7 +65,7 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header info={{ nickname: memberInfo.nickname }}>
+      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
