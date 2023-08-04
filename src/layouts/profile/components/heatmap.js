@@ -36,9 +36,10 @@ const CalendarHeatmap = () => {
                 });
 
                 if (response.data.length === 0) {
-                    setUserActivityData([]);
+                    setUserActivityData([{"date": "2023-01-01","count": 0}]);
                 } else {
                     setUserActivityData(response.data.data);
+                    
                 }
             } catch (error) {
                 console.error(error);

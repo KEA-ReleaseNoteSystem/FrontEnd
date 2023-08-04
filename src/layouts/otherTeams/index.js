@@ -63,7 +63,7 @@ function OtherTeams() {
     <DashboardNavbar />
     <MDBox pt={6} pb={3}>
       <Grid container spacing={1}>
-        <Grid item xs={12} lg={7}>
+        <Grid item xs={12} lg={7} mb={5}>
           <Card>
             <MDBox
               mx={2}
