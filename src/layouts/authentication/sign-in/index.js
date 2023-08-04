@@ -128,7 +128,7 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange} />
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}  size="small"/>
               {(!isEmailEmpty && isEmailWrong) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography>) : <MDTypography> </MDTypography>}
             </MDBox>
             <MDBox mb={2}>
