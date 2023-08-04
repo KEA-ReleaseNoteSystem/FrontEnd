@@ -76,6 +76,8 @@ useEffect(() => {
             icon={order.type == "issue" ? "notifications" : order.type == "releaseNote" ? "inventory" : "vpn_ley"}
             title={order.message}
             dateTime={order.createdAt && order.createdAt.slice(0,10)}
+            type={order.type}
+            typeSpecificId={order.typeSpecificId}
           />
         ))}
       </MDBox>  
