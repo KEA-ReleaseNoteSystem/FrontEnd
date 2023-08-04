@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 
 // Images
-import team2 from "assets/images/team-2.jpg";
+import defimg from "assets/images/default_avatar.jpg";
 
 const projectId = 1;
 
@@ -47,17 +47,23 @@ export default function data(setSelectedMemberId) {
     fetchData();
   }, []);
 
-  const Author = ({ image, name, email }) => (
+  const Author = ({ image, name, nickname }) => {
+    const [avimage, setImage] = useState(image);
+    const handleImageError = () => {
+      setImage(defimg);
+    };
+    return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
         </MDTypography>
-        <MDTypography variant="caption">{email}</MDTypography>
+        <MDTypography variant="caption">{nickname}</MDTypography>
       </MDBox>
     </MDBox>
-  );
+  )};
+
 
   const Job = ({ title, description }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -78,7 +84,7 @@ export default function data(setSelectedMemberId) {
 
   const rows = memberList.map((member) => ({
     author: (
-      <Author image={team2} name={member.name} email={member.email} />
+      <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} email={member.email} />
     ),
     function: <Job title={member.role} description={member.position} />,
     status: (

@@ -309,7 +309,7 @@ const PM = ({ projectInfo }) => {
           {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
             <Grid item xs={12} md={6} xl={3} key={member.id}>
               <DefaultProjectCard
-                image={homeDecor2}
+                image={"http://localhost:8080/" + member.id + ".jpg"}
                 id={member.id}
                 projectId={projectInfo.id}
                 name={member.name}

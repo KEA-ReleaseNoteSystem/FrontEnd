@@ -58,7 +58,7 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header info={{ nickname: memberInfo.nickname }}>
+      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} md={6} xl={12} sx={{ display: "flex" }}>

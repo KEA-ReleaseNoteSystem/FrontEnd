@@ -25,7 +25,7 @@ import backgroundImage from "assets/images/bg-profile.jpeg";
 import MDButton from "components/MDButton";
 // import backgroundImage from "assets/images/home.png";
 
-function Header({ children, info }) {
+function Header({ children, info , memberId}) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const fileInput = useRef(null)
@@ -52,7 +52,6 @@ function Header({ children, info }) {
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
   const [image, setImage] = useState(defimg)
-  console.log("asdf", image);
   const [profileImg, setProfileImg] = useState(new FormData());
 
   const onChange = (e) => {
@@ -76,11 +75,19 @@ function Header({ children, info }) {
     reader.readAsDataURL(e.target.files[0])
   }
 
+  useEffect(() => {
+    setImage("http://localhost:8080/" + memberId + ".jpg");
+    console.log("memberId" , memberId);
+  }, [memberId]);
+
+  const handleImageError = () => {
+    setImage(defimg);
+  };
+
   const handleSubmit = () => {
     profileImg.append("profileImg", image);
-    console.log("asdaaf", profileImg);
     axios
-      .post("/api/member/uploadImage",profileImg,
+      .post("/api/member/profileImage",profileImg,
         {
           headers: 
           { 
@@ -128,7 +135,7 @@ function Header({ children, info }) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <MDAvatar src={image} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
+            <MDAvatar src={image} onError= {handleImageError} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
             <MDButton onClick={handleSubmit}>등록</MDButton>
             <input
               type='file'
