@@ -1,27 +1,19 @@
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
 
 import IssueSearch from "layouts/issue";
-import Myteam from "layouts/myteam";
 
 import IssueSearchid from "layouts/issue/index";
 
 import Members from "layouts/myteam";
 
-import Billing from "layouts/billing";
-import notifications from "layouts/notifications";
-import RTL from "layouts/rtl";
-import Issue from "layouts/Board";
 import IssueManage from "layouts/issue-manage";
-import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Rejoin from "layouts/authentication/rejoin";
-import Home from "layouts/home";
 import Pm from "layouts/pm";
 
 import Projects from "layouts/project"
@@ -40,7 +32,6 @@ import HomeCustom from "./layouts/homepage/index";
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
-import ViewRelease from "layouts/release/create";
 const handleLogout = () => {
   // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
   console.log('로그아웃 버튼이 클릭되었습니다!');
@@ -119,7 +110,6 @@ const routes = [
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
-    onClick: handleLogout,
   },
   {
     type: "",
