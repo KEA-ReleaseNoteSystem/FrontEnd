@@ -163,6 +163,7 @@ function Overview() {
 
   const handleOnClickCreateIssue = async () => {
     try {
+      const token = localStorage.getItem("ACCESS_TOKEN");
       // axios.post를 이용하여 API 호출
       const response = await axios.post(`api/project/${projectId}/issue`, {
         title: title,
@@ -171,7 +172,12 @@ function Overview() {
         description: description,
         date: String(selectedDate),
         userId: Number(1),
-      });
+      },{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
       
       if (response.data.statusCode === 200) {
         window.location.reload();
