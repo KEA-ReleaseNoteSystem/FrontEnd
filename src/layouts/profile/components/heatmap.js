@@ -36,7 +36,7 @@ const CalendarHeatmap = () => {
                 });
 
                 if (response.data.length === 0) {
-                    setUserActivityData([{"date": "2023-01-01","count": 0}]);
+                    setUserActivityData([{date: "2023-01-01", count: 1}]);
                 } else {
                     setUserActivityData(response.data.data);
                     
@@ -49,17 +49,13 @@ const CalendarHeatmap = () => {
 
         const token = localStorage.getItem('ACCESS_TOKEN');
         getIssueData(token);
+        console.log("userActivityData", userActivityData);
     }, []);
 
-     // userActivityData가 준비되지 않은 경우, 렌더링하지 않고 null을 반환
+     // userActivityData가 준비되지 않은 경우, 0인 값 하나 넣어서 표가 표시되도록 만들기
      if (!userActivityData || userActivityData.length === 0) {
-        return null;
+        setUserActivityData([{date: "2023-01-01", count: 0}]);
     }
-
-    // 사용자의 가장 최근 커밋 날짜를 가져옵니다.
-    const latestDate = userActivityData.reduce((maxDate, activity) => {
-        return activity.date > maxDate ? activity.date : maxDate;
-    }, userActivityData[0].date);
 
     // 달력 날짜의 시작과 끝을 계산합니다.
     const startYear = new Date().getFullYear();
