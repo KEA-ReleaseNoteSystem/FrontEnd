@@ -12,8 +12,8 @@ import axios from 'axios';
 
 // Images
 import defimg from "assets/images/default_avatar.jpg";
-
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 const getProjectMemberData = async (projectId, token) => {
   try {
@@ -35,11 +35,10 @@ const getProjectMemberData = async (projectId, token) => {
   }
 };
 
-
-
-
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  
   console.log(memberList);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
