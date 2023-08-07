@@ -6,12 +6,22 @@ import PropTypes from "prop-types";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Icon from "@mui/material/Icon";
+import axios from "axios";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import MDAvatar from "components/MDAvatar";
 
+// Material Dashboard 2 React base styles
+import breakpoints from "assets/theme/base/breakpoints";
+
+// Images
+import defimg from "assets/images/default_avatar.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
-
 import MDButton from "components/MDButton";
 // import backgroundImage from "assets/images/home.png";
 
@@ -45,38 +55,28 @@ function Header({ children, info , memberId}) {
   const [profileImg, setProfileImg] = useState(new FormData());
 
   const onChange = (e) => {
-    const file = e.target.files[0];
-  
-    // Check if a file is selected
-    if (!file) {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const newProfileImg = new FormData();
+      newProfileImg.append("profileImg", e.target.files[0]);
+      setProfileImg(newProfileImg);
+    } else { //업로드 취소할 시
       setImage(defimg);
       setProfileImg(new FormData());
-      return;
+      return
     }
-  
-    // Check the file size (in bytes)
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSizeInBytes) {
-      alert("Please select a file with size less than 5MB.");
-      return;
-    }
-  
-    setImage(file);
-    const newProfileImg = new FormData();
-    newProfileImg.append("profileImg", file);
-    setProfileImg(newProfileImg);
-  
-    // Display the profile picture on the screen
+    //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setImage(reader.result);
+        setImage(reader.result)
       }
-    };
-    reader.readAsDataURL(file);
-  };
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
+
   useEffect(() => {
-    setImage("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
+    setImage("http://localhost:8080/" + memberId + ".jpg");
     console.log("memberId" , memberId);
   }, [memberId]);
 
@@ -97,7 +97,6 @@ function Header({ children, info , memberId}) {
         })
       .then((response) => {
         console.log(response.data);
-        alert(response.data.message);
       })
       .catch((error) => {
         // 에러 처리를 합니다.
@@ -106,8 +105,6 @@ function Header({ children, info , memberId}) {
   };
 
 
-
-function Header({children}) {
   return (
     <MDBox position="relative" mb={5}>
       <MDBox
@@ -119,16 +116,15 @@ function Header({children}) {
         sx={{
           backgroundImage: ({ functions: { rgba, linearGradient }, palette: { gradients } }) =>
             `${linearGradient(
-              rgba(gradients.info.main, 0.3),
+              rgba(gradients.info.main, 0.6),
               rgba(gradients.info.state, 0.6)
             )}, url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "50%",
           overflow: "hidden",
-      
         }}
       />
-    <Card
+      <Card
         sx={{
           position: "relative",
           mt: -8,
@@ -139,6 +135,15 @@ function Header({children}) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
+            <MDAvatar src={image} onError= {handleImageError} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
+            <MDButton onClick={handleSubmit}>등록</MDButton>
+            <input
+              type='file'
+              style={{ display: 'none' }}
+              accept='image/jpg,image/png,image/jpeg'
+              name='profileImg'
+              onChange={onChange}
+              ref={fileInput} />
           </Grid>
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>

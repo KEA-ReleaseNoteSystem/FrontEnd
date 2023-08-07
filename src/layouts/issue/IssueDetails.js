@@ -87,15 +87,15 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
               <Grid item xs={6}>
                 <MDBox pt={2} px={2}>
 
-                <FormControl>
-                  <MDTypography variant="h6">담당자 &nbsp;&nbsp;
-                    <Select
-                      value={memberInCharge}
-                      onChange={handleMemberInCharge}
-                    >
-                      {memberList2}
-                    </Select></MDTypography>
-                    </FormControl>
+                  <FormControl>
+                    <MDTypography variant="h6">담당자 &nbsp;&nbsp;
+                      <Select
+                        value={memberInCharge}
+                        onChange={handleMemberInCharge}
+                      >
+                        {memberList2}
+                      </Select></MDTypography>
+                  </FormControl>
                   <MDTypography variant="subtitle2" ml={10}>
 
                   </MDTypography>

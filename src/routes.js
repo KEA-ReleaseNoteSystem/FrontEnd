@@ -32,6 +32,9 @@ import HomeCustom from "./layouts/homepage/index";
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
+
+
+
 const handleLogout = () => {
   // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
   console.log('로그아웃 버튼이 클릭되었습니다!');
@@ -89,6 +92,7 @@ const routes = [
   },
   {
     type: "collapse",
+
     name: "Profile",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,

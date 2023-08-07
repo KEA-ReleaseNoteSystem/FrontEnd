@@ -164,7 +164,6 @@ function IssueSearch() {
   }, [projectId, token]);
 
 
-
   useEffect(() => {
     const fetchMemo = async () => {
       try {

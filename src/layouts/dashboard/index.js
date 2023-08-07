@@ -185,7 +185,7 @@ function Dashboard(props) {
           </Grid>
         </MDBox>
       </div>
-      <div style={{ float: "right", width: "33%", height: "100vh" }}>
+      <div style={{ float: "right", width: "33%", height: "100vh"}}>
         <MDBox>
           <OrdersOverview />
         </MDBox>
