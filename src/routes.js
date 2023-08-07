@@ -68,17 +68,17 @@ const routes = [
 
   {
     type: "collapse",
-    name: "Search Issues",
-    key: "issueSearch",
-    icon: <Icon fontSize="small">search</Icon>,
+    name: "Issue Management",
+    key: "Issue Management",
+    icon: <Icon fontSize="small">manage_search</Icon>,
     route: "/issuesearch",
     component: <IssueSearch />,
   },
   {
     type: "collapse",
-    name: "Manage Issues",
-    key: "issue manage",
-    icon: <Icon fontSize="small">notifications</Icon>,
+    name: "Kanban Board",
+    key: "Kanban Board",
+    icon: <Icon fontSize="small">developer_board</Icon>,
     route: "/issuemanagement",
     component: <IssueManage />,
   },
