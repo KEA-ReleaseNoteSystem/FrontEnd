@@ -23,13 +23,13 @@ const CalendarHeatmap = (issuescore) => {
     console.log("issuescore",issuescore);
 
     const calculateLevel = (score) => {
-        if (score >= 0 && score <= 50) {
+        if (score >= 0 && score <= 1000) {
           return 'Level 1';
-        } else if (score <= 100) {
+        } else if (score <= 2000) {
           return 'Level 2';
-        } else if (score <= 150) {
+        } else if (score <= 5000) {
           return 'Level 3';
-        } else if (score <= 200) {
+        } else if (score <= 10000) {
           return 'Level 4';
         } else {
           return 'Unknown';
