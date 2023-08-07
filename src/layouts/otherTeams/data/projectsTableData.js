@@ -18,18 +18,19 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 
-
-
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 
 export default function data(selectedMemberId) {
   
 const [projectMembers, setProjectMembers] = useState([]);
+const [projectId, setProjectId] = useRecoilState(projectIdState);
 
 useEffect(() => {
   const getMemberProjectData = async () => {
     try {
-      const response = await axios.get(`/api/project/1/members/${selectedMemberId}`
+      const response = await axios.get(`/api/project/${projectId}/members/${selectedMemberId}`
       );
  
       if (response.data.data.length === 0) {

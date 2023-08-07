@@ -14,8 +14,6 @@ import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 // Images
 import team2 from "assets/images/team-2.jpg";
 
-const [projectId, setProjectId] = useRecoilState(projectIdState);
-
 const getProjectMemberData = async (projectId, token) => {
   try {
     const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
@@ -36,6 +34,7 @@ const getProjectMemberData = async (projectId, token) => {
 };
 
 export default function data(setSelectedMemberId) {
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [memberList, setMemberList] = useState([]);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
