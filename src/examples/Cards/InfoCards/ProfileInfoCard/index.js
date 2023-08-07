@@ -147,6 +147,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
         })
       .then((response) => {
         console.log(response.data);
+        alert(response.data.message);
       })
       .catch((error) => {
         // 에러 처리를 합니다.
