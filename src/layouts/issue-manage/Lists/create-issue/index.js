@@ -329,40 +329,7 @@ function Overview() {
                   maxFileSize= {maxSizeInBytes}
                   onChange={(files) => console.log('Files:', files)}
                 />
-              <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
-                <MDBox mb={2}>
-                  <MDInput type="text" label="이슈 제목" onChange = {handleChangeTitle} fullWidth/>
                 </MDBox>
-                <MDBox mb={2}>
-                  <MDMemberInCharge
-                    label="담당자"
-                    value={writerName}
-                    onChange={handleWriterChange} fullWidth />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDIssueType
-                    label="타입"
-                    value={issueType} // 선택된 이슈 타입을 전달
-                    onChange={handleIssueTypeChange} // 선택된 이슈 타입 변경 시 호출되는 핸들러 함수
-                  />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDDatePicker
-                    label="생성일"
-                    disabled
-                    defaultValue={new Date()}
-                    onChange={handleDateChange}
-                  />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />  
-                </MDBox>
-                <MDBox mt={4} mb={1} display="flex" justifyContent="center">
-                  <MDButton variant="gradient" color="info" onClick={handleOnClickCreateIssue} onClose={handleClose}>
-                    추가
-                  </MDButton>
-                </MDBox>
-              </MDBox>
             )}
             <MDBox mb={2}>
               <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
