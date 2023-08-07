@@ -26,10 +26,11 @@ export default function data(selectedMemberId) {
   
 const [projectMembers, setProjectMembers] = useState([]);
 const [projectId, setProjectId] = useRecoilState(projectIdState);
-
+console.log("selectedMemberId",selectedMemberId)
 useEffect(() => {
   const getMemberProjectData = async () => {
     try {
+      console.log("urlurl",`/api/project/${projectId}/members/${selectedMemberId}`);
       const response = await axios.get(`/api/project/${projectId}/members/${selectedMemberId}`
       );
  
