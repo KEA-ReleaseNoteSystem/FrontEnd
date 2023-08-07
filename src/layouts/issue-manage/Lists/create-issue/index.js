@@ -76,17 +76,17 @@ function MDIssueType({ label, value, onChange }) {
   };
 
   const handleBug = () => {
-    setSelecteType("버그");
+    setSelecteType("bug");
     handleClose();
   };
 
   const handleFeat = () => {
-    setSelecteType("기능");
+    setSelecteType("task");
     handleClose();
   };
 
   const handleImprove = () => {
-    setSelecteType("개선");
+    setSelecteType("story");
     handleClose();
   };
 
@@ -246,6 +246,7 @@ function Overview() {
       const response = await axios.post(`api/project/${projectId}/issue`, {
         title: title,
         memberInCharge: writerName === "담당자를 지정해주세요" ? null : writerName,
+        type: issueType,
         description: description,
         date: String(selectedDate),
         userId: Number(1),
