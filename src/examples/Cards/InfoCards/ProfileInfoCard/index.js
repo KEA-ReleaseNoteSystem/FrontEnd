@@ -12,15 +12,16 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { React, useState, useEffect } from "react";
+import { React, useState, useRef ,useEffect } from "react";
 
 // react-routers components
 import { Link } from "react-router-dom";
 import Modal from 'react-modal';
-
+import defimg from "assets/images/default_avatar.jpg";
 // prop-types is library for typechecking of props
 import PropTypes from "prop-types";
-
+import MDAvatar from "components/MDAvatar";
+import MDButton from "components/MDButton";
 // @mui material components
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
@@ -35,6 +36,7 @@ import MDTypography from "components/MDTypography";
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
 import Edit from "layouts/profile/edit"
+import breakpoints from "assets/theme/base/breakpoints";
 
 const customModalStyles = {
   overlay: {
@@ -58,13 +60,19 @@ const customModalStyles = {
   }
 };
 
-function ProfileInfoCard({ title, description, info, social, action, shadow }) {
+function ProfileInfoCard({ title, description, info, social, action, shadow ,memberId}) {
   const labels = [];
   const values = [];
   const { socialMediaColors } = colors;
   const { size } = typography;
-
   const [activeModal, setActiveModal] = useState(false);
+  const [image, setImage] = useState(defimg)
+  const [profileImg, setProfileImg] = useState(new FormData());
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+  const fileInput = useRef(null)
+  const token = localStorage.getItem('ACCESS_TOKEN');
+
 
   const openProfileEditModal = () => {
     setActiveModal(true);
@@ -72,6 +80,77 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
 
   const closeModal = () => {
     setActiveModal(false);
+  };
+
+  useEffect(() => {
+    // A function that sets the orientation state of the tabs.
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+
+    /** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+    window.addEventListener("resize", handleTabsOrientation);
+
+    // Call the handleTabsOrientation function to set the state with the initial value.
+    handleTabsOrientation();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
+
+
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const newProfileImg = new FormData();
+      newProfileImg.append("profileImg", e.target.files[0]);
+      setProfileImg(newProfileImg);
+    } else { //업로드 취소할 시
+      setImage(defimg);
+      setProfileImg(new FormData());
+      return
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result)
+      }
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
+
+  useEffect(() => {
+    setImage("http://localhost:8080/" + memberId + ".jpg");
+    console.log("memberId" , memberId);
+  }, [memberId]);
+
+  const handleImageError = () => {
+    setImage(defimg);
+  };
+
+  const handleSubmit = () => {
+    profileImg.append("profileImg", image);
+    axios
+      .post("/api/member/profileImage",profileImg,
+        {
+          headers: 
+          { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // 에러 처리를 합니다.
+        console.error("이미지 전송 에러:", error);
+      });
   };
 
 
@@ -102,11 +181,17 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
       </MDTypography>
     </MDBox>
   ));
+
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  };
   
 
 
   return (
-    <Card sx={{ height: "100%", boxShadow: !shadow && "none", width: "100%" }}>
+    <Card sx={{ height: "100%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "25%" }}>
       <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}
@@ -126,6 +211,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
       </MDBox>
       <MDBox p={2}>
         <MDBox mb={2} lineHeight={1}>
+         
           <MDTypography variant="button" color="text" fontWeight="light">
             {description}
           </MDTypography>
@@ -134,7 +220,19 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
           <Divider />
         </MDBox>
         <MDBox>
+        <div style={containerStyle}>
+        <MDAvatar src={image} onError= {handleImageError} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
+            <MDButton onClick={handleSubmit} sx={{ height: "18px" , marginTop:"4%"}}>등록</MDButton><br/>
+              <input
+                type='file'
+                style={{ display: 'none' }}
+                accept='image/jpg,image/png,image/jpeg'
+                name='profileImg'
+                onChange={onChange}
+                ref={fileInput} />
+                    </div>
           {renderItems}
+      
         </MDBox>
       </MDBox>
     </Card>

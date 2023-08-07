@@ -3,8 +3,14 @@ import { useState, useEffect } from 'react';
 import MDTypography from 'components/MDTypography';
 import { Grid } from '@mui/material';
 import axios from 'axios';
+import Level1 from 'assets/images/levels/level1.png'
+import Level2 from 'assets/images/levels/level2.png'
+import Level3 from 'assets/images/levels/level3.png'
+import Level4 from 'assets/images/levels/level4.png'
+import BadgeCollection from './Badge';
 
-const CalendarHeatmap = () => {
+
+const CalendarHeatmap = (issuescore) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     const [userActivityData, setUserActivityData] = useState([]);
     const [hoveredDate, setHoveredDate] = useState(null);
@@ -12,6 +18,49 @@ const CalendarHeatmap = () => {
     const [hoveredCellTop, setHoveredCellTop] = useState(0);
     const [hoveredCellLeft, setHoveredCellLeft] = useState(0);
     const [hoveredCellWidth, setHoveredCellWidth] = useState(0);
+    const [level,setLevel] = useState("Level 1")
+
+    console.log("issuescore",issuescore);
+
+    const calculateLevel = (score) => {
+        if (score >= 0 && score <= 50) {
+          return 'Level 1';
+        } else if (score <= 100) {
+          return 'Level 2';
+        } else if (score <= 150) {
+          return 'Level 3';
+        } else if (score <= 200) {
+          return 'Level 4';
+        } else {
+          return 'Unknown';
+        }
+      };
+
+
+      let levelImageSrc;
+        switch (level) {
+        case 'Level 1':
+            levelImageSrc = Level1;
+            break;
+        case 'Level 2':
+            levelImageSrc = Level2;
+            break;
+        case 'Level 3':
+            levelImageSrc = Level3;
+            break;
+        case 'Level 4':
+            levelImageSrc = Level4;
+            break;
+        default:
+            levelImageSrc = Level1;
+        }
+
+    
+      // Update the level state based on the issuescore
+      useEffect(() => {
+        const level = calculateLevel(issuescore.issueScore);
+        setLevel(level);
+      }, [issuescore]);
 
     // 셀에 마우스 진입 이벤트를 처리하는 함수
     const handleCellMouseEnter = (date) => {
@@ -88,17 +137,19 @@ const CalendarHeatmap = () => {
     const containerStyle = {
         display: 'grid',
         gridTemplateColumns: 'repeat(7, 12px)',
-        gap: '1px',
-        gridRowGap: '1px', // 추가된 부분
+        gap: '4px',
+        gridRowGap: '2px', // 추가된 부분
         overflow: 'hidden', // 추가된 부분
-        height: '90px', // 12px * 7 = 84px, 사용자가 보이는 영역만 남기도록 설정
+        height: '120px', // 12px * 7 = 84px, 사용자가 보이는 영역만 남기도록 설정
+        width : '100%',
+        marginLeft : '8%'
     };
 
     
     const tooltipStyle = {
         position: 'absolute',
-        top: hoveredDate ? `${hoveredCellTop + 100}px` : '-9999px', // hide tooltip if not hovered
-        left: hoveredDate ? `${hoveredCellLeft - 250+ hoveredCellWidth / 2}px` : '0',
+        top: hoveredDate ? `${hoveredCellTop - 340}px` : '-9999px', // hide tooltip if not hovered
+        left: hoveredDate ? `${hoveredCellLeft - (700 + hoveredCellWidth)}px` : '0',
         transform: 'translate(-50%, -100%)',
         backgroundColor: 'black',
         color: 'white',
@@ -110,30 +161,55 @@ const CalendarHeatmap = () => {
         zIndex: 1,
     };
 
-    const getHoveredCellPosition = (event) => {
-        const hoveredCell = event.target.getBoundingClientRect();
-        setHoveredCellTop(hoveredCell.top);
-        setHoveredCellLeft(hoveredCell.left);
-        setHoveredCellWidth(hoveredCell.width);
+    const levelImageStyle = {
+        
+        position: 'absolute',
+        left: '0', // 왼쪽에 배치
+        top: '45%', // 세로 중앙 정렬
+        transform: 'translateY(-50%)', // 세로 중앙 정렬을 위해 translateY 사용
+        marginLeft: '3%',
+    
     };
+
+
+   const getHoveredCellPosition = (event) => {
+  const hoveredCell = event.target.getBoundingClientRect();
+  const hoveredCellTop = hoveredCell.top + window.scrollY; // Add scroll offset
+  const hoveredCellLeft = hoveredCell.left;
+  const hoveredCellWidth = hoveredCell.width;
+  setHoveredCellTop(hoveredCellTop);
+  setHoveredCellLeft(hoveredCellLeft);
+  setHoveredCellWidth(hoveredCellWidth);
+};
 
     return (
         <>
-            <Grid container justifyContent="center">
-                <Grid item xs={1}><MDTypography variant="body2">Jan</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Feb</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Mar</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Apr</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">May</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Jun</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Jul</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Aug</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Sep</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Oct</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Nov</MDTypography></Grid>
-                <Grid item xs={1}><MDTypography variant="body2">Dec</MDTypography></Grid>
+        
+            <div style={{ flexDirection: 'column' ,marginLeft:"8%"}}>
+            <img src={levelImageSrc} alt="Level" style={levelImageStyle} />
+            <MDTypography variant="caption" color="black" style={{ textAlign: 'center' }}>{level}</MDTypography>
+            <BadgeCollection badgeCount={4}  level={level} />
+            </div>
+       
+
+            <Grid container justifyContent="center" sx={{marginLeft:"8%"}} >
+       
+    
+                <Grid item xs={2}><MDTypography variant="body2">Jan</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Feb</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Mar</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Apr</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">May</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Jun</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Jul</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Aug</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Sep</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Oct</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Nov</MDTypography></Grid>
+                <Grid item xs={2}><MDTypography variant="body2">Dec</MDTypography></Grid>
             </Grid>
-            <div style={containerStyle}>
+           
+            <div style={containerStyle} >
                 {dates.map((week, weekIndex) => (
                     <React.Fragment key={weekIndex}>
                         {week.map((date, dayIndex) => (
@@ -142,10 +218,10 @@ const CalendarHeatmap = () => {
                                 style={{
                                     gridRow: dayIndex + 1,
                                     gridColumn: weekIndex + 1,
-                                    width: '12px',
-                                    height: '12px',
+                                    width: '13px',
+                                    height: '13px',
                                     background: `rgba(0, 128, 0, ${getActivityCount(date) / 10})`,
-                                    border: '1px solid #ddd',
+                                    border: '1.5px solid #ddd',
                                     position: 'relative', // 부모에 position 속성 추가
                                 }}
                                 // onMouseEnter와 onMouseLeave 이벤트 핸들러 추가
@@ -164,6 +240,8 @@ const CalendarHeatmap = () => {
                 <MDTypography variant="caption" color="white">{hoveredDate}</MDTypography><br/>
                 <MDTypography variant="caption" color="white">{hoveredCount}개 이슈 해결</MDTypography>
             </div>
+
+           
         </>
     );
 };

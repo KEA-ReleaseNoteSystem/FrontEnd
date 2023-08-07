@@ -23,6 +23,7 @@ const getProjectMemberData = async (projectId, token) => {
       }
     });
    
+    console.log(response.data.data);
     if (response.data.length === 0) {
       return [];
     } else {
@@ -33,6 +34,9 @@ const getProjectMemberData = async (projectId, token) => {
     return [];
   }
 };
+
+
+
 
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
@@ -102,7 +106,7 @@ export default function data(setSelectedMemberId) {
         {member && member.createdAt.slice(0, 10)}
       </MDTypography>),
     button: (
-        <Button variant="contained" color="inherit" onClick={() => setSelectedMemberId(member.id)}>
+        <Button variant="contained" color="inherit" onClick={() => setSelectedMemberId(member.memberId)}>
          조회
       </Button>
     ),

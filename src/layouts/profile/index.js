@@ -4,7 +4,7 @@ import axios from "axios";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-
+import Card from "@mui/material/Card";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -64,12 +64,12 @@ function Overview() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox mb={2} />
-      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
-        <MDBox mt={5} mb={3}>
+      <Header>
+      
+
+        <MDBox mt={5}  >
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
-              <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
               <ProfileInfoCard
                 title="profile information"
                 description={memberInfo.introduce}
@@ -81,21 +81,38 @@ function Overview() {
                   email: memberInfo.email,
                   issueScore: memberInfo.exp,
                 }}
+                memberId = {memberInfo.id}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
               />
-              <Divider orientation="vertical" sx={{ mx: 0 }} />
+              
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+         <Card sx={{ height: "80%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "100%", backgroundColor :"#f9fbfb" , top : "100px"
+         }}>
+          
+          <Grid mt={2.2} ml={2}  container justifyContent="center">
+          <Grid item xs={12} sx={{display: "flex"}}>
+          
+            <MDTypography  variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
+          </Grid>
+
+          <MDBox>
+            <CalendarHeatmap issueScore={memberInfo.exp} />
+          </MDBox>
+
+        </Grid>
+        </Card>
+            
             </Grid>
           </Grid>
         </MDBox>
-        <Grid container justifyContent="center">
-          <Grid item xs={12} sx={{display: "flex"}}>
-            <MDTypography variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
-          </Grid>
-          <MDBox>
-            <CalendarHeatmap />
-          </MDBox>
-        </Grid>
+
+
+     
+
+      <br/>
+      <Card>
         <MDBox pt={2} px={2} lineHeight={1.25}>
           <MDTypography variant="h6" fontWeight="medium">
             Projects
@@ -121,8 +138,8 @@ function Overview() {
             ))}
           </Grid>
         </MDBox>
-
-      </Header>
+        </Card>
+    </Header>
     </DashboardLayout>
   );
 }

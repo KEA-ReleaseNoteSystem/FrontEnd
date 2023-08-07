@@ -163,12 +163,12 @@ function Overview() {
 
   const handleOnClickCreateIssue = async () => {
     try {
+      
       const token = localStorage.getItem("ACCESS_TOKEN");
       // axios.post를 이용하여 API 호출
       const response = await axios.post(`api/project/${projectId}/issue`, {
         title: title,
         writerName: writerName,
-        type: issueType,
         description: description,
         date: String(selectedDate),
         userId: Number(1),
@@ -188,6 +188,7 @@ function Overview() {
     }
 
   }
+
 
   const handleChildValueChange = (value) =>{
     setValueFromChild(value);
