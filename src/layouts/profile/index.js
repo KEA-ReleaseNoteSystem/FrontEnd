@@ -29,12 +29,7 @@ import CalendarHeatmap from "layouts/profile/components/heatmap.js"
 function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
 
-  const [Image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
-  const fileInput = useRef(null)
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
+
   
 
   const currentDate = new Date();

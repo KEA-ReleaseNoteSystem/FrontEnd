@@ -81,7 +81,7 @@ function MyPage() {
 
     return {
       author: (
-        <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} nickname={member.nickname} />
+        <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} nickname={member.nickname} />
       ),
       job: <Job title={member.position} />,
       authority: <MDBox>{member.authority}</MDBox>,

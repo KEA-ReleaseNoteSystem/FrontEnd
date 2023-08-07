@@ -55,28 +55,38 @@ function Header({ children, info , memberId}) {
   const [profileImg, setProfileImg] = useState(new FormData());
 
   const onChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-      const newProfileImg = new FormData();
-      newProfileImg.append("profileImg", e.target.files[0]);
-      setProfileImg(newProfileImg);
-    } else { //업로드 취소할 시
+    const file = e.target.files[0];
+  
+    // Check if a file is selected
+    if (!file) {
       setImage(defimg);
       setProfileImg(new FormData());
-      return
+      return;
     }
-    //화면에 프로필 사진 표시
+  
+    // Check the file size (in bytes)
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      alert("Please select a file with size less than 5MB.");
+      return;
+    }
+  
+    setImage(file);
+    const newProfileImg = new FormData();
+    newProfileImg.append("profileImg", file);
+    setProfileImg(newProfileImg);
+  
+    // Display the profile picture on the screen
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setImage(reader.result)
+        setImage(reader.result);
       }
-    }
-    reader.readAsDataURL(e.target.files[0])
-  }
-
+    };
+    reader.readAsDataURL(file);
+  };
   useEffect(() => {
-    setImage("http://localhost:8080/" + memberId + ".jpg");
+    setImage("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
     console.log("memberId" , memberId);
   }, [memberId]);
 
@@ -97,6 +107,7 @@ function Header({ children, info , memberId}) {
         })
       .then((response) => {
         console.log(response.data);
+        alert(response.data.message);
       })
       .catch((error) => {
         // 에러 처리를 합니다.

@@ -309,7 +309,7 @@ const PM = ({ projectInfo }) => {
           {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
             <Grid item xs={12} md={6} xl={3} key={member.id}>
               <DefaultProjectCard
-                image={"http://localhost:8080/" + member.id + ".jpg"}
+                image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id}
                 id={member.id}
                 projectId={projectInfo.id}
                 name={member.name}

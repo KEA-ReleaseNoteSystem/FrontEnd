@@ -127,7 +127,7 @@ export default function data({ projectInfo }) {
     { Header: "추가", accessor: "join", align: "center" },
   ];
 
-  const rows = memberList.map((member) => {
+  const rows = memberList && memberList.map((member) => {
     // projectInfo.memberInfoDTOList에 현재 멤버의 id가 존재하는지 확인합니다.
     const isMemberInProjectInfo = projectInfo.memberInfoDTOList.some(
       (projectMember) => projectMember.id === member.id
@@ -135,7 +135,7 @@ export default function data({ projectInfo }) {
   
     return {
       author: (
-        <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} email={member.email} />
+        <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} email={member.email} />
       ),
       function: <Job title={member.role} description={member.position} />,
       status: (

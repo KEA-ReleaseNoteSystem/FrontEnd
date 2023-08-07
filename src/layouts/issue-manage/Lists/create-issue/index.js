@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
+import { Icon, IconButton, Menu, MenuItem, Input } from "@mui/material";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -20,6 +20,8 @@ import LinearScaleIcon from '@mui/icons-material/LinearScale';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
+import { DropzoneArea } from 'material-ui-dropzone'
+
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -99,19 +101,19 @@ function MDIssueType({ label, value, onChange }) {
         InputProps={{
           startAdornment: (
             <div>
-            <IconButton onClick={handleClick}>
-              <LinearScaleIcon />
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleBug}>버그</MenuItem>
-            <MenuItem onClick={handleFeat}>기능</MenuItem>
-            <MenuItem onClick={handleImprove}>개선</MenuItem>
-          </Menu>
-          </div>
+              <IconButton onClick={handleClick}>
+                <LinearScaleIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleBug}>버그</MenuItem>
+                <MenuItem onClick={handleFeat}>기능</MenuItem>
+                <MenuItem onClick={handleImprove}>개선</MenuItem>
+              </Menu>
+            </div>
           ),
         }}
       />
@@ -124,6 +126,7 @@ function Overview() {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [valueFromChild, setValueFromChild] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -139,6 +142,7 @@ function Overview() {
   const [writerName, setWriterName] = useState("");
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [showDropzone, setShowDropzone] = useState(false); // DropzoneArea의 표시 여부 상태
 
   const handleInputChange = (event) => {
     setInputWidth(event.target.value.length * 8);
@@ -155,12 +159,14 @@ function Overview() {
     setWriterName(name.target.value);
   }
   const handleChangeTitle = (title) => {
-    setTitle(title.target.value); 
+    setTitle(title.target.value);
   }
-  const handleDescription = (description) =>{
+  const handleDescription = (description) => {
     setDescription(description.target.value);
   }
-
+  const handleOnClickAttachFile = () => {
+    setShowDropzone(true); // 파일 첨부 버튼 클릭 시 DropzoneArea 표시
+  };
   const handleOnClickCreateIssue = async () => {
     try {
       const token = localStorage.getItem("ACCESS_TOKEN");
@@ -172,13 +178,13 @@ function Overview() {
         description: description,
         date: String(selectedDate),
         userId: Number(1),
-      },{
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    });
-      
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
       if (response.data.statusCode === 200) {
         window.location.reload();
       }
@@ -189,63 +195,76 @@ function Overview() {
 
   }
 
-  const handleChildValueChange = (value) =>{
+  const handleChildValueChange = (value) => {
     setValueFromChild(value);
   }
-
+  const maxSizeInBytes = 5 * 1024 * 1024;
   return (
-      <MDBox pt={3} pb={3} anchorEl={anchorEl}>
-        <Grid>
-          <Grid item xs={12}>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  ADD Issue
-                </MDTypography>
+    <MDBox pt={3} pb={3} anchorEl={anchorEl}>
+      <Grid>
+        <Grid item xs={12}>
+          <MDBox
+            mx={2}
+            mt={-3}
+            py={3}
+            px={2}
+            variant="gradient"
+            bgColor="info"
+            borderRadius="lg"
+            coloredShadow="info"
+          >
+            <MDTypography variant="h6" color="white">
+              ADD Issue
+            </MDTypography>
+          </MDBox>
+          <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
+            <MDBox mb={2}>
+              <MDInput type="text" label="이슈 제목" onChange={handleChangeTitle} fullWidth />
+            </MDBox>
+            <MDBox mb={2}>
+            </MDBox>
+            <MDBox mb={2}>
+              <MDIssueType
+                label="타입"
+                value={issueType} // 선택된 이슈 타입을 전달
+                onChange={handleIssueTypeChange} // 선택된 이슈 타입 변경 시 호출되는 핸들러 함수
+              />
+            </MDBox>
+            <MDBox mb={2}>
+              <MDDatePicker
+                label="생성일"
+                disabled
+                defaultValue={new Date()}
+                onChange={handleDateChange}
+              />
+            </MDBox>
+            {!showDropzone && ( // DropzoneArea를 표시하지 않을 때
+              <MDBox mb={2}>
+                <MDButton variant="gradient" color="info" onClick={handleOnClickAttachFile}>
+                  파일 첨부
+                </MDButton>
               </MDBox>
-              <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
-                <MDBox mb={2}>
-                  <MDInput type="text" label="이슈 제목" onChange = {handleChangeTitle} fullWidth/>
-                </MDBox>
-                <MDBox mb={2}>
-                  {/* <MDInput type="text" label="작성자" defaultValue="서강덕" disabled fullWidth/> */}
-                  <MDInput type="text" label="작성자" onChange={handleWriterChange} fullWidth/>
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDIssueType
-                    label="타입"
-                    value={issueType} // 선택된 이슈 타입을 전달
-                    onChange={handleIssueTypeChange} // 선택된 이슈 타입 변경 시 호출되는 핸들러 함수
-                  />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDDatePicker
-                    label="생성일"
-                    disabled
-                    defaultValue={new Date()}
-                    onChange={handleDateChange}
-                  />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />  
-                </MDBox>
-                <MDBox mt={4} mb={1} display="flex" justifyContent="center">
-                  <MDButton variant="gradient" color="info" onClick={handleOnClickCreateIssue} onClose={handleClose}>
-                    추가
-                  </MDButton>
-                </MDBox>
+            )}
+            {showDropzone && ( // DropzoneArea를 표시할 때
+              <MDBox mb={2}>
+                <DropzoneArea
+                  maxFileSize= {maxSizeInBytes}
+                  onChange={(files) => console.log('Files:', files)}
+                />
               </MDBox>
-          </Grid>
+            )}
+            <MDBox mb={2}>
+              <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
+            </MDBox>
+            <MDBox mt={4} mb={1} display="flex" justifyContent="center">
+              <MDButton variant="gradient" color="info" onClick={handleOnClickCreateIssue} onClose={handleClose}>
+                추가
+              </MDButton>
+            </MDBox>
+          </MDBox>
         </Grid>
-      </MDBox>
+      </Grid>
+    </MDBox>
   );
 }
 
