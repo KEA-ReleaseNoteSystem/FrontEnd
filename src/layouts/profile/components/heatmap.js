@@ -195,18 +195,18 @@ const CalendarHeatmap = (issuescore) => {
             <Grid container justifyContent="center" sx={{marginLeft:"8%"}} >
        
     
-                <Grid item xs={2}><MDTypography variant="body2">Jan</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Feb</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Mar</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Apr</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">May</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Jun</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Jul</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Aug</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Sep</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Oct</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Nov</MDTypography></Grid>
-                <Grid item xs={2}><MDTypography variant="body2">Dec</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Jan</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Feb</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Mar</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Apr</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">May</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Jun</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Jul</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Aug</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Sep</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Oct</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Nov</MDTypography></Grid>
+                <Grid item xs={1}><MDTypography variant="body2">Dec</MDTypography></Grid>
             </Grid>
            
             <div style={containerStyle} >
