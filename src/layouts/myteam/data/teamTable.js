@@ -89,7 +89,7 @@ export default function data() {
 
   const rows = memberList.map((member) => ({
     author: (
-      <Author image={"http://localhost:8080/" + member.id + ".jpg"} name={member.name} email={member.email} />
+      <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id } name={member.name} email={member.email} />
     ),
     function: <Job title={member.role} description={member.position} />,
     status: (

@@ -30,6 +30,7 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+import { DropzoneArea } from 'material-ui-dropzone'
 
 
 
@@ -124,8 +125,8 @@ function ViewRelease() {
 
     async function postReleaseNoteData(token) {
         try {
-          const response = await axios.post(
-            `/api/release/create`, {
+            const response = await axios.post(
+                `/api/release/create`, {
                 projectId: projectId,
                 status: state,
                 version: version,
@@ -135,15 +136,15 @@ function ViewRelease() {
                 description: description,
                 issueList: issueData
             },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          console.log("전송 완료");
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            console.log("전송 완료");
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
+    }
 
     useEffect(() => {
         getMembersData(projectId, token);
@@ -318,7 +319,7 @@ function ViewRelease() {
                                         </MDTypography>
                                         <MDBox pt={2} px={2}>
                                             <MDTypography variant="body2">
-                                                <MDInput variant="standard"onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
+                                                <MDInput variant="standard" onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
                                             </MDTypography>
                                         </MDBox>
                                     </MDBox>
@@ -401,7 +402,7 @@ function ViewRelease() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>생성</h6>
                                     </MDButton>
                                 </Grid>
@@ -421,6 +422,20 @@ function ViewRelease() {
                                                     <MDProgress
                                                         value={progress <= 100 && progress >= 0 ? progress : progress > 100 ? 100 : 0}
                                                         color={progress < 30 ? "primary" : progress < 60 ? "error" : progress < 80 ? "warning" : "info"} variant="gradient" />
+                                                </MDBox>
+                                            </Grid>
+                                        </Grid>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs={12} pt={5}>
+                                    <Card>
+                                        <Grid container>
+                                            <Grid item xs={12}>
+                                                <MDBox pt={2} px={1}>
+                                                    <MDTypography variant="h6">파일 첨부</MDTypography>
+                                                    <DropzoneArea
+                                                        onChange={(files) => console.log('Files:', files)}
+                                                    />
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
@@ -452,7 +467,7 @@ function ViewRelease() {
                         </MDTypography>
                     </MDBox>
                     <MDBox pt={1} pl={1} pr={1}>
-                        <MDTypography variant="caption" color="info" sx={{ml:1}}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
+                        <MDTypography variant="caption" color="info" sx={{ ml: 1 }}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
                         {otherIssueData && otherIssueData.map((issue) => (
                             <Issue>
                                 <Title>#{issue.issueNum} {issue.title}
@@ -474,7 +489,7 @@ function ViewRelease() {
                                     <MDTypography variant="caption" fontWeight="light">보고자: {issue.memberReport.name} / 담당자: {issue.memberIdInCharge.name} / 생성일: {issue.createdAt.slice(0, 10)}</MDTypography>
                                     <MDButton size="small" color="dark" onClick={() => addIssue(issue.id)}>릴리즈 노트에 추가하기</MDButton>
                                 </Bottom>
-                                
+
                             </Issue>
                         ))}
                     </MDBox>

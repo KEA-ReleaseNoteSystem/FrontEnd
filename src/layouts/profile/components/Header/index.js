@@ -12,6 +12,100 @@ import MDTypography from "components/MDTypography";
 
 import backgroundImage from "assets/images/bg-profile.jpeg";
 
+import MDButton from "components/MDButton";
+// import backgroundImage from "assets/images/home.png";
+
+function Header({ children, info , memberId}) {
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+  const fileInput = useRef(null)
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  useEffect(() => {
+    // A function that sets the orientation state of the tabs.
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+
+    /** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+    window.addEventListener("resize", handleTabsOrientation);
+
+    // Call the handleTabsOrientation function to set the state with the initial value.
+    handleTabsOrientation();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
+
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+  const [image, setImage] = useState(defimg)
+  const [profileImg, setProfileImg] = useState(new FormData());
+
+  const onChange = (e) => {
+    const file = e.target.files[0];
+  
+    // Check if a file is selected
+    if (!file) {
+      setImage(defimg);
+      setProfileImg(new FormData());
+      return;
+    }
+  
+    // Check the file size (in bytes)
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      alert("Please select a file with size less than 5MB.");
+      return;
+    }
+  
+    setImage(file);
+    const newProfileImg = new FormData();
+    newProfileImg.append("profileImg", file);
+    setProfileImg(newProfileImg);
+  
+    // Display the profile picture on the screen
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  useEffect(() => {
+    setImage("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
+    console.log("memberId" , memberId);
+  }, [memberId]);
+
+  const handleImageError = () => {
+    setImage(defimg);
+  };
+
+  const handleSubmit = () => {
+    profileImg.append("profileImg", image);
+    axios
+      .post("/api/member/profileImage",profileImg,
+        {
+          headers: 
+          { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      .then((response) => {
+        console.log(response.data);
+        alert(response.data.message);
+      })
+      .catch((error) => {
+        // 에러 처리를 합니다.
+        console.error("이미지 전송 에러:", error);
+      });
+  };
+
+
 
 function Header({children}) {
   return (
