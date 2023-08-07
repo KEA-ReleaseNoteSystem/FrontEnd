@@ -125,7 +125,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
   }
 
   useEffect(() => {
-    setImage("http://localhost:8080/" + memberId + ".jpg");
+    setImage("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
     console.log("memberId" , memberId);
   }, [memberId]);
 
