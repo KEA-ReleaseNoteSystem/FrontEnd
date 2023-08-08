@@ -62,11 +62,6 @@ function MDDatePicker({ label, defaultValue, onChange }) {
 function MDIssueType({ label, value, onChange }) {
   const [inputValue, setInputValue] = useState('');
   const [selecteType, setSelecteType] = useState(value);
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    onChange(date);
-  };
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -139,19 +134,19 @@ function MDMemberInCharge({ label, value, onChange }) {
         });
         const fetchedMembersData = membersResponse.data.data;
         setMembersData(fetchedMembersData);
-
+  
         const memberItems = fetchedMembersData.map((member) => (
           <MenuItem key={member.id} onClick={() => handleName(member.name)}>
             {member.name}
           </MenuItem>
         ));
-
+  
         setMemberList(memberItems);
       } catch (error) {
         console.error(error);
       }
     };
-
+  
     fetchData();
   }, [projectId, token]);
 
@@ -189,9 +184,6 @@ function MDMemberInCharge({ label, value, onChange }) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleBug}>Bug</MenuItem>
-            <MenuItem onClick={handleFeat}>Task</MenuItem>
-            <MenuItem onClick={handleImprove}>Story</MenuItem>
             {memberList}
           </Menu>
           </div>
@@ -303,7 +295,11 @@ function Overview() {
               <MDInput type="text" label="이슈 제목" onChange={handleChangeTitle} fullWidth />
             </MDBox>
             <MDBox mb={2}>
-            </MDBox>
+                  <MDMemberInCharge
+                    label="담당자"
+                    value={writerName}
+                    onChange={handleWriterChange} fullWidth />
+                </MDBox>
             <MDBox mb={2}>
               <MDIssueType
                 label="타입"
