@@ -1,9 +1,10 @@
 import SignIn from "layouts/authentication/sign-in";
 import NewProject from "layouts/project/pages/newProject";
 import MyPage from "layouts/project/pages/myPage";
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // @mui icons
 import Icon from "@mui/material/Icon";
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 // name, icon, href, route, collapse
 const routes = [
@@ -12,7 +13,7 @@ const routes = [
     type: "collapse",
     name: "프로젝트 생성",
     key: "memberinfo",
-    icon: <Icon fontSize="small">groups</Icon>,
+    icon: <NoteAddIcon fontSize="small">NoteAdd</NoteAddIcon>,
     route:"/home/project/new",
     component: <NewProject />,
   },
@@ -20,7 +21,7 @@ const routes = [
     type: "collapse",
     name: "마이페이지",
     key: "dashboard",
-    icon: <Icon fontSize="small">dashboard</Icon>,
+    icon: <AccountCircleIcon fontSize="small">dashboard</AccountCircleIcon>,
     route: "/home/mypage",
     component: <MyPage />,
   },

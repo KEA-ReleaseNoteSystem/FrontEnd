@@ -34,7 +34,7 @@ function Overview() {
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear()
-
+  console.log("memberInfo", memberInfo);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -123,10 +123,12 @@ function Overview() {
                   image={homeDecor2}
                   title={project.name}
                   description={project.description}
+                  id = {project.id}
                   action={{
                     type: "internal",
                     color: "info",
                     label: "view project",
+                    route: "/dashboard",
                   }}
                 />
               </Grid>
