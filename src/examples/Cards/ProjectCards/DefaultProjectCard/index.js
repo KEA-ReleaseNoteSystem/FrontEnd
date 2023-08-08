@@ -29,8 +29,19 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDAvatar from "components/MDAvatar";
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../Sidenav/ProjectIdAtom.js';
 
-function DefaultProjectCard({ image, label, title, description, action, authors }) {
+
+function DefaultProjectCard({ image, label, title, description, action, authors, id }) {
+  console.log(id);
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+
+  const handleProjectIdChange = () => {
+    // Change the projectId to a new value
+    setProjectId(id);
+  };
+
   const renderAuthors = authors.map(({ image: media, name }) => (
     <Tooltip key={name} title={name} placement="bottom">
       <MDAvatar
@@ -115,6 +126,7 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
               variant="outlined"
               size="small"
               color={action.color}
+              onClick={handleProjectIdChange}
             >
               {action.label}
             </MDButton>

@@ -22,7 +22,7 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
-import { DropzoneArea } from 'material-ui-dropzone'
+import { DropzoneDialog  } from 'material-ui-dropzone'
 
 
 
@@ -103,19 +103,19 @@ function MDIssueType({ label, value, onChange }) {
         InputProps={{
           startAdornment: (
             <div>
-            <IconButton onClick={handleClick}>
-              <ArrowCircleDownIcon />
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleBug}>Bug</MenuItem>
-            <MenuItem onClick={handleFeat}>Test</MenuItem>
-            <MenuItem onClick={handleImprove}>Story</MenuItem>
-          </Menu>
-          </div>
+              <IconButton onClick={handleClick}>
+                <ArrowCircleDownIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleBug}>Bug</MenuItem>
+                <MenuItem onClick={handleFeat}>Test</MenuItem>
+                <MenuItem onClick={handleImprove}>Story</MenuItem>
+              </Menu>
+            </div>
           ),
         }}
       />
@@ -139,19 +139,19 @@ function MDMemberInCharge({ label, value, onChange }) {
         });
         const fetchedMembersData = membersResponse.data.data;
         setMembersData(fetchedMembersData);
-  
+
         const memberItems = fetchedMembersData.map((member) => (
           <MenuItem key={member.id} onClick={() => handleName(member.name)}>
             {member.name}
           </MenuItem>
         ));
-  
+
         setMemberList(memberItems);
       } catch (error) {
         console.error(error);
       }
     };
-  
+
     fetchData();
   }, [projectId, token]);
 
@@ -208,7 +208,7 @@ function Overview() {
   const [valueFromChild, setValueFromChild] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [open, setOpen] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -319,21 +319,25 @@ function Overview() {
                 onChange={handleDateChange}
               />
             </MDBox>
-            {!showDropzone && ( // DropzoneArea를 표시하지 않을 때
-              <MDBox mb={2}>
-                <MDButton variant="gradient" color="info" onClick={handleOnClickAttachFile}>
-                  파일 첨부
-                </MDButton>
-              </MDBox>
-            )}
-            {showDropzone && ( // DropzoneArea를 표시할 때
-              <MDBox mb={2}>
-                <DropzoneArea
-                  maxFileSize= {maxSizeInBytes}
-                  onChange={(files) => console.log('Files:', files)}
-                />
-                </MDBox>
-            )}
+            <MDBox mb={2}>
+            <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
+              Add Image
+            </MDButton>
+            <DropzoneDialog
+              acceptedFiles={['image/*']}
+              cancelButtonText={"cancel"}
+              submitButtonText={"submit"}
+              maxFileSize={5000000}
+              open={open}
+              onClose={() => setOpen(false)}
+              onSave={(files) => {
+                console.log('Files:', files);
+                setOpen(false);
+              }}
+              showPreviews={true}
+              showFileNamesInPreview={true}
+            />
+            </MDBox>
             <MDBox mb={2}>
               <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
             </MDBox>

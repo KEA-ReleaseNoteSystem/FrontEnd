@@ -72,6 +72,7 @@ const ProjectBoardIssueDetails = ({selectedIssue}) => {
        
       </Content>
     </Fragment>
+  
   );
 };
 

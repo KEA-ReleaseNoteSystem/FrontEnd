@@ -53,8 +53,7 @@ const ProjectBoardIssueDetailsDescription = ( {issue,updateIssue} ) => {
   };
 
   return (
-<Fragment>
-      
+<Fragment> 
       {isEditing ? (
         <Fragment>
           <MDTypography variant="h6">

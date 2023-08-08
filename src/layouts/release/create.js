@@ -325,9 +325,9 @@ function ViewRelease() {
                                     </MDBox>
                                 </Card>
                             </MDBox>
-                            <MDBox pt={2} px={2} mb={4}>
+                            <MDBox pt={2} px={2} mb={4} >
                                 <Card sx={{ backgroundColor: '#e9e9e9' }}>
-                                    <MDBox pt={2} px={2} pb={2}>
+                                    <MDBox pt={2} px={2} pb={2} >
                                         <Grid container spacing={0}>
                                             <Grid item xs={10}>
                                                 <MDTypography variant="body2" fontWeight="medium">
@@ -351,7 +351,7 @@ function ViewRelease() {
                                             </Grid>
                                         </Grid>
                                         <MDBox pt={1} px={2}>
-                                            <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll", maxHeight: "50vh" }}>
+                                            <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll",minHeight: "15vh", maxHeight: "50vh" }}>
                                                 {filteredIssues.map((issue) => (
                                                     <div onClick={() => openIssueInfoModal(issue)}>
                                                         <Issue>
@@ -431,11 +431,17 @@ function ViewRelease() {
                                     <Card>
                                         <Grid container>
                                             <Grid item xs={12}>
-                                                <MDBox pt={2} px={1}>
+                                                <MDBox pt={2} px={1} mb={2}>
                                                     <MDTypography variant="h6">파일 첨부</MDTypography>
                                                     <DropzoneArea
+                                                        showPreviews={true}
+                                                        showPreviewsInDropzone={false}
+                                                        showFileNamesInPreview={true}
+                                                        acceptedFiles={['image/*']}
                                                         onChange={(files) => console.log('Files:', files)}
+                                                        maxFileSize={5000000}
                                                     />
+
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
