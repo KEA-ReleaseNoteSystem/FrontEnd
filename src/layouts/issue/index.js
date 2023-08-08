@@ -165,16 +165,6 @@ function IssueSearch() {
     fetchData();
   }, [projectId, token]);
 
-
-  const handleOnClickSearchIssue = async () => {
-    try {
-      const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setFetchedIssues(issuesResponse.data.data);
-      console.log(issuesResponse.data);
   useEffect(() => {
     const fetchMemo = async () => {
       try {
@@ -190,6 +180,18 @@ function IssueSearch() {
 
 
     fetchMemo();
+
+  }, [!issueDetail ? null : issueDetail.id]);
+
+  const handleOnClickSearchIssue = async () => {
+    try {
+      const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setFetchedIssues(issuesResponse.data.data);
+      console.log(issuesResponse.data);
 
       const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
         headers: { Authorization: `Bearer ${token}` }
