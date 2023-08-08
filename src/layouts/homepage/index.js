@@ -8,26 +8,15 @@ import MKSocialButton from "./components/MKSocialButton";
 
 // Material Kit 2 React examples
 import DefaultNavbar from "./examples/Navbars/DefaultNavbar";
-import DefaultFooter from "./examples/Footers/DefaultFooter";
-import FilledInfoCard from "./examples/Cards/InfoCards/FilledInfoCard";
 import PageLayout from '../../examples/LayoutContainers/PageLayout';
 
 // Presentation page sections
 import Counters from "./pages/Presentation/sections/Counters";
 import Information from "./pages/Presentation/sections/Information";
-import DesignBlocks from "./pages/Presentation/sections/DesignBlocks";
 import Pages from "./pages/Presentation/sections/Pages";
-import Testimonials from "./pages/Presentation/sections/Testimonials";
-import Download from "./pages/Presentation/sections/Download";
-
-// Presentation page components
-import BuiltByDevelopers from "./pages/Presentation/components/BuiltByDevelopers";
-
 // Routes
 import routes from "./home.routes";
-import footerRoutes from "./footer.routes";
-
-import bgImage from "assets/images/home-bg.png";
+import bgImage from "assets/images/home-bg.webp";
 
 
 function Home() {
@@ -117,6 +106,7 @@ function Home() {
                                 mr={{ xs: 0, lg: "auto" }}
                                 sx={{ textAlign: { xs: "center", lg: "right" } }}
                             >
+                                {/*
                                 <MKSocialButton
                                     component="a"
                                     href="https://twitter.com/"
@@ -137,6 +127,7 @@ function Home() {
                                     <i className="fab fa-facebook" />
                                     &nbsp;Facebook
                                 </MKSocialButton>
+                                */}
                                 <MKSocialButton
                                     component="a"
                                     href="https://github.com/KEA-ReleaseNoteSystem"
@@ -151,9 +142,6 @@ function Home() {
                     </Container>
                 </MKBox>
             </Card>
-            {/* <MKBox pt={6} px={1} mt={6}>
-                <DefaultFooter content={footerRoutes} />
-            </MKBox> */}
         </PageLayout>
     );
 }

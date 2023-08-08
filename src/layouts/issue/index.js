@@ -166,7 +166,6 @@ function IssueSearch() {
   }, [projectId, token]);
 
 
-
   const handleOnClickSearchIssue = async () => {
     try {
       const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
@@ -176,6 +175,21 @@ function IssueSearch() {
       });
       setFetchedIssues(issuesResponse.data.data);
       console.log(issuesResponse.data);
+  useEffect(() => {
+    const fetchMemo = async () => {
+      try {
+        console.log(`Fetching memo for projectId=${projectId}, issueId=${issueDetail.id}`);
+        const response = await axios.get(`/api/memo/${projectId}/${issueDetail.id}`);
+        console.log('Response:', response.data.data);
+        setFetchedMemo(response.data.data);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+
+    fetchMemo();
 
       const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
         headers: { Authorization: `Bearer ${token}` }

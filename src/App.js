@@ -54,6 +54,7 @@ import SocialLogin from "layouts/authentication/social-login";
 import ViewRelease from "layouts/release/modify";
 import { RecoilRoot } from "recoil";
 
+import axios from "axios";
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -138,9 +139,8 @@ export default function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
-
+  const token = localStorage.getItem("ACCESS_TOKEN");
   useEffect(() => {
-    const token = localStorage.getItem("ACCESS_TOKEN");
     setIsAuthenticated(!!token);
     setIsAuthChecked(true); // Set to true after checking
   }, []);
@@ -149,6 +149,27 @@ export default function App() {
   if (isAuthenticated === null) {
     return null;
   }
+
+  const keepSessionAlive = async () => {
+    try {
+      await axios.post("/api/keepAlive",{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("로그인 유지 요청 성공.");
+    } catch (error) {
+      console.error("로그인 유지 요청 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      // 로그인 상태일 때만 setInterval로 주기적으로 keepSessionAlive 함수 호출
+      const intervalId = setInterval(keepSessionAlive, 3 * 60 * 1000); // 3분마다 호출
+      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+    }
+  }, [isAuthenticated, token]);
 
   return (
     <RecoilRoot>
@@ -174,7 +195,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/social-login" element={<SocialLogin />} />
         <Route path="/release/:releaseId" element={ isAuthenticated ? <ViewRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
-
       </Routes>
     </ThemeProvider>
     </RecoilRoot>

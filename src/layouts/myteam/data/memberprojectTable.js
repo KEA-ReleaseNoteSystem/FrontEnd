@@ -11,9 +11,9 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-
-const projectId = 1;
+import defimg from "assets/images/default_avatar.jpg";
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
 const getProjectMemberData = async (projectId, token) => {
   try {
@@ -23,6 +23,7 @@ const getProjectMemberData = async (projectId, token) => {
       }
     });
    
+    console.log(response.data.data);
     if (response.data.length === 0) {
       return [];
     } else {
@@ -36,7 +37,9 @@ const getProjectMemberData = async (projectId, token) => {
 
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
-
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  
+  console.log(memberList);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
@@ -47,17 +50,23 @@ export default function data(setSelectedMemberId) {
     fetchData();
   }, []);
 
-  const Author = ({ image, name, email }) => (
+  const Author = ({ image, name, nickname }) => {
+    const [avimage, setImage] = useState(image);
+    const handleImageError = () => {
+      setImage(defimg);
+    };
+    return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
         </MDTypography>
-        <MDTypography variant="caption">{email}</MDTypography>
+        <MDTypography variant="caption">{nickname}</MDTypography>
       </MDBox>
     </MDBox>
-  );
+  )};
+
 
   const Job = ({ title, description }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -67,18 +76,18 @@ export default function data(setSelectedMemberId) {
       <MDTypography variant="caption">{description}</MDTypography>
     </MDBox>
   );
+
   const columns = [
-    { Header: "팀원", accessor: "author", width: "45%", align: "left" },
+    { Header: "팀원", accessor: "author", align: "left" },
     { Header: "직책/역할", accessor: "function", align: "left" },
     { Header: "접속", accessor: "status", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
     { Header: "", accessor: "button", align: "center" }
-
   ];
 
   const rows = memberList.map((member) => ({
     author: (
-      <Author image={team2} name={member.name} email={member.email} />
+      <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} email={member.email} />
     ),
     function: <Job title={member.role} description={member.position} />,
     status: (
@@ -96,7 +105,7 @@ export default function data(setSelectedMemberId) {
         {member && member.createdAt.slice(0, 10)}
       </MDTypography>),
     button: (
-        <Button variant="contained" color="inherit" onClick={() => setSelectedMemberId(member.id)}>
+        <Button variant="contained" color="inherit" onClick={() => setSelectedMemberId(member.memberId)}>
          조회
       </Button>
     ),

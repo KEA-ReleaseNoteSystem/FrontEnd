@@ -53,6 +53,18 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
 
+  const handleSidenavClick = () => {
+    if (typeof onClick === 'function') {
+      onClick();
+    }
+  };
+
+  const handleLogout = () => {
+    // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
+    console.log('로그아웃 버튼이 클릭되었습니다!');
+    // 여기서 로그아웃 처리를 할 수 있습니다. 예를 들어, API 호출이나 로컬 상태 변경 등을 수행할 수 있습니다.
+  };
+
   let textColor = "white";
 
 
@@ -146,6 +158,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       {...rest}
       variant="permanent"
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}
+      onClick={handleSidenavClick}
     >
       <MDBox pt={3} pb={1} px={4} textAlign="center">
         <MDBox
@@ -161,7 +174,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <Icon sx={{ fontWeight: "bold" }}>close</Icon>
           </MDTypography>
         </MDBox>
-        <MDBox component={NavLink} to="/" display="flex" alignItems="center">
+        <MDBox component={NavLink} to="/home/manage-project" display="flex" alignItems="center">
           {brand && <MDBox component="img" src={brand} alt="Brand" width="2rem" />}
           <MDBox
             width={!brandName && "100%"}

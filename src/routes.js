@@ -1,27 +1,19 @@
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
 import OtherTeams from "layouts/otherTeams";
 
 import IssueSearch from "layouts/issue";
-import Myteam from "layouts/myteam";
 
 import IssueSearchid from "layouts/issue/index";
 
 import Members from "layouts/myteam";
 
-import Billing from "layouts/billing";
-import notifications from "layouts/notifications";
-import RTL from "layouts/rtl";
-import Issue from "layouts/Board";
 import IssueManage from "layouts/issue-manage";
-import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Rejoin from "layouts/authentication/rejoin";
-import Home from "layouts/home";
 import Pm from "layouts/pm";
 
 import Projects from "layouts/project"
@@ -40,8 +32,14 @@ import HomeCustom from "./layouts/homepage/index";
 import Icon from "@mui/material/Icon";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Release from "layouts/release";
-import ViewRelease from "layouts/release/create";
 
+
+
+const handleLogout = () => {
+  // 로그아웃 버튼 클릭 시 실행되어야 할 작업을 여기에 정의합니다.
+  console.log('로그아웃 버튼이 클릭되었습니다!');
+  // 여기서 로그아웃 처리를 할 수 있습니다. 예를 들어, API 호출이나 로컬 상태 변경 등을 수행할 수 있습니다.
+};
 const routes = [
   {
     type: "collapse",
@@ -70,27 +68,19 @@ const routes = [
 
   {
     type: "collapse",
-    name: "Search Issues",
-    key: "issueSearch",
-    icon: <Icon fontSize="small">search</Icon>,
+    name: "Issue Management",
+    key: "Issue Management",
+    icon: <Icon fontSize="small">manage_search</Icon>,
     route: "/issuesearch",
     component: <IssueSearch />,
   },
   {
     type: "collapse",
-    name: "Manage Issues",
-    key: "issuemenage",
-    icon: <Icon fontSize="small">notifications</Icon>,
+    name: "Kanban Board",
+    key: "Kanban Board",
+    icon: <Icon fontSize="small">developer_board</Icon>,
     route: "/issuemanagement",
     component: <IssueManage />,
-  },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
   },
   {
     type: "collapse",
@@ -99,6 +89,15 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/release",
     component: <Release />,
+  },
+  {
+    type: "collapse",
+
+    name: "Profile",
+    key: "profile",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/profile",
+    component: <Profile />,
   },
   {
     type: "collapse",

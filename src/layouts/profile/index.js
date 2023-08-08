@@ -1,15 +1,10 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef} from "react";
 import axios from "axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-
+import Card from "@mui/material/Card";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -24,23 +19,21 @@ import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
 
 // Overview page components
 import Header from "layouts/profile/components/Header";
-import PlatformSettings from "layouts/profile/components/PlatformSettings";
-
 // Data
-import profilesListData from "layouts/profile/data/profilesListData";
-
 // Images
-import homeDecor1 from "assets/images/home-decor-1.jpg";
 import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
-import homeDecor4 from "assets/images/home-decor-4.jpeg";
-import team1 from "assets/images/team-1.jpg";
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+
+
+import CalendarHeatmap from "layouts/profile/components/heatmap.js"
 
 function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
+
+
+  
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,12 +59,12 @@ function Overview() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox mb={2} />
-      <Header info={{ nickname: memberInfo.nickname }}>
-        <MDBox mt={5} mb={3}>
+      <Header>
+      
+
+        <MDBox mt={5}  >
           <Grid container spacing={1} justifyContent="center">
-            <Grid item xs={12} md={6} xl={12} sx={{ display: "flex" }}>
-              <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
+            <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
               <ProfileInfoCard
                 title="profile information"
                 description={memberInfo.introduce}
@@ -83,13 +76,38 @@ function Overview() {
                   email: memberInfo.email,
                   issueScore: memberInfo.exp,
                 }}
+                memberId = {memberInfo.id}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
               />
-              <Divider orientation="vertical" sx={{ mx: 0 }} />
+              
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+         <Card sx={{ height: "80%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "100%", backgroundColor :"#f9fbfb" , top : "100px"
+         }}>
+          
+          <Grid mt={2.2} ml={2}  container justifyContent="center">
+          <Grid item xs={12} sx={{display: "flex"}}>
+          
+            <MDTypography  variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
+          </Grid>
+
+          <MDBox>
+            <CalendarHeatmap issueScore={memberInfo.exp} />
+          </MDBox>
+
+        </Grid>
+        </Card>
+            
             </Grid>
           </Grid>
         </MDBox>
+
+
+     
+
+      <br/>
+      <Card>
         <MDBox pt={2} px={2} lineHeight={1.25}>
           <MDTypography variant="h6" fontWeight="medium">
             Projects
@@ -115,8 +133,8 @@ function Overview() {
             ))}
           </Grid>
         </MDBox>
-
-      </Header>
+        </Card>
+    </Header>
     </DashboardLayout>
   );
 }

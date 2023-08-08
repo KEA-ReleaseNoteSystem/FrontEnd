@@ -30,6 +30,7 @@ MDInput.defaultProps = {
   error: false,
   success: false,
   disabled: false,
+  size : "small"
 };
 
 // Typechecking props for the MDInput

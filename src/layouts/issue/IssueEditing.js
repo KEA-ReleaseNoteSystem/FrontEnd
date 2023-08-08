@@ -259,7 +259,6 @@ function IssueEditing({ issue,updatedchildIssues ,updateIssue, deleteChild,fetch
           </MDBox>
         </Grid>
       </Card>
-   
     </Grid>
   );
 }

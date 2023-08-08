@@ -1,33 +1,11 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 // react-router-dom components
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -51,7 +29,9 @@ function Basic() {
   const navigate = useNavigate(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -59,7 +39,34 @@ function Basic() {
     setPassword(event.target.value);
   }
 
+  const logout = async () => {
+    axios.post(`/api/member/logout`, { //   생성한 설문 가져오는 요청
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // JWT 토큰을 헤더에 추가합니다.
+      }
+    })
+      .then(response => {
+        console.log('로그아웃');
+        localStorage.removeItem("ACCESS_TOKEN");
+      })
+      .catch(error => {
+        // 삭제 실패 후 실행할 코드를 작성합니다.
+        console.error('로그아웃 실패', error);
+      });
+  };
+
+  useEffect(() => {
+    if (token) {
+    async function fetchData() {
+      logout();
+    }
+    fetchData();
+    }
+  }, []);
+  
   const handleSubmit = () => {
+    setIsSubmitting(true);
     // POST 요청을 보내는 부분
     axios.post("/api/member/login", {
       email: email,
@@ -115,7 +122,7 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange} />
+              <MDInput type="email" label="이메일" fullWidth required value={email} onChange={handleEmailChange}  size="small"/>
               {(!isEmailEmpty && isEmailWrong) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;이메일 형식이 틀립니다.</MDTypography>) : <MDTypography> </MDTypography>}
             </MDBox>
             <MDBox mb={2}>
@@ -135,7 +142,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty || isSubmitting} onClick={handleSubmit}>
                 로그인
               </MDButton>
             </MDBox>

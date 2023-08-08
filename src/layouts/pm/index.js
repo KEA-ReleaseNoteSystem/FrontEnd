@@ -94,11 +94,11 @@ function MDDatePicker({ label, defaultValue, onChange }) {
   );
 }
 
-const PM = ({ projectInfo }, { project }) => {
+const PM = ({ projectInfo }) => {
   const [isLoading, setIsLoading] = useState(false); // Added loading state
   const [groupMessage, setGroupMessage] = useState("");
   const [groupCodeMessage, setGroupCodeMessage] = useState("");
-  const { columns, rows } = teamTable();
+  const { columns, rows } = teamTable({projectInfo});
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -165,8 +165,7 @@ const PM = ({ projectInfo }, { project }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   console.log(projectInfo.id);
   console.log(projectInfo.name);
-  const defaultValue = '뇌파를 이용한 설문조사 서비스';
-
+  
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -310,7 +309,7 @@ const PM = ({ projectInfo }, { project }) => {
           {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
             <Grid item xs={12} md={6} xl={3} key={member.id}>
               <DefaultProjectCard
-                image={homeDecor2}
+                image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id}
                 id={member.id}
                 projectId={projectInfo.id}
                 name={member.name}
