@@ -74,17 +74,17 @@ function MDIssueType({ label, value, onChange }) {
   };
 
   const handleBug = () => {
-    setSelecteType("버그");
+    setSelecteType("Bug");
     handleClose();
   };
 
   const handleFeat = () => {
-    setSelecteType("기능");
+    setSelecteType("Task");
     handleClose();
   };
 
   const handleImprove = () => {
-    setSelecteType("개선");
+    setSelecteType("Story");
     handleClose();
   };
 
@@ -107,9 +107,9 @@ function MDIssueType({ label, value, onChange }) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleBug}>버그</MenuItem>
-            <MenuItem onClick={handleFeat}>기능</MenuItem>
-            <MenuItem onClick={handleImprove}>개선</MenuItem>
+            <MenuItem onClick={handleBug}>Bug</MenuItem>
+            <MenuItem onClick={handleFeat}>Task</MenuItem>
+            <MenuItem onClick={handleImprove}>Story</MenuItem>
           </Menu>
           </div>
           ),
