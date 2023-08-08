@@ -189,6 +189,9 @@ function MDMemberInCharge({ label, value, onChange }) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
+            <MenuItem onClick={handleBug}>Bug</MenuItem>
+            <MenuItem onClick={handleFeat}>Task</MenuItem>
+            <MenuItem onClick={handleImprove}>Story</MenuItem>
             {memberList}
           </Menu>
           </div>

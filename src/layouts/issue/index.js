@@ -22,6 +22,7 @@ import IssueEditing from './IssueEditing';
 import MyTree from './MyTree';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+import SearchIcon from '@mui/icons-material/Search';
 
 function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
@@ -40,6 +41,7 @@ function IssueSearch() {
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
   const [childIssues,setChildIssues] = useState();
+  
 
   const updateChildIssues = (updatedChildIssues) => {
     setIssueDetail((prevIssue) => ({
@@ -164,6 +166,15 @@ function IssueSearch() {
   }, [projectId, token]);
 
 
+  const handleOnClickSearchIssue = async () => {
+    try {
+      const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setFetchedIssues(issuesResponse.data.data);
+      console.log(issuesResponse.data);
   useEffect(() => {
     const fetchMemo = async () => {
       try {
@@ -180,10 +191,21 @@ function IssueSearch() {
 
     fetchMemo();
 
-  }, [!issueDetail ? null : issueDetail.id]);
+      const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMembersData(membersResponse.data.data);
+      setIssueDetail(issuesResponse.data.data[0]);
+      setChildIssues(issuesResponse.data.data[0].childIssue);
 
+      console.log("issuesResponse.data.data[0]", issuesResponse.data.data[0]);
 
+      setIsLoading(!issuesResponse.data.data[0]);
 
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   const updateIssue = async (updatedFields) => {
@@ -356,7 +378,9 @@ function IssueSearch() {
 
           <MDInput variant="standard" defaultValue={searchBar} onChange={handleSearchBarChange} style={{ paddingTop: '12px' }} />
 
-          &nbsp; &nbsp; &nbsp;
+          <IconButton onClick={handleOnClickSearchIssue}>
+              <SearchIcon color="info" />
+            </IconButton>
 
           <Select
             labelId="filter-select-label"
