@@ -1,3 +1,5 @@
+
+
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -14,7 +16,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect, useMemo } from "react";
-
+import 'eventsource-polyfill'; 
 // react-router components
 import { Routes, Route, Navigate, useLocation, Router } from "react-router-dom";
 
@@ -52,9 +54,15 @@ import CreateRelease from "layouts/release/create";
 import SocialLogin from "layouts/authentication/social-login";
 
 import ViewRelease from "layouts/release/modify";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot ,useRecoilState} from "recoil";
+import { projectIdState } from 'examples/Sidenav/ProjectIdAtom';
+import Notification from "layouts/notifications/noticicateAlert"
+
+
 
 import axios from "axios";
+
+
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -69,6 +77,60 @@ export default function App() {
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  
+  const [message, setMessage] = useState();
+ 
+  
+  useEffect(() => {
+    let retryCount = 0;
+
+    let sse;
+
+    const maxRetries = 10;
+    const retryInterval = 5000; // 5 seconds
+
+  
+
+    const initializeSSE = () => {
+        const sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+
+        console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+
+        sse.onmessage = (event) => {
+            // Handle the message event
+            console.log("onmessage", event.data);
+            console.log(event.data.includes("message"));
+            setMessage(event.data.includes("message") ? JSON.parse(event.data) : null );
+        };
+
+        sse.onerror = (error) => {
+            // Handle any errors here
+            console.error("SSE failed:", error);
+
+            if (retryCount < maxRetries) {
+                console.log(`Retrying in ${retryInterval / 1000} seconds...`);
+                setTimeout(() => {
+                    initializeSSE();
+                    retryCount++;
+                }, retryInterval);
+            } else {
+                console.error("Max retries reached. Not reconnecting.");
+            }
+
+            sse.close();
+        };
+    };
+
+    initializeSSE();
+
+    // Clean-up function
+    return () => {
+      if (sse) {
+        sse.close();
+      }
+    };
+}, [projectId]);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -171,9 +233,11 @@ export default function App() {
     }
   }, [isAuthenticated, token]);
 
+  console.log("q@q",message);
   return (
-    <RecoilRoot>
+    
     <ThemeProvider theme={darkMode ? themeDark : theme}>
+      <Notification message = {message} projectId = {projectId}/>
       <CssBaseline />
       {layout === "dashboard" && (
         <>
@@ -197,6 +261,6 @@ export default function App() {
         <Route path="/release/:releaseId" element={ isAuthenticated ? <ViewRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
       </Routes>
     </ThemeProvider>
-    </RecoilRoot>
+   
   );
 }
