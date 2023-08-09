@@ -164,6 +164,7 @@ function Tables() {
 
   const handleSaveClick = async () => {
     await saveGPTRecommend(projectId, token);
+    window.location.reload()
     alert("GPT가 추천한 이슈 별 중요도가 저장되었습니다!");
   }
 

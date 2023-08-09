@@ -93,7 +93,7 @@ function JoinGroup() {
             </MDBox>
             { isGroupCodeEmpty ? ( <MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;그룹 코드를 입력해주세요.</MDTypography> ) : <MDTypography> </MDTypography>}
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" disabled={isGroupCodeEmpty || isSubmitting} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" disabled={isGroupCodeEmpty || isSubmitting} onClick={handleSubmit} fullWidth>
                 회원가입
               </MDButton>
             </MDBox>
