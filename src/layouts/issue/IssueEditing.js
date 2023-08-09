@@ -81,6 +81,26 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   };
 
 
+  const onClickSubmitButton = (files) =>{
+
+    console.log("** Issue Id: ", issue);
+    const formData = new FormData();
+    files.map(file => formData.append('image', file));
+
+    axios.post(`api/issue/${issue.id}/images`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Important for file upload
+      },
+    })
+    .then(response => {
+      console.log('Upload successful!', response.data);
+    })
+    .catch(error => {
+      console.error('Error uploading the image:', error);
+    });
+
+    setOpen(false);
+  }
 
 
   const getOtherIssue = async (excludeissues) => {
@@ -163,10 +183,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                   maxFileSize={5000000}
                   open={open}
                   onClose={() => setOpen(false)}
-                  onSave={(files) => {
-                    console.log('Files:', files);
-                    setOpen(false);
-                  }}
+                  onSave={onClickSubmitButton}
                   showPreviews={true}
                   showFileNamesInPreview={true}
                 />
