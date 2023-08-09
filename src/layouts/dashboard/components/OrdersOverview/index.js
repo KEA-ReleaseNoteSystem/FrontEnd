@@ -74,7 +74,7 @@ useEffect(() => {
           <TimelineItem
             key={index}
             color={order.type == "issue" ? "info" : order.type == "releaseNote" ? "primary" : "warning"}
-            icon={order.type == "issue" ? "notifications" : order.type == "releaseNote" ? "inventory" : "vpn_ley"}
+            icon={order.type == "issue" ? "notifications" : order.type == "releaseNote" ? "inventory" : "vpn_key"}
             title={order.message}
             dateTime={order.createdAt && order.createdAt.slice(0,10)}
             type={order.type}
