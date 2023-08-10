@@ -78,7 +78,6 @@ function MyPage() {
 
   const rows = groupMember.map((member, index) => {
     const showButton = member.authority !== "GM"; 
-
     return {
       author: (
         <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} nickname={member.nickname} />
@@ -86,11 +85,11 @@ function MyPage() {
       job: <Job title={member.position} />,
       authority: <MDBox>{member.authority}</MDBox>,
       email: <MDBox>{member.email}</MDBox>,
-      button: showButton ? (
+      button: memberInfo.authority === "GM" && showButton ? (
         <button className="styled-button" onClick={() => { setSelectedMemberName(member.name); setSelectedMemberId(member.id); setShowConfirmation(true); }}>
           {'삭제'}
         </button>
-      ) :  null
+      ) : <>권한 불가</>
     };
   });
   let showDeleteButton = true;
@@ -153,7 +152,6 @@ function MyPage() {
         routes={routes}
         sticky
       />
-      {/* <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s"> */}
       <MDBox sx={{ mb: 2, mt: 11 }} />
       <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
         <MDBox mt={5} mb={3}>
