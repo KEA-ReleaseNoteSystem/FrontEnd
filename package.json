@@ -28,6 +28,7 @@
     "chroma-js": "2.4.2",
     "color": "^4.2.3",
     "dotenv": "^16.3.1",
+    "event-source-polyfill": "^1.0.31",
     "eventsource-polyfill": "^0.9.6",
     "formik": "^2.4.2",
     "material-ui-dropzone": "^3.5.0",
