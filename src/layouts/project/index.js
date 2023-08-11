@@ -77,7 +77,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
     const [selectedProject, setSelectedProject] = useState('');
 
     const currentdate = new Date();
-    console.log("현재시간", currentdate);
+    
     if (!projectData) {
         return <div>Loading...</div>;
     }

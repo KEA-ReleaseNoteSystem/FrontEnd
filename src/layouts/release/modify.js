@@ -529,14 +529,14 @@ function ViewRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     {firstImgUrl && <MDTypography variant="h6">첨부 파일 1</MDTypography>}
-                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{width: '100%'}}/>}
-                                                    
-                                                    {secondImgUrl &&  <MDTypography variant="h6">첨부 파일 2</MDTypography>}
-                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{width: '100%'}}/>}
-                                                    
+                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{ width: '100%' }} />}
+
+                                                    {secondImgUrl && <MDTypography variant="h6">첨부 파일 2</MDTypography>}
+                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{ width: '100%' }} />}
+
                                                     {thirdImgUrl && <MDTypography variant="h6">첨부 파일 3</MDTypography>}
-                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{width: '100%'}}/>}
-                                                    
+                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{ width: '100%' }} />}
+
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
