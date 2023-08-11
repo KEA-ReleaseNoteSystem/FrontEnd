@@ -46,14 +46,14 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIssues, setSelectedIssues] = useState([]);
   const [initialImageBlob, setInitialImageBlob] = useState(null);
-  const [image, setImage] =useState("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbo4mmL%2FbtrxiX5hROV%2FZUuHpkuYysruWva1JBWqj0%2Fimg.png");
+  const [image, setImage] = useState("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbo4mmL%2FbtrxiX5hROV%2FZUuHpkuYysruWva1JBWqj0%2Fimg.png");
   const [dialogOpen, setDialogOpen] = useState(false);
-  
+
   const [dialogInitialFiles, setDialogInitialFiles] = useState([
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
 
   useEffect(() => {
     console.log("issue.imgUrl_1asdddddddddddddd", issue.imgUrl_1);
@@ -61,9 +61,9 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
   }, [issue]);
-  
+
   console.log("DIG", dialogInitialFiles);
   console.log("ISSUE*", issue);
   const openIssueAddModal = () => {
@@ -95,7 +95,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   };
 
 
-  const onClickSubmitButton = (files) =>{
+  const onClickSubmitButton = (files) => {
     const formData = new FormData();
     files.map(file => formData.append('image', file));
 
@@ -104,12 +104,12 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
         'Content-Type': 'multipart/form-data', // Important for file upload
       },
     })
-    .then(response => {
-      console.log('Upload successful!', response.data);
-    })
-    .catch(error => {
-      console.error('Error uploading the image:', error);
-    });
+      .then(response => {
+        console.log('Upload successful!', response.data);
+      })
+      .catch(error => {
+        console.error('Error uploading the image:', error);
+      });
   }
 
 
@@ -181,17 +181,18 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{margin: '0 auto'}}>
-     
-                <DropzoneArea
-                  acceptedFiles={['image/*']}
-                  submitButtonText={"submit"}
-                  maxFileSize={5000000}
-                  onChange={onClickSubmitButton}
-                  showPreviews={true}
-                  showPreviewsInDropzone={false}
-                  initialFiles={dialogInitialFiles}
-                />
+            <Card sx={{ margin: '0 auto' }}>
+
+              <DropzoneArea
+                key={dialogInitialFiles.join('')} // key 값 설정
+                acceptedFiles={['image/*']}
+                submitButtonText={"submit"}
+                maxFileSize={5000000}
+                onChange={onClickSubmitButton}
+                showPreviews={true}
+                showPreviewsInDropzone={false}
+                initialFiles={dialogInitialFiles}
+              />
 
             </Card>
           </MDBox>
