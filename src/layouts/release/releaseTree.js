@@ -8,12 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import MDBox from 'components/MDBox';
 import Card from '@mui/material/Card';
 import MDTypography from "components/MDTypography";
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 
 function releaseTree() {
   
   const navigate = useNavigate();
   const [isLoading,setIsLoading] = useState(true);
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
+
 const handleNodeTextClick = (event, id,active) => {
   // Prevent the toggleNode event from firing
   event.stopPropagation();
@@ -25,14 +29,13 @@ const handleNodeTextClick = (event, id,active) => {
 
   const [data, setData] = useState();
 
-;
 
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const getTree = async () => {
       try {
-        const response = await axios.get(`/api/1/releases/tree`);
+        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/releases/tree`);
         {response.data.data == null ? setIsLoading(true): setIsLoading(false)};
         const id = null ;
         // 빈 루트 노드를 만듭니다
