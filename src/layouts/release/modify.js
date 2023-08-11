@@ -29,6 +29,7 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+import { Maximize } from '@mui/icons-material';
 
 
 const customModalStyles = {
@@ -60,9 +61,9 @@ function ViewRelease() {
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
     const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
     const [memberInCharge, setmemberInCharge] = useState('');
-    const [imgUrl_1, setImgUrl_1] = useState();
-    const [imgUrl_2, setImgUrl_2] = useState();
-    const [imgUrl_3, setImgUrl_3] = useState();
+    const [firstImgUrl, setFirstImgUrl] = useState();
+    const [secondImgUrl, setSecondImgUrl] = useState();
+    const [thirdImgUrl, setThirdImgUrl] = useState();
 
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
@@ -118,9 +119,9 @@ function ViewRelease() {
             setProgress(response.data.data.percent);
             setReleaseDate(response.data.data.releaseDate);
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
-            setImgUrl_1(response.data.data.imgUrl_1);
-            setImgUrl_2(response.data.data.imgUrl_2);
-            setImgUrl_3(response.data.data.imgUrl_3);
+            setFirstImgUrl(response.data.data.imgUrl_1);
+            setSecondImgUrl(response.data.data.imgUrl_2);
+            setThirdImgUrl(response.data.data.imgUrl_3);
             console.log("** response: ", response.data);
         } catch (error) {
             console.error(error);
@@ -522,14 +523,20 @@ function ViewRelease() {
                                             </Grid> */}
                                         </Grid>
                                     </Card>
-                                            <br></br>
+                                    <br></br>
                                     <Card >
                                         <Grid container>
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
-                                                    <MDTypography variant="h6">첨부 파일</MDTypography>
-                                                    {imgUrl_1 && <img src={'https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1'+imgUrl_1} alt="이미지" />}
-                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.createdAt && releaseNoteData.createdAt.slice(0, 10)}</MDTypography>
+                                                    {firstImgUrl && <MDTypography variant="h6">첨부 파일 1</MDTypography>}
+                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{width: '100%'}}/>}
+                                                    
+                                                    {secondImgUrl &&  <MDTypography variant="h6">첨부 파일 2</MDTypography>}
+                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{width: '100%'}}/>}
+                                                    
+                                                    {thirdImgUrl && <MDTypography variant="h6">첨부 파일 3</MDTypography>}
+                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{width: '100%'}}/>}
+                                                    
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
