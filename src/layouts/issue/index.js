@@ -186,7 +186,7 @@ function IssueSearch() {
 
   const handleOnClickSearchIssue = async () => {
     try {
-      const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
+      const issuesResponse = await axios.get(`/api/project/${projectId}/issue?title=${searchBar}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
