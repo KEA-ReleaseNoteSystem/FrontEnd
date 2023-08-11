@@ -144,6 +144,7 @@ function IssueSearch() {
             Authorization: `Bearer ${token}`
           }
         });
+        
         setFetchedIssues(issuesResponse.data.data);
 
         const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
@@ -152,7 +153,7 @@ function IssueSearch() {
         setMembersData(membersResponse.data.data);
         setIssueDetail(issuesResponse.data.data[0]);
         setChildIssues(issuesResponse.data.data[0].childIssue);
-
+        console.log("!! ***response: " , issuesResponse.data);
         console.log("issuesResponse.data.data[0]",issuesResponse.data.data[0])
 
         { !issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false) }

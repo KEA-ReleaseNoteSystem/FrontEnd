@@ -60,6 +60,9 @@ function ViewRelease() {
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
     const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
     const [memberInCharge, setmemberInCharge] = useState('');
+    const [imgUrl_1, setImgUrl_1] = useState();
+    const [imgUrl_2, setImgUrl_2] = useState();
+    const [imgUrl_3, setImgUrl_3] = useState();
 
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
@@ -71,7 +74,7 @@ function ViewRelease() {
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
-    
+
     const navigate = useNavigate();
 
     const getStatusColor = (status) => {
@@ -115,6 +118,10 @@ function ViewRelease() {
             setProgress(response.data.data.percent);
             setReleaseDate(response.data.data.releaseDate);
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
+            setImgUrl_1(response.data.data.imgUrl_1);
+            setImgUrl_2(response.data.data.imgUrl_2);
+            setImgUrl_3(response.data.data.imgUrl_3);
+            console.log("** response: ", response.data);
         } catch (error) {
             console.error(error);
         }
@@ -171,8 +178,8 @@ function ViewRelease() {
 
     async function putReleaseNoteData(token) {
         try {
-          const response = await axios.put(
-            `/api/release/update`, {
+            const response = await axios.put(
+                `/api/release/update`, {
                 projectId: projectId,
                 releaseId: releaseId,
                 status: state,
@@ -183,15 +190,15 @@ function ViewRelease() {
                 description: description,
                 issueList: issueData
             },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          console.log("전송 완료");
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            console.log("전송 완료");
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
+    }
 
     useEffect(() => {
         console.log("정보를 받아와보자.")
@@ -222,7 +229,7 @@ function ViewRelease() {
         setFilteredIssues(filtered);
         setMenu2(null);
     };
-    
+
     const handleShowBacklog = () => {
         const filteredIssues = issueData.filter((issue) => issue.status === 'backlog');
         setFilteredIssues(filteredIssues);
@@ -455,7 +462,7 @@ function ViewRelease() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
@@ -471,8 +478,8 @@ function ViewRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                                                    <MDInput variant="standard" defaultValue={releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)} 
-                                                    onChange={(e) => setReleaseDate(e.target.value)} multiline />
+                                                    <MDInput variant="standard" defaultValue={releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)}
+                                                        onChange={(e) => setReleaseDate(e.target.value)} multiline />
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -515,7 +522,20 @@ function ViewRelease() {
                                             </Grid> */}
                                         </Grid>
                                     </Card>
+                                            <br></br>
+                                    <Card >
+                                        <Grid container>
+                                            <Grid item xs={6}>
+                                                <MDBox pt={2} px={2}>
+                                                    <MDTypography variant="h6">첨부 파일</MDTypography>
+                                                    {imgUrl_1 && <img src={'https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1'+imgUrl_1} alt="이미지" />}
+                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.createdAt && releaseNoteData.createdAt.slice(0, 10)}</MDTypography>
+                                                </MDBox>
+                                            </Grid>
+                                        </Grid>
+                                    </Card>
                                 </Grid>
+
                             </Grid>
                         </MDBox>
                     </Grid>
@@ -542,7 +562,7 @@ function ViewRelease() {
                         </MDTypography>
                     </MDBox>
                     <MDBox pt={1} pl={1} pr={1}>
-                        <MDTypography variant="caption" color="info" sx={{ml:1}}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
+                        <MDTypography variant="caption" color="info" sx={{ ml: 1 }}>이슈를 추가하면 필터가 초기화 됩니다.</MDTypography>
                         {otherIssueData && otherIssueData.map((issue) => (
                             <Issue>
                                 <Title>#{issue.issueNum} {issue.title}
@@ -564,7 +584,7 @@ function ViewRelease() {
                                     <MDTypography variant="caption" fontWeight="light">보고자: {issue.memberReport.name} / 담당자: {issue.memberIdInCharge.name} / 생성일: {issue.createdAt.slice(0, 10)}</MDTypography>
                                     <MDButton size="small" color="dark" onClick={() => addIssue(issue.id)}>릴리즈 노트에 추가하기</MDButton>
                                 </Bottom>
-                                
+
                             </Issue>
                         ))}
                     </MDBox>

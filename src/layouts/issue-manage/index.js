@@ -125,7 +125,7 @@ const ProjectBoard = () => {
 
   const getAPI = async () => {
     const response = await axios.get(`/api/project/${projectId}/issues/management`);
-    console.log('== response == : ', response.data.data);
+    console.log('== response == : ', response.data);
     setProjectMock(response.data.data);
   }
 
