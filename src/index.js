@@ -16,6 +16,9 @@ Coded by www.creative-tim.com
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+// require('dotenv').config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 import App from "App";
 
 // Material Dashboard 2 React Context Provider
