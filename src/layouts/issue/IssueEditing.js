@@ -11,7 +11,7 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 import axios from "axios";
-import { DropzoneDialog } from 'material-ui-dropzone';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 const customModalStyles = {
   overlay: {
@@ -36,7 +36,6 @@ const customModalStyles = {
 
 function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fetchedMemo, projectId, createChildIssue }) {
   console.log("childIssues1", updatedchildIssues);
-  const [open, setOpen] = useState(false);
   const [Memo, setMemo] = useState(fetchedMemo);
   const [childIssues, setChildIssues] = useState(updatedchildIssues);
   const [activeModal, setActiveModal] = useState("");
@@ -46,11 +45,27 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const [otherIssue, setOtherIssue] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIssues, setSelectedIssues] = useState([]);
+  const [initialImageBlob, setInitialImageBlob] = useState(null);
+  const [image, setImage] =useState("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbo4mmL%2FbtrxiX5hROV%2FZUuHpkuYysruWva1JBWqj0%2Fimg.png");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
+  const [dialogInitialFiles, setDialogInitialFiles] = useState([
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
 
-
-  console.log("issue123", issue.childIssue);
-  console.log("issue12", childIssues);
-
+  useEffect(() => {
+    console.log("issue.imgUrl_1asdddddddddddddd", issue.imgUrl_1);
+    setDialogInitialFiles([
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+  }, [issue]);
+  
+  console.log("DIG", dialogInitialFiles);
+  console.log("ISSUE*", issue);
   const openIssueAddModal = () => {
     setActiveModal("addChildIssue");
   };
@@ -58,7 +73,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const closeModal = () => {
     setCurrentIds([issue.id]);
     setActiveModal(null);
-    console.log("이슈id", issue.id);
   };
 
 
@@ -82,8 +96,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
 
   const onClickSubmitButton = (files) =>{
-
-    console.log("** Issue Id: ", issue);
     const formData = new FormData();
     files.map(file => formData.append('image', file));
 
@@ -98,8 +110,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     .catch(error => {
       console.error('Error uploading the image:', error);
     });
-
-    setOpen(false);
   }
 
 
@@ -131,7 +141,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   useEffect(() => {
     setCurrentIds([issue.id]);
     setChildIssues(updatedchildIssues);
-
   }, [issue.id, issue.childIssue, createChildIssue]);
 
   console.log("childIssues", childIssues);
@@ -172,21 +181,18 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{width:'40%', margin: '0 auto'}}>
-                <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
-                  ADD Image
-                </MDButton>
-                <DropzoneDialog
+            <Card sx={{margin: '0 auto'}}>
+     
+                <DropzoneArea
                   acceptedFiles={['image/*']}
-                  cancelButtonText={"cancel"}
                   submitButtonText={"submit"}
                   maxFileSize={5000000}
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  onSave={onClickSubmitButton}
+                  onChange={onClickSubmitButton}
                   showPreviews={true}
-                  showFileNamesInPreview={true}
+                  showPreviewsInDropzone={false}
+                  initialFiles={dialogInitialFiles}
                 />
+
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
