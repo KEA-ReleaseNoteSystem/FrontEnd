@@ -65,6 +65,7 @@ function ViewRelease() {
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
 
+    const [sendImages, setSendImages] = useState([]);
     //POST 요청 위한 변수들
     const [version, setVersion] = useState('');
     const [state, setState] = useState(''); //우상단 상태 리스트 선택박스용
@@ -125,8 +126,10 @@ function ViewRelease() {
 
     async function postReleaseNoteData(token) {
         try {
-            const response = await axios.post(
-                `/api/release/create`, {
+            console.log("완료시 사진: ", sendImages);
+            const formData = new FormData();
+            sendImages.map(file => formData.append('image', file));
+            const jsonData = {
                 projectId: projectId,
                 status: state,
                 version: version,
@@ -134,13 +137,40 @@ function ViewRelease() {
                 releaseDate: releaseDate,
                 brief: brief,
                 description: description,
-                issueList: issueData
-            },
+                issueList: issueData};
+
+            formData.append('jsonData', new Blob([JSON.stringify(jsonData)], {
+                type: "application/json"
+            }));
+
+            const response = await axios.post(
+                `/api/release/create`, formData,
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}`, 
+                    'Content-Type': 'multipart/form-data'},
                 }
             );
+            // const response = await axios.post(
+            //     `/api/release/create`, {
+            //     projectId: projectId,
+            //     status: state,
+            //     version: version,
+            //     percent: progress,
+            //     releaseDate: releaseDate,
+            //     brief: brief,
+            //     description: description,
+            //     issueList: issueData,
+            //     // attachedImage: formData
+            //     formData
+            // },
+            //     {
+                    
+            //         headers: { Authorization: `Bearer ${token}`, 
+            //         'Content-Type': 'multipart/form-data'},
+            //     }
+            // );
             console.log("전송 완료");
+            // console.log("")
         } catch (error) {
             console.error(error);
         }
@@ -154,9 +184,12 @@ function ViewRelease() {
     //릴리스 작성하기 버튼
     const handleRelaseUpdateOnClick = (event) => {
         console.log("릴리스 저장 버튼 클릭됨");
+        // console.log("사진 데이터: ", event);
+    
         postReleaseNoteData(token);
         alert('릴리즈노트가 생성되었습니다!');
         navigate(-1);
+
     };
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
@@ -283,6 +316,11 @@ function ViewRelease() {
         setFilteredIssues(removedIssues);
         setOtherIssueData(addedIssues);
         setActiveModal(null);
+    }
+
+    const handlerImages = (files) => {
+        console.log("** Files: ", files);
+        setSendImages(files);
     }
 
     return (
@@ -438,10 +476,9 @@ function ViewRelease() {
                                                         showPreviewsInDropzone={false}
                                                         showFileNamesInPreview={true}
                                                         acceptedFiles={['image/*']}
-                                                        onChange={(files) => console.log('Files:', files)}
+                                                        onChange={handlerImages}      // 이부분으로!
                                                         maxFileSize={5000000}
                                                     />
-
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
