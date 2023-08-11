@@ -52,6 +52,9 @@ const ViewIssue = ({releaseId}) =>{
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
+    const [firstImgUrl, setFirstImgUrl] = useState();
+    const [secondImgUrl, setSecondImgUrl] = useState();
+    const [thirdImgUrl, setThirdImgUrl] = useState();
     
     const navigate = useNavigate();
 
@@ -88,6 +91,8 @@ const ViewIssue = ({releaseId}) =>{
                     Authorization: `Bearer ${token}`
                 }
             });
+            console.log("여기??");
+            console.log("??==: ", response.data);
             setReleaseNoteData(response.data.data);
             setVersion(response.data.data.version);
             setBrief(response.data.data.brief);
@@ -96,6 +101,9 @@ const ViewIssue = ({releaseId}) =>{
             setProgress(response.data.data.percent);
             setReleaseDate(response.data.data.releaseDate);
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
+            setFirstImgUrl(response.data.data.imgUrl_1);
+            setSecondImgUrl(response.data.data.imgUrl_2);
+            setThirdImgUrl(response.data.data.imgUrl_3);
         } catch (error) {
             console.error(error);
         }
@@ -374,6 +382,24 @@ const ViewIssue = ({releaseId}) =>{
                                                     <MDProgress
                                                         value={progress <= 100 && progress >= 0 ? progress : progress > 100 ? 100 : 0}
                                                         color={progress < 30 ? "primary" : progress < 60 ? "error" : progress < 80 ? "warning" : "info"} variant="gradient" />
+                                                </MDBox>
+                                            </Grid>
+                                        </Grid>
+                                    </Card>
+                                    <br></br>
+                                    <Card >
+                                        <Grid container>
+                                            <Grid item xs={6}>
+                                                <MDBox pt={2} px={2}>
+                                                    {firstImgUrl && <MDTypography variant="h6">첨부 파일 1</MDTypography>}
+                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{ width: '100%' }} />}
+
+                                                    {secondImgUrl && <MDTypography variant="h6">첨부 파일 2</MDTypography>}
+                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{ width: '100%' }} />}
+
+                                                    {thirdImgUrl && <MDTypography variant="h6">첨부 파일 3</MDTypography>}
+                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{ width: '100%' }} />}
+
                                                 </MDBox>
                                             </Grid>
                                         </Grid>
