@@ -437,19 +437,19 @@ function ViewRelease() {
                         <MDBox pt={3} px={3}>
                             <Grid container spacing={0}>
                                 <Grid item xs={8}>
-                                    <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
-                                        <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
-                                        <Select
-                                            value={state}
-                                            label="릴리즈 상태"
-                                            onChange={handleChange}
-                                            sx={{ minHeight: 50 }}
-                                        >
-                                            <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
-                                        </Select>
-                                        <FormHelperText>릴리즈 상태를 설정해주세요.</FormHelperText>
-                                    </FormControl>
+                                <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
+                                <Select
+                                    value={state}
+                                    label="릴리즈 상태"
+                                    onChange={handleChange}
+                                    sx={{ minHeight: 50 }}
+                                >
+                                    <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
+                                    <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
+                                </Select>
+                                <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
+                            </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect || !state} onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
