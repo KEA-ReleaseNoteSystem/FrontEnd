@@ -29,7 +29,6 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
-import { Maximize } from '@mui/icons-material';
 
 
 const customModalStyles = {
@@ -75,7 +74,7 @@ function ViewRelease() {
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
-
+    
     const navigate = useNavigate();
 
     const getStatusColor = (status) => {
@@ -101,7 +100,7 @@ function ViewRelease() {
         }
     }
 
-    const token = localStorage.getItem('ACCESS_TOKEN');
+
 
     // 이 릴리즈노트의 정보 받아오기
     async function getReleaseNoteData(releaseId, token) {
@@ -127,6 +126,8 @@ function ViewRelease() {
             console.error(error);
         }
     };
+
+    console.log("version",version);
 
     // 이 릴리즈 노트에 속한 이슈 받아오기
     async function getIssueData(releaseId, token) {
@@ -355,7 +356,8 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={(e) => setVersion(e.target.value)} multiline />
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={handleVersionChange}  multiline required/>
+                                    {(!isVersionCorrect) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;버전 포맷은 "x.x.x"입니다. (예시 : 1.0.0)</MDTypography>) : <MDTypography> </MDTypography>}
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={2} px={2} mb={2}>
@@ -378,10 +380,8 @@ function ViewRelease() {
                                         <MDTypography variant="body2" fontWeight="medium">
                                             세부 설명
                                         </MDTypography>
-                                        <MDBox pt={2} px={2}>
-                                            <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={releaseNoteData.description} onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
-                                            </MDTypography>
+                                        <MDBox pt={1} px={2}>
+                                            <Description description={description} setDescription = {setDescription} />
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -463,7 +463,7 @@ function ViewRelease() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
