@@ -106,19 +106,8 @@ const customModalStyles = {
                     color={getPriorityColor(issue.importance)}
                     variant="gradient"
                     size="sm"
-                  />
-
+                  />                  
                 </div>
-                {/* <Assignees>
-                  {assignees.map(user => (
-                    <AssigneeAvatar
-                      key={user.id}
-                      size={24}
-                      avatarUrl={user.avatarUrl}
-                      name={user.name}
-                    />
-                  ))}
-                </Assignees> */}
               </Bottom>
             </Issue>
           </div>

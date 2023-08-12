@@ -44,6 +44,7 @@ function Overview(issue) {
       });
   }, []);
 
+  console.log("테스트: ", issue);
 
 
   const handleOnClickDeleteIssue = async () => {
@@ -84,30 +85,76 @@ function Overview(issue) {
             <MDBox mb={2}>
               <MDInput type="text" label="담당자" defaultValue={issue.issue.memberIdInCharge.name} disabled fullWidth />
             </MDBox>
+
             <MDBox mb={2}>
-              <MDInput
-                label="타입"
-                value={issue.issue.issueType}
-                disabled
-              /> &nbsp;
-              <MDInput
-                label="상태"
-                value={issue.issue.status}
-                disabled
-              />
+              <Grid >
+                <Grid container alignItems="center">
+                  <MDBox style={{ display: 'flex', flexDirection: 'row' }}>
+                    <MDInput
+                      label="타입"
+                      value={issue.issue.issueType}
+                      disabled
+                    /> &nbsp;
+                    <MDInput
+                      label="상태"
+                      value={issue.issue.status}
+                      disabled
+                    />&nbsp;
+                  
+                  <MDInput
+                    label="생성일"
+                    disabled
+                    defaultValue={issue.issue.createdAt}
+                  /> &nbsp;
+                  <MDInput
+                    label="중요도"
+                    value={issue.issue.importance}
+                    disabled
+                  />
+                  </MDBox>
+                </Grid>
+                <Grid container mt={2}>
+                  {issue.issue.imgUrl_1 && (
+                    <Grid item xs={4}>
+                      <div style={{ marginRight: '10px' }}>
+                        <MDTypography label="첨부 파일 1" style={{ fontSize: '15px' }}>첨부 파일 1</MDTypography>
+                        <img
+                          src={process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.issue.imgUrl_1}
+                          alt="이미지 1"
+                          style={{ width: '100%' }}
+                        />
+                      </div>
+                    </Grid>
+                  )}
+                  {issue.issue.imgUrl_2 && (
+                    <Grid item xs={4}>
+                      <div style={{ marginRight: '10px' }}>
+                        <MDTypography label="첨부 파일 2" style={{ fontSize: '15px' }}>첨부 파일 2</MDTypography>
+                        <img
+                          src={process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.issue.imgUrl_2}
+                          alt="이미지 2"
+                          style={{ width: '100%' }}
+                        />
+                      </div>
+                    </Grid>
+                  )}
+                  {issue.issue.imgUrl_3 && (
+                    <Grid item xs={4}>
+                      <div>
+                        <MDTypography label="첨부 파일 3" style={{ fontSize: '15px' }}>첨부 파일 3</MDTypography>
+                        <img
+                          src={process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.issue.imgUrl_3}
+                          alt="이미지 3"
+                          style={{ width: '100%' }}
+                        />
+                      </div>
+                    </Grid>
+                  )}
+                </Grid>
+              </Grid>
             </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                label="생성일"
-                disabled
-                defaultValue={issue.issue.createdAt}
-              /> &nbsp;
-                <MDInput
-                  label="중요도"
-                  value={issue.issue.importance}
-                  disabled
-                />
-            </MDBox>
+
+
             <MDBox mb={2}>
               <MDInput type="textarea" label="설명" defaultValue={issue.issue.description} disabled rows={4} multiline fullWidth />
             </MDBox>
