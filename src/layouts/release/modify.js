@@ -29,6 +29,7 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+import Description from "layouts/release/description";
 
 
 const customModalStyles = {
@@ -60,9 +61,9 @@ function ViewRelease() {
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
     const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
     const [memberInCharge, setmemberInCharge] = useState('');
-    const [imgUrl_1, setImgUrl_1] = useState();
-    const [imgUrl_2, setImgUrl_2] = useState();
-    const [imgUrl_3, setImgUrl_3] = useState();
+    const [firstImgUrl, setFirstImgUrl] = useState();
+    const [secondImgUrl, setSecondImgUrl] = useState();
+    const [thirdImgUrl, setThirdImgUrl] = useState();
 
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
@@ -74,8 +75,18 @@ function ViewRelease() {
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
+    const [isVersionCorrect, setIsVersionCorrect] = useState(false);
 
     const navigate = useNavigate();
+    const token = localStorage.getItem('ACCESS_TOKEN');
+
+
+    const handleVersionChange = (e) => {
+        
+        const versionPattern = /^[0-9]+(\.[0-9]+){2}$/; // 릴리즈 노트 버전 포맷 x.y.z 
+        setIsVersionCorrect(versionPattern.test(e.target.value));
+        setVersion(e.target.value);
+    }
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -100,7 +111,7 @@ function ViewRelease() {
         }
     }
 
-    const token = localStorage.getItem('ACCESS_TOKEN');
+
 
     // 이 릴리즈노트의 정보 받아오기
     async function getReleaseNoteData(releaseId, token) {
@@ -118,14 +129,16 @@ function ViewRelease() {
             setProgress(response.data.data.percent);
             setReleaseDate(response.data.data.releaseDate);
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
-            setImgUrl_1(response.data.data.imgUrl_1);
-            setImgUrl_2(response.data.data.imgUrl_2);
-            setImgUrl_3(response.data.data.imgUrl_3);
+            setFirstImgUrl(response.data.data.imgUrl_1);
+            setSecondImgUrl(response.data.data.imgUrl_2);
+            setThirdImgUrl(response.data.data.imgUrl_3);
             console.log("** response: ", response.data);
         } catch (error) {
             console.error(error);
         }
     };
+
+    console.log("version",version);
 
     // 이 릴리즈 노트에 속한 이슈 받아오기
     async function getIssueData(releaseId, token) {
@@ -354,7 +367,8 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={(e) => setVersion(e.target.value)} multiline />
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={handleVersionChange}  multiline required/>
+                                    {(!isVersionCorrect) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;버전 포맷은 "x.x.x"입니다. (예시 : 1.0.0)</MDTypography>) : <MDTypography> </MDTypography>}
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={2} px={2} mb={2}>
@@ -377,10 +391,8 @@ function ViewRelease() {
                                         <MDTypography variant="body2" fontWeight="medium">
                                             세부 설명
                                         </MDTypography>
-                                        <MDBox pt={2} px={2}>
-                                            <MDTypography variant="body2">
-                                                <MDInput variant="standard" defaultValue={releaseNoteData.description} onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
-                                            </MDTypography>
+                                        <MDBox pt={1} px={2}>
+                                            <Description description={description} setDescription = {setDescription} />
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -447,22 +459,23 @@ function ViewRelease() {
                         <MDBox pt={3} px={3}>
                             <Grid container spacing={0}>
                                 <Grid item xs={8}>
-                                    <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
-                                        <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
-                                        <Select
-                                            value={state}
-                                            label="릴리즈 상태"
-                                            onChange={handleChange}
-                                            sx={{ minHeight: 50 }}
-                                        >
-                                            <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
-                                        </Select>
-                                        <FormHelperText>릴리즈 상태를 설정해주세요.</FormHelperText>
-                                    </FormControl>
+                                <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
+                                <Select
+                                    value={state}
+                                    label="릴리즈 상태"
+                                    onChange={handleChange}
+                                    sx={{ minHeight: 50 }}
+                                >
+                                    <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
+                                    <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
+                                </Select>
+                                <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
+                            </FormControl>
+
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
@@ -522,14 +535,20 @@ function ViewRelease() {
                                             </Grid> */}
                                         </Grid>
                                     </Card>
-                                            <br></br>
+                                    <br></br>
                                     <Card >
                                         <Grid container>
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
-                                                    <MDTypography variant="h6">첨부 파일</MDTypography>
-                                                    {imgUrl_1 && <img src={'https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1'+imgUrl_1} alt="이미지" />}
-                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.createdAt && releaseNoteData.createdAt.slice(0, 10)}</MDTypography>
+                                                    {firstImgUrl && <MDTypography variant="h6">첨부 파일 1</MDTypography>}
+                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{ width: '100%' }} />}
+
+                                                    {secondImgUrl && <MDTypography variant="h6">첨부 파일 2</MDTypography>}
+                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{ width: '100%' }} />}
+
+                                                    {thirdImgUrl && <MDTypography variant="h6">첨부 파일 3</MDTypography>}
+                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{ width: '100%' }} />}
+
                                                 </MDBox>
                                             </Grid>
                                         </Grid>

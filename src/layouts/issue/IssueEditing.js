@@ -181,8 +181,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ margin: '0 auto' }}>
-
+            <Card sx={{backgroundColor: '#F0EDEE' }}>
               <DropzoneArea
                 key={dialogInitialFiles.join('')} // key 값 설정
                 acceptedFiles={['image/*']}

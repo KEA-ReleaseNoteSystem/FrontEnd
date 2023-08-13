@@ -6,10 +6,13 @@ import './tree.css';
 import MDBox from 'components/MDBox';
 import Card from '@mui/material/Card';
 import MDTypography from "components/MDTypography";
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 
 function MyTree({ issue }) {
   console.log("tree issue :",issue)
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [data, setData] = useState({
     name: 'Root',
     attributes: {
@@ -36,7 +39,7 @@ function MyTree({ issue }) {
   useEffect(() => {
     const getTree = async () => {
       try {
-        const response = await axios.get(`/api/1/issues/tree/${issue.id}`);
+        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/issues/tree/${issue.id}`);
         setData(response.data);
         setTranslate({ x: 220, y: 150 });
         console.log("data",data)

@@ -30,7 +30,8 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
-import { DropzoneArea } from 'material-ui-dropzone'
+import { DropzoneArea } from 'material-ui-dropzone';
+import Description from 'layouts/release/description';
 
 
 
@@ -73,6 +74,17 @@ function ViewRelease() {
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
+
+
+ 
+    const [isVersionCorrect, setIsVersionCorrect] = useState(false);
+
+    const handleVersionChange = (e) => {
+        
+        const versionPattern = /^[0-9]+(\.[0-9]+){2}$/; // 릴리즈 노트 버전 포맷 x.y.z 
+        setIsVersionCorrect(versionPattern.test(e.target.value));
+        setVersion(e.target.value);
+    }
 
     const navigate = useNavigate();
 
@@ -150,10 +162,11 @@ function ViewRelease() {
                     'Content-Type': 'multipart/form-data'},
                 }
             );
+
             // const response = await axios.post(
             //     `/api/release/create`, {
             //     projectId: projectId,
-            //     status: state,
+            //     status: stßate,
             //     version: version,
             //     percent: progress,
             //     releaseDate: releaseDate,
@@ -277,7 +290,7 @@ function ViewRelease() {
     };
 
     const handleMemberInCharge = (event) => {
-        setmemberInCharge(even.target.value);
+        setmemberInCharge(event.target.value);
     };
 
     const [activeModal, setActiveModal] = useState("");
@@ -332,7 +345,8 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" onChange={(e) => setVersion(e.target.value)} multiline />
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" onChange={handleVersionChange}  multiline required/>
+                                    {(!isVersionCorrect) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;버전 포맷은 "x.x.x"입니다. (예시 : 1.0.0)</MDTypography>) : <MDTypography> </MDTypography>}
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={2} px={2} mb={2}>
@@ -355,10 +369,8 @@ function ViewRelease() {
                                         <MDTypography variant="body2" fontWeight="medium">
                                             세부 설명
                                         </MDTypography>
-                                        <MDBox pt={2} px={2}>
-                                            <MDTypography variant="body2">
-                                                <MDInput variant="standard" onChange={(e) => setDescription(e.target.value)} multiline fullWidth />
-                                            </MDTypography>
+                                        <MDBox pt={1} px={2}>
+                                        <Description description={description} setDescription = {setDescription} />
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -425,22 +437,22 @@ function ViewRelease() {
                         <MDBox pt={3} px={3}>
                             <Grid container spacing={0}>
                                 <Grid item xs={8}>
-                                    <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
-                                        <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
-                                        <Select
-                                            value={state}
-                                            label="릴리즈 상태"
-                                            onChange={handleChange}
-                                            sx={{ minHeight: 50 }}
-                                        >
-                                            <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
-                                        </Select>
-                                        <FormHelperText>릴리즈 상태를 설정해주세요.</FormHelperText>
-                                    </FormControl>
+                                <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
+                                <Select
+                                    value={state}
+                                    label="릴리즈 상태"
+                                    onChange={handleChange}
+                                    sx={{ minHeight: 50 }}
+                                >
+                                    <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
+                                    <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
+                                </Select>
+                                <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
+                            </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect || !state} onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>생성</h6>
                                     </MDButton>
                                 </Grid>
