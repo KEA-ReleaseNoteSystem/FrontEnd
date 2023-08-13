@@ -34,38 +34,31 @@ const customModalStyles = {
 };
 
 
-function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fetchedMemo, projectId, createChildIssue }) {
-  console.log("childIssues1", updatedchildIssues);
+function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fetchedMemo, projectId, createChildIssue ,submitIssue}) {
+  console.log("childIssues1", issue);
   const [Memo, setMemo] = useState(fetchedMemo);
   const [childIssues, setChildIssues] = useState(updatedchildIssues);
   const [activeModal, setActiveModal] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState();
-  const token = localStorage.getItem('ACCESS_TOKEN');
   const [currentIds, setCurrentIds] = useState([issue.id]);
   const [otherIssue, setOtherIssue] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedIssues, setSelectedIssues] = useState([]);
-  const [initialImageBlob, setInitialImageBlob] = useState(null);
-  const [image, setImage] = useState("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbo4mmL%2FbtrxiX5hROV%2FZUuHpkuYysruWva1JBWqj0%2Fimg.png");
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [dialogInitialFiles, setDialogInitialFiles] = useState([
-    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
-    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
-    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+    issue.imgUrl_1 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+    issue.imgUrl_2 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+    issue.imgUrl_3 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+  ].filter(Boolean));
 
   useEffect(() => {
-    console.log("issue.imgUrl_1asdddddddddddddd", issue.imgUrl_1);
     setDialogInitialFiles([
-      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
-      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
-      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
-  }, [issue]);
+      issue.imgUrl_1 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+      issue.imgUrl_2 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+      issue.imgUrl_3 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+    ].filter(Boolean));
 
-  console.log("DIG", dialogInitialFiles);
-  console.log("ISSUE*", issue);
+}, [issue.id]);
+
   const openIssueAddModal = () => {
     setActiveModal("addChildIssue");
   };
@@ -95,22 +88,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   };
 
 
-  const onClickSubmitButton = (files) => {
-    const formData = new FormData();
-    files.map(file => formData.append('image', file));
-
-    axios.post(`api/issue/${issue.id}/images`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Important for file upload
-      },
-    })
-      .then(response => {
-        console.log('Upload successful!', response.data);
-      })
-      .catch(error => {
-        console.error('Error uploading the image:', error);
-      });
-  }
+  
 
 
   const getOtherIssue = async (excludeissues) => {
@@ -118,10 +96,9 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
       const response = await axios.get(`/api/${projectId}/issues?exclude=${excludeissues.join(',')}`);
 
-      console.log('Response other:', response.data.data);
       setOtherIssue(response.data.data);
 
-      (!otherIssue ? setIsLoading(true) : setIsLoading(false));
+    
 
 
     }
@@ -143,11 +120,35 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     setChildIssues(updatedchildIssues);
   }, [issue.id, issue.childIssue, createChildIssue]);
 
-  console.log("childIssues", childIssues);
 
 
+  const handleDropzoneChange = (files) => {
+    submitIssue(files, currentIds); 
+  };
 
+  const handleFileDownload = (url) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = url.split('/').pop();
+    link.click();
+};
 
+const PreviewImages = () => {
+  return (
+      <div>
+          {dialogInitialFiles.map((url, index) => (
+              <img 
+                  key={index}
+                  src={url} 
+                  alt={`Preview ${index}`} 
+                  onClick={() => handleFileDownload(url)}
+                  style={{cursor: 'pointer'}} // 클릭 가능한 이미지임을 나타내기 위해
+              />
+          ))}
+      </div>
+  );
+}
+  
 
   return (
     <Grid item xs={12} id="right" container direction="column" lg={200}>
@@ -188,12 +189,12 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                 acceptedFiles={['image/*']}
                 submitButtonText={"submit"}
                 maxFileSize={5000000}
-                onChange={onClickSubmitButton}
+                onChange={handleDropzoneChange}
                 showPreviews={true}
                 showPreviewsInDropzone={false}
                 initialFiles={dialogInitialFiles}
               />
-
+              
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
