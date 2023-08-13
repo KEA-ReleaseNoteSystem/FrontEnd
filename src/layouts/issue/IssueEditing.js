@@ -57,7 +57,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
       issue.imgUrl_3 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
     ].filter(Boolean));
 
-}, [issue.id]);
+}, [issue]);
 
   const openIssueAddModal = () => {
     setActiveModal("addChildIssue");
@@ -185,15 +185,15 @@ const PreviewImages = () => {
             <Card sx={{ margin: '0 auto' }}>
 
               <DropzoneArea
-                key={dialogInitialFiles.join('')} // key 값 설정
                 acceptedFiles={['image/*']}
                 submitButtonText={"submit"}
                 maxFileSize={5000000}
                 onChange={handleDropzoneChange}
-                showPreviews={true}
+                showPreviews={false}
                 showPreviewsInDropzone={false}
-                initialFiles={dialogInitialFiles}
+           
               />
+              <PreviewImages/>
               
             </Card>
           </MDBox>
