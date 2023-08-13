@@ -17,8 +17,7 @@ const ProjectBoardIssueDetailsDescription = ( {issue,updateIssue} ) => {
   const [description, setDescription] = useState(issue.description);
   const [isEditing, setEditing] = useState(false);
   
-  console.log("updateIssue" , updateIssue);
-
+ 
   // const handleUpdate = async () => {
   //   setEditing(false);
   //   console.log(`DS 변경 ${issue.id}`);
@@ -35,7 +34,7 @@ const ProjectBoardIssueDetailsDescription = ( {issue,updateIssue} ) => {
   useEffect(() => {
     setTitle(issue.title);
     setDescription(issue.description);
-  }, [issue.title,issue.description]);
+  }, [issue.title || issue.description]);
   
 
   const isDescriptionEmpty = getTextContentsFromHtmlString(description).trim().length === 0;
