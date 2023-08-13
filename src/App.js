@@ -203,11 +203,11 @@ export default function App() {
   const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
   useEffect(() => {
-    setIsAuthenticated(!!token);
+    setIsAuthenticated(true);
     setIsAuthChecked(true); // Set to true after checking
   }, []);
 
-  
+
   if (isAuthenticated === null) {
     return null;
   }
@@ -233,7 +233,7 @@ export default function App() {
     }
   }, [isAuthenticated, token]);
 
-  console.log("q@q",message);
+
   return (
     
     <ThemeProvider theme={darkMode ? themeDark : theme}>
@@ -254,12 +254,25 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
+      {isAuthChecked ? (  // 인증 확인이 완료된 경우에만 라우트 렌더링
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/social-login" element={<SocialLogin />} />
-        <Route path="/release/:releaseId" element={ isAuthenticated ? <ViewRelease /> : <Navigate to="/authentication/sign-in" replace={true} />} />
+        <Route
+          path="/release/:releaseId"
+          element={
+            isAuthenticated ? (
+              <ViewRelease />
+            ) : (
+              <Navigate to="/authentication/sign-in" replace={true} />
+            )
+          }
+        />
       </Routes>
+    ) : (
+      <div>로딩중...</div>  // 로딩 스피너나 다른 UI 표시
+    )}
     </ThemeProvider>
    
   );
