@@ -126,28 +126,38 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     submitIssue(files, currentIds); 
   };
 
-  const handleFileDownload = (url) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = url.split('/').pop();
-    link.click();
-};
+
 
 const PreviewImages = () => {
+
+
+  const handleDelete = (files) => {
+    // Here, I'm assuming dialogInitialFiles is a state, so you would use a setState function like this:
+    // setDialogInitialFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
+    // If dialogInitialFiles isn't a state, adjust accordingly.
+  };
+
   return (
-      <div>
-          {dialogInitialFiles.map((url, index) => (
-              <img 
-                  key={index}
-                  src={url} 
-                  alt={`Preview ${index}`} 
-                  onClick={() => handleFileDownload(url)}
-                  style={{cursor: 'pointer'}} // 클릭 가능한 이미지임을 나타내기 위해
-              />
-          ))}
-      </div>
+    <div>
+      {dialogInitialFiles.map((url, index) => (
+        <Card key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ margin: '10px', width: '50px', height: '50px', overflow: 'hidden', borderRadius: '50%' }}>
+              <img src={url} alt={`Preview ${index}`} style={{ width: '100%', height: 'auto' }} />
+            </div>
+            <div style={{ marginLeft: '10px', fontSize: '14px' }}>{url.split('/').pop()}</div>
+            <div style={{ flexGrow: 1, cursor: 'pointer', textAlign: 'right' }}>
+            <button onClick={() => handleDelete(index)} style={{ marginRight: '10px' }}>Delete</button>
+          </div>
+          
+            {/* If you're using a UI library like Material-UI, replace the above button with a styled component. */}
+          </div>
+        </Card>
+      ))}
+    </div>
   );
-}
+};
+
   
 
   return (
