@@ -20,7 +20,6 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issue, fetchedMemo, setMemo })
   const [isCreating, setCreating] = useState(false);
   const [body, setBody] = useState('');
   const [memoLength, setMemoLength] = useState(fetchedMemo.id);
-  console.log("body", body);
   const { currentUser } = 1;
 
   const token = localStorage.getItem('ACCESS_TOKEN');

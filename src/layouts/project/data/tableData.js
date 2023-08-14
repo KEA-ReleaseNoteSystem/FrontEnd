@@ -56,6 +56,7 @@ export default function Data({id}) {
   useEffect(() => {
     async function fetchData() {
       const data = await getReleaseNoteData(id, token);
+      console.log("++ Data: ", data);
       setReleaseList(data);
     }
     fetchData();
