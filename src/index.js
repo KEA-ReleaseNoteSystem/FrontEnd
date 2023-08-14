@@ -20,6 +20,7 @@ import { BrowserRouter } from "react-router-dom";
 // import dotenv from 'dotenv';
 // dotenv.config();
 import App from "App";
+import { RecoilRoot } from "recoil";
 
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
@@ -30,7 +31,9 @@ const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <MaterialUIControllerProvider>
+      <RecoilRoot>
       <App />
+      </RecoilRoot>
     </MaterialUIControllerProvider>
   </BrowserRouter>
 );

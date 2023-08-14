@@ -30,7 +30,12 @@ function Overview() {
   const [memberInfo, setMemberInfo] = useState([]);
 
 
-  
+  const fixedWidthStyle = {
+    maxWidth: '1440px',
+    margin: '0 auto',
+    overflowX: 'hidden'
+};
+
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear()
@@ -59,11 +64,12 @@ function Overview() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <div style={fixedWidthStyle}>
       <Header>
       
 
         <MDBox mt={5}  >
-          <Grid container spacing={1} justifyContent="center">
+        <Grid container style={{ width: '1310px' }}>
             <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
               <ProfileInfoCard
                 title="profile information"
@@ -83,9 +89,7 @@ function Overview() {
               
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
  
-         <Card sx={{ height: "80%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "100%", backgroundColor :"#f9fbfb" , top : "100px"
-         }}>
-          
+          <Card sx={{ height: "80%", width: "calc(100% - 350px)", backgroundColor: "#f9fbfb", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
           <Grid mt={2.2} ml={2}  container justifyContent="center">
           <Grid item xs={12} sx={{display: "flex"}}>
           
@@ -137,6 +141,7 @@ function Overview() {
         </MDBox>
         </Card>
     </Header>
+    </div>
     </DashboardLayout>
   );
 }

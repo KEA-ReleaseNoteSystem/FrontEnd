@@ -94,7 +94,11 @@ export default function Data() {
     const releaseId = release.id; // release.id 값을 별도의 변수에 저장
   
     return {
-      version: release.version,
+      version: (
+        <Link to={`/release/${encodeURIComponent(releaseId)}`}>
+          {release.version}
+        </Link>
+      ),
       releaseDate: release.releaseDate && release.releaseDate.slice(0, 10),
       author: release.member && release.member.username,
       createDate: release.releaseDate && release.createdAt.slice(0, 10),

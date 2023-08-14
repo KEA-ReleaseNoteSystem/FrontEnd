@@ -91,13 +91,15 @@ function Release() {
               </MDBox>
               <MDBox pt={3}>
                 {view === 'table' ? (
+                  <>
                   <DataTable
-                    table={{ columns, rows }}
+                    table={{ columns, rows}}
                     isSorted={false}
-                    entriesPerPage={false}
+                    entriesPerPage={10}
                     showTotalEntries={false}
                     noEndBorder
                   />
+                  </>
                 ) : (
                   <ReleaseTree />
                 )}
@@ -111,7 +113,6 @@ function Release() {
           <AddCircleOutlineIcon color="info"/>
         </IconButton>
       </div>
-      <Footer />
     </DashboardLayout>
   );
 }

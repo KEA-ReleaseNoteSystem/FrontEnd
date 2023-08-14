@@ -17,15 +17,13 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
   const [mystatus, setStatus] = useState('');
   const [issueType, setIssueType] = useState('');
 
-  console.log("asdasdassd", memberCharge, memberReport);
-
 
 
   useEffect(() => {
     // setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
     setStatus(issue ? issue.status : '')
     setIssueType(issue ? issue.issueType : '')
-  }, [issue, updateIssue]);
+  }, [issue.status || issue.issueType]);
 
 
 

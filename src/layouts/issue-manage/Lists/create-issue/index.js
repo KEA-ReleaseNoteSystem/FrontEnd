@@ -123,7 +123,7 @@ function MDMemberInCharge({ label, value, onChange }) {
   const [selectMember, setSelectMember] = useState(value);
   const [membersData, setMembersData] = useState([]);
   const [memberList, setMemberList] = useState();
-
+  const [memberId, setMemberId] = useState();
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
@@ -136,11 +136,13 @@ function MDMemberInCharge({ label, value, onChange }) {
         setMembersData(fetchedMembersData);
 
         const memberItems = fetchedMembersData.map((member) => (
-          <MenuItem key={member.id} onClick={() => handleName(member.name)}>
+          <MenuItem key={member.id} onClick={() => handleName(member)}>
             {member.name}
           </MenuItem>
         ));
 
+        console.log("memberItems",memberItems);
+  
         setMemberList(memberItems);
       } catch (error) {
         console.error(error);
@@ -161,12 +163,12 @@ function MDMemberInCharge({ label, value, onChange }) {
   };
 
   const handleName = (value) => {
-    setSelectMember(value);
-    // setMemberId(value.id);
+    setSelectMember(value.name);
+    setMemberId(value.id);
     handleClose();
   };
 
-  onChange(selectMember);  // ***
+  onChange(selectMember,memberId);  // ***
 
   return (
     <MDBox mb={2}>
@@ -214,6 +216,7 @@ function Overview() {
   const [projects, setProjects] = useState([]);
   const [issueType, setIssueType] = useState("타입을 선택해주세요"); // 선택된 이슈 타입을 저장하는 상태
   const [writerName, setWriterName] = useState("담당자를 지정해주세요");
+  const [memberId,setMemberId] = useState();
   const [title, setTitle] = useState("")
   // const [memberId,setMemberId] = useState('');
   const [description, setDescription] = useState("")
@@ -253,8 +256,11 @@ function Overview() {
   const handleIssueTypeChange = (type) => {
     setIssueType(type);
   };
-  const handleWriterChange = (name) => {
+
+  console.log("handleWriterChange",writerName);
+  const handleWriterChange = (name, id) => {
     setWriterName(name);
+    setMemberId(id);
   }
   const handleChangeTitle = (title) => {
     setTitle(title.target.value);
@@ -275,7 +281,7 @@ function Overview() {
       const jsonData = {
         title: title,
         memberInCharge: writerName === "담당자를 지정해주세요" ? null : writerName,
-        // memberInChargeId : memberId,
+        memberInChargeId : memberId,
         type: issueType,
         description: description,
         date: String(selectedDate),
@@ -338,11 +344,12 @@ function Overview() {
               <MDInput type="text" label="이슈 제목" onChange={handleChangeTitle} fullWidth />
             </MDBox>
             <MDBox mb={2}>
-              <MDMemberInCharge
-                label="담당자"
-                value={writerName}
-                onChange={handleWriterChange} fullWidth />
-            </MDBox>
+                  <MDMemberInCharge
+                    label="담당자"
+                    value={writerName}
+                    // key = {key}
+                    onChange={handleWriterChange} fullWidth />
+                </MDBox>
             <MDBox mb={2}>
               <MDIssueType
                 label="타입"

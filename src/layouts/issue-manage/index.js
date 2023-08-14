@@ -26,7 +26,6 @@ import Footer from "examples/Footer";
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
-
 const propTypes = {
   project: PropTypes.object.isRequired,
   fetchProject: PropTypes.func.isRequired,
