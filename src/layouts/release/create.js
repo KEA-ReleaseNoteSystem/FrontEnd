@@ -210,7 +210,7 @@ function ViewRelease() {
 
     const openMenu1 = ({ currentTarget }) => setMenu1(currentTarget);
     const closeMenu1 = () => setMenu1(null);
-    const openMenu2 = ({ curentTarget }) => setMenu2(currentTarget);
+    const openMenu2 = ({ currentTarget }) => setMenu2(currentTarget);
     const closeMenu2 = () => setMenu2(null);
 
     const handleShowAssignedIssues = (name) => {
