@@ -33,7 +33,7 @@ function IssueSearch() {
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
   const [filter, setFilter] = useState("");
-  const [init, setInit] = useState(false);
+
   const [searchBar, setSearchBar] = useState();
   const [searchFilter, setSearchFilter] = useState();
   const [firstfilter, setFirstfilter] = useState("");
@@ -41,6 +41,8 @@ function IssueSearch() {
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
   const [childIssues,setChildIssues] = useState();
+
+
   
 
   const updateChildIssues = (updatedChildIssues) => {
@@ -153,10 +155,9 @@ function IssueSearch() {
         setMembersData(membersResponse.data.data);
         setIssueDetail(issuesResponse.data.data[0]);
         setChildIssues(issuesResponse.data.data[0].childIssue);
-        console.log("!! ***response: " , issuesResponse.data);
-        console.log("issuesResponse.data.data[0]",issuesResponse.data.data[0])
 
-        { !issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false) }
+
+        { issuesResponse.status !== 200 ? setIsLoading(true) : setIsLoading(false) }
 
       } catch (error) {
         console.error(error);
@@ -186,7 +187,7 @@ function IssueSearch() {
 
   const handleOnClickSearchIssue = async () => {
     try {
-      const issuesResponse = await axios.get(`/api/issues?title=${searchBar}`, {
+      const issuesResponse = await axios.get(`/api/project/${projectId}/issue?title=${searchBar}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -211,12 +212,15 @@ function IssueSearch() {
   };
 
 
+
+
   const updateIssue = async (updatedFields) => {
     try {
       // API를 호출하여 이슈 업데이트
       const response = await axios.put(`/api/project/${projectId}/issues/${issueDetail.id}`, updatedFields, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+
         }
       });
 
@@ -250,6 +254,69 @@ function IssueSearch() {
     }
   };
 
+
+  const submitIssue = async (files, currentIds) => {
+    try {
+        // 1. 이미지 업로드 부분
+        const formData = new FormData();
+        files.forEach(file => formData.append('image', file));
+        
+        const uploadResponse = await axios.post(`api/issue/${currentIds}/images`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`
+            },
+        });
+     
+
+        const uploadedFileUrls = uploadResponse.data.data;
+        
+        console.log("uploadedFileUrls",uploadedFileUrls);
+      
+
+        // 현재 issueDetail 혹은 선택된 이슈의 상태를 가져옵니다.
+        const currentIssue = fetchedIssues.find(issue => issue.id === currentIds) || issueDetail;
+
+        let updatedFieldsWithImages = {
+            updatedAt: new Date().toISOString()
+        };
+
+        const imgKeys = ['imgUrl_1', 'imgUrl_2', 'imgUrl_3'];
+        imgKeys.forEach((key, index) => {
+                if (uploadedFileUrls[index]) {
+                    updatedFieldsWithImages[key] = uploadedFileUrls[index];
+                }else{
+                  updatedFieldsWithImages[key] = "";
+                }
+            
+        });
+
+        
+
+        const updatedIssues = fetchedIssues.map((issue) => {
+            if (issueDetail.id === issue.id) {
+                return {
+                    ...issue,
+                    ...updatedFieldsWithImages
+                };
+            }
+            return issue;
+        });
+
+        setFetchedIssues(updatedIssues);
+        setIssueDetail((prevIssue) => ({
+            ...prevIssue,
+            ...updatedFieldsWithImages
+        }));
+        console.log("new Issue",issueDetail);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+  
+  
 
   const handleFilter = (event) => {
     const selectedValue = event.target.value;
@@ -304,7 +371,6 @@ function IssueSearch() {
 
       // 필터링된 이슈 목록 설정
       setFetchedIssues(response.data.data);
-      setInit(true);
       setSelectedIssueIndex(0);
       setIssueDetail(response.data.data[0])
       { response.data.data[0] == undefined ? setIsLoading(true) : setIsLoading(false) }
@@ -346,13 +412,22 @@ function IssueSearch() {
   };
 
   const handleClick = (issue, issueIndex) => {
-    setIssueDetail(issue);
+      const updatedIssue = fetchedIssues.find(i => i.id === issue.id);
+    if (updatedIssue) {
+
+        setIssueDetail(updatedIssue);
+    } else {
+
+        setIssueDetail(issue);  // fallback to the clicked issue if not found in fetchedIssues
+    }
+
+
     setSelectedIssueIndex(issueIndex);
     setChildIssues(issue.childIssue);
-    setInit(false);
+
   };
 
-  console.log("init", init);
+ 
 
   return (
     <DashboardLayout>
@@ -472,7 +547,7 @@ function IssueSearch() {
 
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
                   {isLoading ? (
-                    <MDTypography>There are no issues</MDTypography>
+                    null
                   ) : (
                     fetchedIssues.map((issue, index) => (
                       <div
@@ -493,13 +568,13 @@ function IssueSearch() {
 
             <Grid item xs={5}>
               {isLoading ? null : <IssueEditing issue={issueDetail} updatedchildIssues={childIssues} updateIssue={updateIssue} deleteChild={deleteChild}
-               fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} />}
+               fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} submitIssue={submitIssue}/>}
             </Grid>
             <Grid item xs={4}>
 
-              {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
-              memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
-              {isLoading ? null : <MyTree issue={issueDetail} />}
+              {/* {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
+              memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />} */}
+              {/* {isLoading ? null : <MyTree issue={issueDetail} />} */}
 
             </Grid>
           </Grid>

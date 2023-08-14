@@ -66,6 +66,7 @@ function Basic() {
   }, []);
   
   const handleSubmit = () => {
+    const errorStatusCodes = [401, 400, 404];
     setIsSubmitting(true);
     // POST 요청을 보내는 부분
     axios.post("/api/member/login", {
@@ -85,12 +86,17 @@ function Basic() {
           }
           )
         } 
+        else if (errorStatusCodes.includes(response.data.statusCode)) {
+          navigate('/authentication/sign-in'); 
+      }
+
         else
         window.location.href = "/home/manage-project";
       })
       .catch((error) => {
         // 요청이 실패한 경우의 처리
-        console.error(error);console.error(error);
+        console.error(error);
+        navigate('/authentication/sign-in'); 
       });
   };
   const isEmailEmpty = email === "";

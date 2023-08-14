@@ -14,11 +14,71 @@ import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import { Select } from "@mui/material";
-import { Menu, MenuItem } from "@mui/material";
+
+import { Icon, IconButton, Menu, MenuItem, Input } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import DefaultNavbar from 'layouts/homepage/examples/Navbars/DefaultNavbar';
 import routes from '../data/home.routes.js';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+
+
+function ProjectStatusSelector({ label, value, onChange }) {
+  const [selectedStatus, setSelectedStatus] = useState("프로젝트 상태를 설정해주세요.");
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const statuses = [
+    { label: "중단됨", value: "중단됨" },
+    { label: "진행중", value: "진행중" },
+    { label: "완료됨", value: "완료됨" },
+  ];
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleStatusChange = (statusValue) => {
+    setSelectedStatus(statusValue);
+    onChange(statusValue);  // Call parent's onChange with the new status value
+    handleClose();
+  };
+
+  return (
+    <MDBox mb={2}>
+      <MDInput
+        label={label}
+        value={selectedStatus}
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <div>
+              <IconButton onClick={handleClick}>
+                <ArrowCircleDownIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {statuses.map((status) => (
+                  <MenuItem key={status.value} onClick={() => handleStatusChange(status.value)}>
+                    {status.label}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
+          ),
+        }}
+      />
+    </MDBox>
+  );
+}
+
+
 const NewProject = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,6 +92,8 @@ const NewProject = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     event.preventDefault();
     setIsLoading(true); // Start loading
+    
+
 
     // Send form data as JSON using Axios
     axios
@@ -62,6 +124,19 @@ const NewProject = () => {
       });
   };
 
+  const handleStatusChange = (newStatus) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      status: newStatus,
+    }));
+    const isAnyFieldEmpty =
+      formData.name.trim() === "" ||
+      newStatus.trim() === "" ||
+      formData.description.trim() === "";
+    setIsFormValid(!isAnyFieldEmpty);
+  };
+
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -86,8 +161,8 @@ const NewProject = () => {
       <MDBox sx={{ mb: 2, mt: 15 }} />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
+          <Grid item xs={12} >
+          <Card style={{ maxWidth: "1300px",minHeight: "600px", margin: "0 auto" }}>
               <MDBox
                 mx={2}
                 mt={-3}
@@ -106,7 +181,7 @@ const NewProject = () => {
                 component="form"
                 role="form"
                 mt={6}
-                ml={3}
+                ml={9}
                 mr={10}
               >
                 <MDBox mb={2}>
@@ -122,34 +197,25 @@ const NewProject = () => {
                 </MDBox>
                 <MDBox mb={2}>
                   <FormControl fullWidth>
-                    <InputLabel id="select-label">상태</InputLabel>
-                    <Select
-                      label="상태"
-                      value={formData.status}
-                      onChange={handleInputChange}
-                      fullWidth
-                      sx={{ height: "5.5vh" }}
-                      required
-                      name="status"
-                    >
-                      <MenuItem value={"Stopped"}>중단됨</MenuItem>
-                      <MenuItem value={"In-progress"}>진행중</MenuItem>
-                      <MenuItem value={"Completed"}>완료됨</MenuItem>
-                      <MenuItem value={"Not-started"}>시작 전</MenuItem>
-                    </Select>
+                  <ProjectStatusSelector 
+                    label="상태" 
+                    value={formData.status} 
+                    onChange={handleStatusChange}
+                  />
                   </FormControl>
                 </MDBox>
-                <MDBox mb={2}>
+                <MDBox mb={10}>
                   <MDInput
                     type="textarea"
                     label="설명"
                     defaultValue=""
                     multiline
-                    rows={5}
+                    rows={10}
                     fullWidth
                     required
                     name="description"
                     onChange={handleInputChange}
+                    style={{ fontSize: '14.5rem', height: '200px' }}
                   />
                 </MDBox>
                 <MDBox mt={4} mb={1} display="flex" justifyContent="center">
