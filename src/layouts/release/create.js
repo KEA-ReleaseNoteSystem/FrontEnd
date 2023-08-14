@@ -13,7 +13,10 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+import { useDropzone } from 'react-dropzone';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { styled } from '@mui/system';
+import MDSnackbar from '../../components/MDSnackbar/index.js';
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -30,10 +33,7 @@ import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
-import { DropzoneArea } from 'material-ui-dropzone';
 import Description from 'layouts/release/description';
-
-
 
 const customModalStyles = {
     overlay: {
@@ -54,6 +54,56 @@ const customModalStyles = {
         paddingTop: '3%'
     }
 };
+const DropzoneContainer = styled('div')({
+    height: '150px',
+    border: '2px dashed #cccccc',
+    borderRadius: '4px',
+    padding: '20px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'border-color 0.3s ease-in-out',
+    '&:hover': {
+        borderColor: '#a0a0a0',
+        background: '#f0f0f0', // Add background color on hover
+    },
+});
+
+const ImageList = styled('div')({
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: '20px',
+});
+
+const ImageContainer = styled('div')({
+    margin: '10px',
+    position: 'relative',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: 'scale(1.1)',
+    },
+});
+
+const Image = styled('img')({
+    maxWidth: '100%',
+    maxHeight: '100px',
+    borderRadius: '4px',
+});
+
+const DeleteButton = styled('button')({
+    position: 'absolute',
+    top: '5px',
+    right: '5px',
+    background: 'transparent',
+    color: 'gray',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'color 0.3s ease-in-out',
+    '&:hover': {
+        color: 'red',
+    },
+});
+
 
 function ViewRelease() {
 
@@ -62,10 +112,12 @@ function ViewRelease() {
     const [issueData, setIssueData] = useState([]); //릴리즈노트와 연관된 이슈들 정보
     const [otherIssueData, setOtherIssueData] = useState([]); //릴리즈노트에 연관되지 않았지만 추가할 수 있어야되므로 이 프로젝트의 나머지 이슈들 정보
     const [filteredIssues, setFilteredIssues] = useState([]); //릴리즈노트와 관련된 이슈들 필터링 및 정렬 위함
-
+    const [files, setFiles] = useState([]);
+    const [imageUrls, setImageUrls] = useState([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState(false); 
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
-
     const [sendImages, setSendImages] = useState([]);
     //POST 요청 위한 변수들
     const [version, setVersion] = useState('');
@@ -74,13 +126,38 @@ function ViewRelease() {
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
-
-
- 
     const [isVersionCorrect, setIsVersionCorrect] = useState(false);
+ 
+    const onDrop = (acceptedFiles) => {
+        const newImageUrls = acceptedFiles.map((file) => URL.createObjectURL(file));
+        const newFiles = [...files, ...acceptedFiles];
+        if (newFiles.length > 3) {
+            newImageUrls.splice(3);
+            newFiles.splice(3);
+            setSnackbarOpen(true); // MDSnackbar 열기
+            setSnackbarMessage('최대 3개 파일만 추가할 수 있습니다.');
+        }
+        setImageUrls([...imageUrls, ...newImageUrls]);
+        setFiles(newFiles);
+    };
+
+    console.log(files);
+    
+    const deleteImage = (index) => {
+        const newFiles = [...files];
+        const newImageUrls = [...imageUrls];
+    
+        URL.revokeObjectURL(newImageUrls[index]);
+        newImageUrls.splice(index, 1);
+        newFiles.splice(index, 1);
+    
+        setImageUrls(newImageUrls);
+        setFiles(newFiles);
+    };
+    
 
     const handleVersionChange = (e) => {
-        
+
         const versionPattern = /^[0-9]+(\.[0-9]+){2}$/; // 릴리즈 노트 버전 포맷 x.y.z 
         setIsVersionCorrect(versionPattern.test(e.target.value));
         setVersion(e.target.value);
@@ -138,9 +215,9 @@ function ViewRelease() {
 
     async function postReleaseNoteData(token) {
         try {
-            console.log("완료시 사진: ", sendImages);
+            console.log("완료시 사진: ", files);
             const formData = new FormData();
-            sendImages.map(file => formData.append('image', file));
+            files.map(file => formData.append('image', file));
             const jsonData = {
                 projectId: projectId,
                 status: state,
@@ -149,7 +226,8 @@ function ViewRelease() {
                 releaseDate: releaseDate,
                 brief: brief,
                 description: description,
-                issueList: issueData};
+                issueList: issueData
+            };
 
             formData.append('jsonData', new Blob([JSON.stringify(jsonData)], {
                 type: "application/json"
@@ -158,8 +236,10 @@ function ViewRelease() {
             const response = await axios.post(
                 `/api/release/create`, formData,
                 {
-                    headers: { Authorization: `Bearer ${token}`, 
-                    'Content-Type': 'multipart/form-data'},
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    },
                 }
             );
 
@@ -177,7 +257,7 @@ function ViewRelease() {
             //     formData
             // },
             //     {
-                    
+
             //         headers: { Authorization: `Bearer ${token}`, 
             //         'Content-Type': 'multipart/form-data'},
             //     }
@@ -198,7 +278,7 @@ function ViewRelease() {
     const handleRelaseUpdateOnClick = (event) => {
         console.log("릴리스 저장 버튼 클릭됨");
         // console.log("사진 데이터: ", event);
-    
+
         postReleaseNoteData(token);
         alert('릴리즈노트가 생성되었습니다!');
         navigate(-1);
@@ -207,7 +287,7 @@ function ViewRelease() {
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
     const [menu2, setMenu2] = useState(null); // 담당자 필터
-
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
     const openMenu1 = ({ currentTarget }) => setMenu1(currentTarget);
     const closeMenu1 = () => setMenu1(null);
     const openMenu2 = ({ curentTarget }) => setMenu2(currentTarget);
@@ -331,10 +411,7 @@ function ViewRelease() {
         setActiveModal(null);
     }
 
-    const handlerImages = (files) => {
-        console.log("** Files: ", files);
-        setSendImages(files);
-    }
+   
 
     return (
         <DashboardLayout>
@@ -345,7 +422,7 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" onChange={handleVersionChange}  multiline required/>
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" onChange={handleVersionChange} multiline required />
                                     {(!isVersionCorrect) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;버전 포맷은 "x.x.x"입니다. (예시 : 1.0.0)</MDTypography>) : <MDTypography> </MDTypography>}
                                 </MDTypography>
                             </MDBox>
@@ -370,7 +447,7 @@ function ViewRelease() {
                                             세부 설명
                                         </MDTypography>
                                         <MDBox pt={1} px={2}>
-                                        <Description description={description} setDescription = {setDescription} />
+                                            <Description description={description} setDescription={setDescription} />
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -401,7 +478,7 @@ function ViewRelease() {
                                             </Grid>
                                         </Grid>
                                         <MDBox pt={1} px={2}>
-                                            <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll",minHeight: "15vh", maxHeight: "50vh" }}>
+                                            <MDBox pt={3} pl={1} pr={1} sx={{ overflow: "scroll", minHeight: "15vh", maxHeight: "50vh" }}>
                                                 {filteredIssues.map((issue) => (
                                                     <div onClick={() => openIssueInfoModal(issue)}>
                                                         <Issue>
@@ -437,19 +514,19 @@ function ViewRelease() {
                         <MDBox pt={3} px={3}>
                             <Grid container spacing={0}>
                                 <Grid item xs={8}>
-                                <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
-                                <Select
-                                    value={state}
-                                    label="릴리즈 상태"
-                                    onChange={handleChange}
-                                    sx={{ minHeight: 50 }}
-                                >
-                                    <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                    <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
-                                </Select>
-                                <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
-                            </FormControl>
+                                    <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
+                                        <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
+                                        <Select
+                                            value={state}
+                                            label="릴리즈 상태"
+                                            onChange={handleChange}
+                                            sx={{ minHeight: 50 }}
+                                        >
+                                            <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
+                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
+                                        </Select>
+                                        <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect || !state} onClick={handleRelaseUpdateOnClick} /*component={Link} to={"/release"}*/>
@@ -483,14 +560,30 @@ function ViewRelease() {
                                             <Grid item xs={12}>
                                                 <MDBox pt={2} px={1} mb={2}>
                                                     <MDTypography variant="h6">파일 첨부</MDTypography>
-                                                    <DropzoneArea
-                                                        showPreviews={true}
-                                                        showPreviewsInDropzone={false}
-                                                        showFileNamesInPreview={true}
-                                                        acceptedFiles={['image/*']}
-                                                        onChange={handlerImages}      // 이부분으로!
-                                                        maxFileSize={5000000}
-                                                    />
+                                                    <div>
+                                                        <DropzoneContainer {...getRootProps()}>
+                                                            <input {...getInputProps()} />
+                                                            <p>이미지 파일을 드래그하여 업로드하거나 클릭하여 이미지 선택 (최대 3개 파일만 가능)</p>
+                                                        </DropzoneContainer>
+                                                        <ImageList>
+                                                            {files.map((file, index) => (
+                                                                <ImageContainer key={file.name}>
+                                                                    <Image src={imageUrls[index]} alt={file.name} />
+                                                                    <DeleteButton onClick={() => deleteImage(index)}>
+                                                                        <DeleteIcon />
+                                                                    </DeleteButton>
+                                                                </ImageContainer>
+                                                            ))}
+                                                        </ImageList>
+                                                        <MDSnackbar
+                                                            open={snackbarOpen}
+                                                            autoHideDuration={3000}
+                                                            onClose={() => setSnackbarOpen(false)}
+                                                            content={snackbarMessage}
+                                                            title="alert"
+                                                            color='error'
+                                                        />
+                                                    </div>
                                                 </MDBox>
                                             </Grid>
                                         </Grid>

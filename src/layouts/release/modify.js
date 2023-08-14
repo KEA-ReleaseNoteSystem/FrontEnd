@@ -30,7 +30,7 @@ import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
 import Description from "layouts/release/description";
 import { DropzoneArea, DropzoneDialog } from 'material-ui-dropzone';
-
+import MDSnackbar from '../../components/MDSnackbar/index.js';
 const customModalStyles = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -75,7 +75,8 @@ function ViewRelease() {
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
     const [isVersionCorrect, setIsVersionCorrect] = useState(false);
-
+    const [snackbarOpen, setSnackbarOpen]= useState(false);
+    const [snackbarMessage, setSnackbarMessage]= useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem('ACCESS_TOKEN');
 
@@ -137,11 +138,7 @@ function ViewRelease() {
         }
     };
 
-    const [dialogInitialFiles, setDialogInitialFiles] = useState([
-        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_1,
-        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_2,
-        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_3
-    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
+    const [dialogInitialFiles, setDialogInitialFiles] = useState([]);
 
     useEffect(() => {
         setDialogInitialFiles([
@@ -359,26 +356,30 @@ function ViewRelease() {
     };
 
 
-
-
-    const onClickSubmitButton = (files) => {
-        const formData = new FormData();
-        files.forEach(file => {
+    const onClickSubmitButton = (uploadedFiles) => {
+          const formData = new FormData();
+          uploadedFiles.forEach((file) => {
             formData.append('image', file);
-        });
-
-        axios.post(`/api/releaseNote/${releaseId}/images`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Important for file upload
-            },
-        })
-            .then(response => {
-                console.log('Upload successful!', response.data);
+          });
+      
+          axios
+            .post(`/api/releaseNote/${releaseId}/images`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
             })
-            .catch(error => {
-                console.error('Error uploading the image:', error);
+            .then((response) => {
+              console.log('Upload successful!', response.data);
+              setSnackbarOpen(true); // MDSnackbar 열기
+            setSnackbarMessage('파일을 저장 완료했습니다.');
+            })
+            .catch((error) => {
+              console.error('Error uploading the image:', error);
             });
-    }
+      };
+
+    
+
 
     // 이슈 제거하기
     const deleteIssue = (id) => {
@@ -576,7 +577,7 @@ function ViewRelease() {
                                                 <MDBox pt={2} px={2} mb={2}>
                                                     <MDTypography variant="h6">첨부 파일</MDTypography>
                                                     <Dropzone
-                                                        onChange={onClickSubmitButton}
+                                                        onClick={onClickSubmitButton}
                                                         initialFiles={dialogInitialFiles}
                                                     />
                                                 </MDBox>
@@ -721,6 +722,13 @@ function ViewRelease() {
                     </Grid>
                 </MDBox>
             </Modal>
+            <MDSnackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+                content={snackbarMessage}
+                title = "Alert"
+            />
         </DashboardLayout >
     );
 }
