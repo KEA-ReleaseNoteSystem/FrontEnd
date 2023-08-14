@@ -31,6 +31,8 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
   const [body, setBody] = useState(comment.memo_content);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
+
+
   const handleCommentDelete = async () => {
     try {
       console.log("comment.issueId", comment.issueId);
@@ -44,7 +46,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
     }
   };
 
-  console.log("comment", comment);
+
   const handleCommentUpdate = async () => {
     try {
       setUpdating(true);
@@ -73,7 +75,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
       <Comment data-testid="issue-comment">
         {/* <UserAvatar name={comment.memberNickName} avatarUrl={null} /> */}
         <Content>
-          <Username>{comment.memberNickname}</Username>
+          <Username>{comment.memberNickName}</Username>
           <CreatedAt>{formatDateTimeConversational(comment.createdAt)}</CreatedAt>
   
           {isFormOpen ? (

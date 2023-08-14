@@ -155,10 +155,9 @@ function IssueSearch() {
         setMembersData(membersResponse.data.data);
         setIssueDetail(issuesResponse.data.data[0]);
         setChildIssues(issuesResponse.data.data[0].childIssue);
-        console.log("!! ***response: " , issuesResponse.data);
-        console.log("issuesResponse.data.data[0]",issuesResponse.data.data[0])
 
-        { !issuesResponse.data.data[0] ? setIsLoading(true) : setIsLoading(false) }
+
+        { issuesResponse.status !== 200 ? setIsLoading(true) : setIsLoading(false) }
 
       } catch (error) {
         console.error(error);
@@ -548,7 +547,7 @@ function IssueSearch() {
 
                 <MDBox pt={3} pr={2} pl={2} fullWidth>
                   {isLoading ? (
-                    <MDTypography>There are no issues</MDTypography>
+                    null
                   ) : (
                     fetchedIssues.map((issue, index) => (
                       <div
