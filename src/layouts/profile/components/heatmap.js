@@ -23,13 +23,13 @@ const CalendarHeatmap = (issuescore) => {
     console.log("issuescore",issuescore);
 
     const calculateLevel = (score) => {
-        if (score >= 0 && score <= 1000) {
+        if (score >= 0 && score <= 100) {
           return 'Level 1';
-        } else if (score <= 2000) {
+        } else if (score <= 200) {
           return 'Level 2';
-        } else if (score <= 5000) {
+        } else if (score <= 500) {
           return 'Level 3';
-        } else if (score <= 10000) {
+        } else if (score <= 1000) {
           return 'Level 4';
         } else {
           return 'Unknown';
@@ -142,14 +142,14 @@ const CalendarHeatmap = (issuescore) => {
         overflow: 'hidden', // 추가된 부분
         height: '120px', // 12px * 7 = 84px, 사용자가 보이는 영역만 남기도록 설정
         width : '100%',
-        marginLeft : '8%'
+        marginLeft : '9%'
     };
 
     
     const tooltipStyle = {
         position: 'absolute',
-        top: hoveredDate ? `${hoveredCellTop - 340}px` : '-9999px', // hide tooltip if not hovered
-        left: hoveredDate ? `${hoveredCellLeft - (700 + hoveredCellWidth)}px` : '0',
+        top: hoveredDate ? `${hoveredCellTop - 490}px` : '-9999px', // hide tooltip if not hovered
+        left: hoveredDate ? `${hoveredCellLeft - (655 + hoveredCellWidth)}px` : '0',
         transform: 'translate(-50%, -100%)',
         backgroundColor: 'black',
         color: 'white',
@@ -218,8 +218,8 @@ const CalendarHeatmap = (issuescore) => {
                                 style={{
                                     gridRow: dayIndex + 1,
                                     gridColumn: weekIndex + 1,
-                                    width: '13px',
-                                    height: '13px',
+                                    width: '10px',
+                                    height: '10px',
                                     background: `rgba(0, 128, 0, ${getActivityCount(date) / 10})`,
                                     border: '1.5px solid #ddd',
                                     position: 'relative', // 부모에 position 속성 추가
