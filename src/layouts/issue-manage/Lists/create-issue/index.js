@@ -22,7 +22,7 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
-import { DropzoneDialog  } from 'material-ui-dropzone'
+import { DropzoneDialog } from 'material-ui-dropzone'
 
 
 
@@ -134,12 +134,13 @@ function MDMemberInCharge({ label, value, onChange }) {
         });
         const fetchedMembersData = membersResponse.data.data;
         setMembersData(fetchedMembersData);
-  
+
         const memberItems = fetchedMembersData.map((member) => (
           <MenuItem key={member.id} onClick={() => handleName(member)}>
             {member.name}
           </MenuItem>
         ));
+
         console.log("memberItems",memberItems);
   
         setMemberList(memberItems);
@@ -147,7 +148,7 @@ function MDMemberInCharge({ label, value, onChange }) {
         console.error(error);
       }
     };
-  
+
     fetchData();
   }, [projectId, token]);
 
@@ -178,17 +179,17 @@ function MDMemberInCharge({ label, value, onChange }) {
         InputProps={{
           startAdornment: (
             <div>
-            <IconButton onClick={handleClick}>
-              <ArrowCircleDownIcon />
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {memberList}
-          </Menu>
-          </div>
+              <IconButton onClick={handleClick}>
+                <ArrowCircleDownIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {memberList}
+              </Menu>
+            </div>
           ),
         }}
       />
@@ -217,8 +218,32 @@ function Overview() {
   const [writerName, setWriterName] = useState("담당자를 지정해주세요");
   const [memberId,setMemberId] = useState();
   const [title, setTitle] = useState("")
+  // const [memberId,setMemberId] = useState('');
   const [description, setDescription] = useState("")
   const [showDropzone, setShowDropzone] = useState(false); // DropzoneArea의 표시 여부 상태
+
+  const [files, setFiles] = useState();
+  const onClickSubmitButton = (files) => {
+
+    // console.log("** Issue Id: ", issue);
+    setFiles(files);
+    // const formData = new FormData();
+    // files.map(file => formData.append('image', file));
+
+    // axios.post(`api/issue/${issue.id}/images`, formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data', // Important for file upload
+    //   },
+    // })
+    // .then(response => {
+    //   console.log('Upload successful!', response.data);
+    // })
+    // .catch(error => {
+    //   console.error('Error uploading the image:', error);
+    // });
+
+    setOpen(false);
+  }
 
   const handleInputChange = (event) => {
     setInputWidth(event.target.value.length * 8);
@@ -249,8 +274,11 @@ function Overview() {
   const handleOnClickCreateIssue = async () => {
     try {
       const token = localStorage.getItem("ACCESS_TOKEN");
-      // axios.post를 이용하여 API 호출
-      const response = await axios.post(`api/project/${projectId}/issue`, {
+      console.log("== hihi:", files);
+      const formData = new FormData();
+      files.map(file => formData.append('image', file));
+
+      const jsonData = {
         title: title,
         memberInCharge: writerName === "담당자를 지정해주세요" ? null : writerName,
         memberInChargeId : memberId,
@@ -258,16 +286,30 @@ function Overview() {
         description: description,
         date: String(selectedDate),
         userId: Number(1),
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
+      };
 
-      if (response.data.statusCode === 200) {
-        window.location.reload();
-      }
+      formData.append('jsonData', new Blob([JSON.stringify(jsonData)], {
+        type: "application/json"
+      }));
+
+      const response = axios.post(`api/project/${projectId}/issue`, formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        })
+        .then(response => {
+          console.log('Upload successful!', response.data);
+          window.location.reload();
+        })
+        .catch(error => {
+          console.error('Error uploading the image:', error);
+        });
+
+      // if (response.data.statusCode === 200) {
+      //   window.location.reload();
+      // }
     } catch (error) {
       // 오류 처리
       console.error("API 요청 중 오류 발생:", error.message);
@@ -324,23 +366,20 @@ function Overview() {
               />
             </MDBox>
             <MDBox mb={2}>
-            <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
-              Add Image
-            </MDButton>
-            <DropzoneDialog
-              acceptedFiles={['image/*']}
-              cancelButtonText={"cancel"}
-              submitButtonText={"submit"}
-              maxFileSize={5000000}
-              open={open}
-              onClose={() => setOpen(false)}
-              onSave={(files) => {
-                console.log('Files:', files);
-                setOpen(false);
-              }}
-              showPreviews={true}
-              showFileNamesInPreview={true}
-            />
+              <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
+                Add Image
+              </MDButton>
+              <DropzoneDialog
+                acceptedFiles={['image/*']}
+                cancelButtonText={"cancel"}
+                submitButtonText={"submit"}
+                maxFileSize={5000000}
+                open={open}
+                onClose={() => setOpen(false)}
+                onSave={onClickSubmitButton}
+                showPreviews={true}
+                showFileNamesInPreview={true}
+              />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
