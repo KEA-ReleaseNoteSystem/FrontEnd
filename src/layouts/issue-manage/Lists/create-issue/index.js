@@ -25,6 +25,7 @@ import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
 import { DropzoneDialog } from 'material-ui-dropzone'
 
 
+let memberInChargeId = null;
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -118,7 +119,7 @@ function MDIssueType({ label, value, onChange }) {
   );
 }
 
-function MDMemberInCharge({ label, value, onChange }) {
+function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [selectMember, setSelectMember] = useState(value);
   const [membersData, setMembersData] = useState([]);
@@ -133,10 +134,12 @@ function MDMemberInCharge({ label, value, onChange }) {
           headers: { Authorization: `Bearer ${token}` }
         });
         const fetchedMembersData = membersResponse.data.data;
+        console.log("fetchedMembersData: ", fetchedMembersData);
+        
         setMembersData(fetchedMembersData);
 
         const memberItems = fetchedMembersData.map((member) => (
-          <MenuItem key={member.id} onClick={() => handleName(member.name)}>
+          <MenuItem key={member.id} onClick={() => handleName(member)}>
             {member.name}
           </MenuItem>
         ));
@@ -161,8 +164,10 @@ function MDMemberInCharge({ label, value, onChange }) {
   };
 
   const handleName = (value) => {
-    setSelectMember(value);
-    // setMemberId(value.id);
+    console.log("handleName: ", value);
+    setSelectMember(value.name);
+    
+    damdangjaId(value.memberId);
     handleClose();
   };
 
@@ -215,30 +220,13 @@ function Overview() {
   const [issueType, setIssueType] = useState("타입을 선택해주세요"); // 선택된 이슈 타입을 저장하는 상태
   const [writerName, setWriterName] = useState("담당자를 지정해주세요");
   const [title, setTitle] = useState("")
-  // const [memberId,setMemberId] = useState('');
   const [description, setDescription] = useState("")
   const [showDropzone, setShowDropzone] = useState(false); // DropzoneArea의 표시 여부 상태
 
+  const [memberChargedId, setMemberChargedId ] = useState();
   const [files, setFiles] = useState();
   const onClickSubmitButton = (files) => {
-
-    // console.log("** Issue Id: ", issue);
     setFiles(files);
-    // const formData = new FormData();
-    // files.map(file => formData.append('image', file));
-
-    // axios.post(`api/issue/${issue.id}/images`, formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data', // Important for file upload
-    //   },
-    // })
-    // .then(response => {
-    //   console.log('Upload successful!', response.data);
-    // })
-    // .catch(error => {
-    //   console.error('Error uploading the image:', error);
-    // });
-
     setOpen(false);
   }
 
@@ -265,26 +253,40 @@ function Overview() {
   const handleOnClickAttachFile = () => {
     setShowDropzone(true); // 파일 첨부 버튼 클릭 시 DropzoneArea 표시
   };
+
+  const getDamdangjaId = (damdangjaId) => {
+    console.log('담당자 id:', damdangjaId);
+    setMemberChargedId(damdangjaId);
+    // 여기에서 자식 컴포넌트에서 가져온 값을 사용할 수 있습니다.
+  };
+
   const handleOnClickCreateIssue = async () => {
     try {
+      console.log('*** 보낼 담당자 id: ', memberChargedId);
       const token = localStorage.getItem("ACCESS_TOKEN");
       console.log("== hihi:", files);
       const formData = new FormData();
-      files.map(file => formData.append('image', file));
+      if(files != null){
+        files.map(file => formData.append('image', file));
+      }else{
+        formData.append('image', null)
+      }
+      
 
       const jsonData = {
         title: title,
         memberInCharge: writerName === "담당자를 지정해주세요" ? null : writerName,
-        // memberInChargeId : memberId,
+        memberInChargeId : Number(memberChargedId),
         type: issueType,
         description: description,
-        date: String(selectedDate),
-        userId: Number(1),
+        // date: String(selectedDate),
       };
 
       formData.append('jsonData', new Blob([JSON.stringify(jsonData)], {
         type: "application/json"
       }));
+
+      
 
       const response = axios.post(`api/project/${projectId}/issue`, formData,
         {
@@ -341,7 +343,8 @@ function Overview() {
               <MDMemberInCharge
                 label="담당자"
                 value={writerName}
-                onChange={handleWriterChange} fullWidth />
+                onChange={handleWriterChange}
+                damdangjaId={getDamdangjaId} fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDIssueType
