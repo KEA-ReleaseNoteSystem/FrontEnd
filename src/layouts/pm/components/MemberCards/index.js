@@ -162,7 +162,7 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
           <Modal.Title>권한 양도</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          정말로 PM 권한을 {name}에게 양도하시겠습니까?
+          정말로 PM 권한을 {name}님에게 양도하시겠습니까?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowAssignModal(false)}>
@@ -178,7 +178,7 @@ function DefaultProjectCard({ id, projectId, image, name, nickname, position, em
           <Modal.Title>삭제 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          정말로 {name} 프로젝트에서 삭제하시겠습니까?
+          정말로 {name}님을 프로젝트에서 삭제하시겠습니까?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>

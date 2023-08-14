@@ -18,7 +18,8 @@ import DataTable from "examples/Tables/DataTable";
 import memberprojectTable from "layouts/myteam/data/memberprojectTable";
 import projectsTableData from "layouts/myteam/data/projectsTableData";
 
-const projectId = 1;
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
 
 function OtherTeams() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
@@ -26,7 +27,7 @@ function OtherTeams() {
   const { columns: pColumns, rows: pRows } = projectsTableData(selectedMemberId);
   const [ projectName, setProjectName ] = useState("");
   const token = localStorage.getItem('ACCESS_TOKEN');
-
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
 
 
   const getProjectName = async (projectId, token) => {

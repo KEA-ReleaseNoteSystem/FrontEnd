@@ -75,7 +75,6 @@ function Basic() {
     })
       .then((response) => {
         console.log(response)
-        alert(response.data.message); // Alert 창을 띄웁니다.
         localStorage.setItem("ACCESS_TOKEN", response.data.data);
         if (response.data.statusCode === 401) {
           navigate('/authentication/rejoin', {
