@@ -11,7 +11,7 @@ import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 import axios from "axios";
-import { DropzoneArea } from 'material-ui-dropzone';
+import Dropzone  from 'layouts/release/components/Dropzone.jsx'
 
 const customModalStyles = {
   overlay: {
@@ -35,7 +35,9 @@ const customModalStyles = {
 
 
 function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fetchedMemo, projectId, createChildIssue ,submitIssue}) {
-  console.log("childIssues1", issue);
+  console.log("issue", issue);
+  console.log("issue1", issue.imgUrl_1);
+  console.log("issue2", issue.imgUrl_2);
   const [Memo, setMemo] = useState(fetchedMemo);
   const [childIssues, setChildIssues] = useState(updatedchildIssues);
   const [activeModal, setActiveModal] = useState("");
@@ -45,19 +47,18 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const [selectedIssues, setSelectedIssues] = useState([]);
 
   const [dialogInitialFiles, setDialogInitialFiles] = useState([
-    issue.imgUrl_1 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
-    issue.imgUrl_2 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
-    issue.imgUrl_3 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-  ].filter(Boolean));
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+    process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+null&& url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+undefined));
 
   useEffect(() => {
     setDialogInitialFiles([
-      issue.imgUrl_1 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
-      issue.imgUrl_2 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
-      issue.imgUrl_3 && process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-    ].filter(Boolean));
-
-}, [issue]);
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
+      process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
+    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+null && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+undefined));
+  }, [issue]);
 
   const openIssueAddModal = () => {
     setActiveModal("addChildIssue");
@@ -123,40 +124,42 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
 
   const handleDropzoneChange = (files) => {
+    console.log("handle",files);
     submitIssue(files, currentIds); 
   };
 
 
+  
 
-const PreviewImages = () => {
+// const PreviewImages = () => {
 
 
-  const handleDelete = (files) => {
-    // Here, I'm assuming dialogInitialFiles is a state, so you would use a setState function like this:
-    // setDialogInitialFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
-    // If dialogInitialFiles isn't a state, adjust accordingly.
-  };
+//   const handleDelete = (files) => {
+//     // Here, I'm assuming dialogInitialFiles is a state, so you would use a setState function like this:
+//     // setDialogInitialFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
+//     // If dialogInitialFiles isn't a state, adjust accordingly.
+//   };
 
-  return (
-    <div>
-      {dialogInitialFiles.map((url, index) => (
-        <Card key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ margin: '10px', width: '50px', height: '50px', overflow: 'hidden', borderRadius: '50%' }}>
-              <img src={url} alt={`Preview ${index}`} style={{ width: '100%', height: 'auto' }} />
-            </div>
-            <div style={{ marginLeft: '10px', fontSize: '14px' }}>{url.split('/').pop()}</div>
-            <div style={{ flexGrow: 1, cursor: 'pointer', textAlign: 'right' }}>
-            <button onClick={() => handleDelete(index)} style={{ marginRight: '10px' }}>Delete</button>
-          </div>
+//   return (
+//     <div>
+//       {dialogInitialFiles.map((url, index) => (
+//         <Card key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+//           <div style={{ display: 'flex', alignItems: 'center' }}>
+//             <div style={{ margin: '10px', width: '50px', height: '50px', overflow: 'hidden', borderRadius: '50%' }}>
+//               <img src={url} alt={`Preview ${index}`} style={{ width: '100%', height: 'auto' }} />
+//             </div>
+//             <div style={{ marginLeft: '10px', fontSize: '14px' }}>{url.split('/').pop()}</div>
+//             <div style={{ flexGrow: 1, cursor: 'pointer', textAlign: 'right' }}>
+//             <button onClick={() => handleDelete(index)} style={{ marginRight: '10px' }}>Delete</button>
+//           </div>
           
-            {/* If you're using a UI library like Material-UI, replace the above button with a styled component. */}
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-};
+//             {/* If you're using a UI library like Material-UI, replace the above button with a styled component. */}
+//           </div>
+//         </Card>
+//       ))}
+//     </div>
+//   );
+// };
 
   
 
@@ -191,19 +194,13 @@ const PreviewImages = () => {
               </MDBox>
             </Card>
           </MDBox>
-          <MDBox pt={2} px={2} mb={2}>
-            <Card sx={{ margin: '0 auto' }}>
-
-              <DropzoneArea
-                acceptedFiles={['image/*']}
-                submitButtonText={"submit"}
-                maxFileSize={5000000}
-                onChange={handleDropzoneChange}
-                showPreviews={false}
-                showPreviewsInDropzone={false}
-           
+          <MDBox pt={5} px={5} mb={5}>
+            <Card sx={{backgroundColor: 'white' }}>
+              <Dropzone
+                onClick={handleDropzoneChange}
+                initialFiles={dialogInitialFiles}
               />
-              <PreviewImages/>
+              {/* <PreviewImages/> */}
               
             </Card>
           </MDBox>

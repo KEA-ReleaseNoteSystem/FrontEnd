@@ -116,7 +116,7 @@ function IssueSearch() {
           importance: childIssue.importance,
           createdAt: childIssue.createdAt,
           memberIdInCharge: {
-            name: childIssue.memberIdInCharge.name,
+          name: childIssue.memberIdInCharge.name,
             nickname: childIssue.memberIdInCharge.nickname,
           },
           child: true,
@@ -254,6 +254,8 @@ function IssueSearch() {
     }
   };
 
+  
+
 
   const submitIssue = async (files, currentIds) => {
     try {
@@ -264,7 +266,7 @@ function IssueSearch() {
         const uploadResponse = await axios.post(`api/issue/${currentIds}/images`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`
+      
             },
         });
      
@@ -272,10 +274,6 @@ function IssueSearch() {
         const uploadedFileUrls = uploadResponse.data.data;
         
         console.log("uploadedFileUrls",uploadedFileUrls);
-      
-
-        // 현재 issueDetail 혹은 선택된 이슈의 상태를 가져옵니다.
-        const currentIssue = fetchedIssues.find(issue => issue.id === currentIds) || issueDetail;
 
         let updatedFieldsWithImages = {
             updatedAt: new Date().toISOString()
@@ -283,7 +281,7 @@ function IssueSearch() {
 
         const imgKeys = ['imgUrl_1', 'imgUrl_2', 'imgUrl_3'];
         imgKeys.forEach((key, index) => {
-                if (uploadedFileUrls[index]) {
+                if (uploadedFileUrls !== undefined) {
                     updatedFieldsWithImages[key] = uploadedFileUrls[index];
                 }else{
                   updatedFieldsWithImages[key] = "";
@@ -572,9 +570,9 @@ function IssueSearch() {
             </Grid>
             <Grid item xs={4}>
 
-              {/* {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
-              memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />} */}
-              {/* {isLoading ? null : <MyTree issue={issueDetail} />} */}
+              {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
+              memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
+              {isLoading ? null : <MyTree issue={issueDetail} />}
 
             </Grid>
           </Grid>

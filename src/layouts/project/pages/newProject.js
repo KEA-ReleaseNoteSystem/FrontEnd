@@ -102,7 +102,6 @@ const NewProject = () => {
         console.log("Form submitted successfully", response);
         setIsLoading("success"); // Set loading state to success
         setTimeout(() => {
-          alert(response.data.message);
           // Reset form fields and state
           setFormData({
             name: "",
