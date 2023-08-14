@@ -90,7 +90,6 @@ function Dropzone({ onClick, initialFiles, Button=true }) {
 
     useEffect(() => {
             setFiles(initialFiles);
-
             setImageUrls(initialFiles);
     }, [initialFiles]);
     console.log(files);
