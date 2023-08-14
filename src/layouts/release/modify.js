@@ -12,7 +12,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -24,13 +23,13 @@ import MDInput from 'components/MDInput';
 import MDButton from 'components/MDButton';
 import MDProgress from 'components/MDProgress';
 import MDBadge from "components/MDBadge";
-
+import Dropzone from './components/Dropzone.jsx';
 import axios from 'axios';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
 import Description from "layouts/release/description";
-
+import { DropzoneArea, DropzoneDialog } from 'material-ui-dropzone';
 
 const customModalStyles = {
     overlay: {
@@ -82,7 +81,7 @@ function ViewRelease() {
 
 
     const handleVersionChange = (e) => {
-        
+
         const versionPattern = /^[0-9]+(\.[0-9]+){2}$/; // 릴리즈 노트 버전 포맷 x.y.z 
         setIsVersionCorrect(versionPattern.test(e.target.value));
         setVersion(e.target.value);
@@ -138,7 +137,20 @@ function ViewRelease() {
         }
     };
 
-    console.log("version",version);
+    const [dialogInitialFiles, setDialogInitialFiles] = useState([
+        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_1,
+        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_2,
+        process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_3
+    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
+
+    useEffect(() => {
+        setDialogInitialFiles([
+            process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_1,
+            process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_2,
+            process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_3
+        ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
+    }, [releaseNoteData]);
+    console.log("dialogInitialFiles", dialogInitialFiles);
 
     // 이 릴리즈 노트에 속한 이슈 받아오기
     async function getIssueData(releaseId, token) {
@@ -346,6 +358,28 @@ function ViewRelease() {
         setOtherIssueData(removedIssues);
     };
 
+
+
+
+    const onClickSubmitButton = (files) => {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('image', file);
+        });
+
+        axios.post(`/api/releaseNote/${releaseId}/images`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Important for file upload
+            },
+        })
+            .then(response => {
+                console.log('Upload successful!', response.data);
+            })
+            .catch(error => {
+                console.error('Error uploading the image:', error);
+            });
+    }
+
     // 이슈 제거하기
     const deleteIssue = (id) => {
         filterReset();
@@ -367,7 +401,7 @@ function ViewRelease() {
                         <Card>
                             <MDBox pt={2} px={3}>
                                 <MDTypography variant="body2">
-                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={handleVersionChange}  multiline required/>
+                                    릴리즈 버전: &nbsp;<MDInput variant="standard" defaultValue={releaseNoteData.version} onChange={handleVersionChange} multiline required />
                                     {(!isVersionCorrect) ? (<MDTypography fontWeight="light" color="error" variant="caption">&nbsp;&nbsp;버전 포맷은 "x.x.x"입니다. (예시 : 1.0.0)</MDTypography>) : <MDTypography> </MDTypography>}
                                 </MDTypography>
                             </MDBox>
@@ -392,7 +426,7 @@ function ViewRelease() {
                                             세부 설명
                                         </MDTypography>
                                         <MDBox pt={1} px={2}>
-                                            <Description description={description} setDescription = {setDescription} />
+                                            <Description description={description} setDescription={setDescription} />
                                         </MDBox>
                                     </MDBox>
                                 </Card>
@@ -459,23 +493,23 @@ function ViewRelease() {
                         <MDBox pt={3} px={3}>
                             <Grid container spacing={0}>
                                 <Grid item xs={8}>
-                                <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
-                                <Select
-                                    value={state}
-                                    label="릴리즈 상태"
-                                    onChange={handleChange}
-                                    sx={{ minHeight: 50 }}
-                                >
-                                    <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
-                                    <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
-                                </Select>
-                                <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
-                            </FormControl>
+                                    <FormControl sx={{ mt: -2, pb: 2, minWidth: 120 }}>
+                                        <InputLabel id="demo-simple-select-helper-label">상태</InputLabel>
+                                        <Select
+                                            value={state}
+                                            label="릴리즈 상태"
+                                            onChange={handleChange}
+                                            sx={{ minHeight: 50 }}
+                                        >
+                                            <MenuItem value={"Not released"}>릴리즈 안됨(예정)</MenuItem>
+                                            <MenuItem value={"Released"}>릴리즈 됨</MenuItem>
+                                        </Select>
+                                        <FormHelperText error={!state}>릴리즈 상태를 설정해주세요.</FormHelperText>
+                                    </FormControl>
 
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }}  onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
@@ -538,17 +572,13 @@ function ViewRelease() {
                                     <br></br>
                                     <Card >
                                         <Grid container>
-                                            <Grid item xs={6}>
-                                                <MDBox pt={2} px={2}>
-                                                    {firstImgUrl && <MDTypography variant="h6">첨부 파일 1</MDTypography>}
-                                                    {firstImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + firstImgUrl} alt="이미지 1" style={{ width: '100%' }} />}
-
-                                                    {secondImgUrl && <MDTypography variant="h6">첨부 파일 2</MDTypography>}
-                                                    {secondImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + secondImgUrl} alt="이미지 2" style={{ width: '100%' }} />}
-
-                                                    {thirdImgUrl && <MDTypography variant="h6">첨부 파일 3</MDTypography>}
-                                                    {thirdImgUrl && <img src={process.env.REACT_APP_KIC_OBJECT_STORAGE + thirdImgUrl} alt="이미지 3" style={{ width: '100%' }} />}
-
+                                            <Grid item xs={12}>
+                                                <MDBox pt={2} px={2} mb={2}>
+                                                    <MDTypography variant="h6">첨부 파일</MDTypography>
+                                                    <Dropzone
+                                                        onChange={onClickSubmitButton}
+                                                        initialFiles={dialogInitialFiles}
+                                                    />
                                                 </MDBox>
                                             </Grid>
                                         </Grid>

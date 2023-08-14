@@ -53,7 +53,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+  ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
 
   useEffect(() => {
     console.log("issue.imgUrl_1asdddddddddddddd", issue.imgUrl_1);
@@ -61,7 +61,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_2,
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
-    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE));
+    ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
   }, [issue]);
 
   console.log("DIG", dialogInitialFiles);
@@ -192,7 +192,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                 showPreviewsInDropzone={false}
                 initialFiles={dialogInitialFiles}
               />
-
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
