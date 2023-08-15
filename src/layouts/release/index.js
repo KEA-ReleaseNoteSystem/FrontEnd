@@ -55,7 +55,7 @@ function Release() {
           displayEmpty
         >
           <MenuItem disabled>
-            View
+            보기 방식 선택
           </MenuItem>
           {Object.values(releaseView).map(view => (
             <MenuItem key={view} value={view}>
