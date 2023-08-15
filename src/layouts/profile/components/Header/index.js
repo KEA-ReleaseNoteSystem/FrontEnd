@@ -15,7 +15,7 @@ import backgroundImage from "assets/images/bg-profile.jpeg";
 
 function Header({children}) {
   return (
-    <Grid container style={{ width: '1310px' }}>
+    <Grid  container style={{ width: '1310px' }}>
     <MDBox position="relative" mb={5}>
       <MDBox
         display="flex"
