@@ -23,6 +23,7 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../../../examples/Sidenav/ProjectIdAtom';
 import { DropzoneDialog } from 'material-ui-dropzone'
+import Dropzone from 'layouts/release/components/Dropzone.jsx'
 
 
 let memberInChargeId = null;
@@ -223,7 +224,7 @@ function Overview() {
   };
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
+  const [dialogInitialFiles, setDialogInitialFiles] = useState([]);
   
   const handleClose = () => {
     setAnchorEl(null);
@@ -404,22 +405,18 @@ function Overview() {
             </MDBox>
             
             <MDBox mb={2}>
-              <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
+              {/* <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
                 Add Image
-              </MDButton>
-              <DropzoneDialog
-                acceptedFiles={['image/*']}
-                cancelButtonText={"cancel"}
-                submitButtonText={"submit"}
-                maxFileSize={5000000}
-                open={open}
-                onClose={() => setOpen(false)}
-                onSave={onClickSubmitButton}
-                showPreviews={true}
-                showFileNamesInPreview={true}
+              </MDButton> */}
+          
+                  <Dropzone
+                  onClick={onClickSubmitButton}
+                  initialFiles={dialogInitialFiles}
               />
+              
             </MDBox>
             <MDBox mb={2}>
+              <br/>
               <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
             </MDBox>
             <MDBox mt={4} mb={1} display="flex" justifyContent="center">

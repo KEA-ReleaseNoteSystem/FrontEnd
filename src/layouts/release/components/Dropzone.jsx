@@ -54,7 +54,7 @@ const DeleteButton = styled('button')({
     },
 });
 
-function Dropzone({ onClick, initialFiles, Button=true }) {
+function Dropzone({ onClick, initialFiles, Button=true ,insidePreview=true}) {
     const [files, setFiles] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const [snackbarOpen, setSnackbarOpen]= useState(false);
@@ -94,17 +94,35 @@ function Dropzone({ onClick, initialFiles, Button=true }) {
     }, [initialFiles]);
 
 
-    const deleteImage = (index) => {
+    // const deleteImage = (index) => {
+    //     const newFiles = [...files];
+    //     const newImageUrls = [...imageUrls];
+
+    //     URL.revokeObjectURL(newImageUrls[index]);
+    //     newImageUrls.splice(index, 1);
+    //     newFiles.splice(index, 1);
+
+    //     setImageUrls(newImageUrls);
+    //     setFiles(newFiles);
+
+    //     if (index < initialFiles.length) {
+    //         initialFiles.splice(index, 1);
+    //     }
+    // };
+
+    const deleteImage = (index, e) => {
+        e.stopPropagation(); // 이벤트 전파 중지
+    
         const newFiles = [...files];
         const newImageUrls = [...imageUrls];
-
+    
         URL.revokeObjectURL(newImageUrls[index]);
         newImageUrls.splice(index, 1);
         newFiles.splice(index, 1);
-
+    
         setImageUrls(newImageUrls);
         setFiles(newFiles);
-
+    
         if (index < initialFiles.length) {
             initialFiles.splice(index, 1);
         }
@@ -112,22 +130,27 @@ function Dropzone({ onClick, initialFiles, Button=true }) {
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
 
+    const renderImageList = () => (
+        <ImageList>
+            {files.map((file, index) => (
+                <ImageContainer key={file.name}>
+                    <Image src={imageUrls[index]} alt={file.name} />
+                    <DeleteButton onClick={(e) => deleteImage(index, e)}>
+                <DeleteIcon />
+            </DeleteButton>
+                </ImageContainer>
+            ))}
+        </ImageList>
+    );
+
     return (
         <div>
             <DropzoneContainer {...getRootProps()}>
                 <input {...getInputProps()} />
                 <p>이미지 파일을 드래그하여 업로드하거나 클릭하여 이미지 선택 (최대 3개 파일만 가능)</p>
+                {insidePreview && renderImageList()} {/* 드랍존 내부에 프리뷰 표시 */}
             </DropzoneContainer>
-            <ImageList>
-                {files.map((file, index) => (
-                    <ImageContainer key={file.name}>
-                        <Image src={imageUrls[index]} alt={file.name} />
-                        <DeleteButton onClick={() => deleteImage(index)}>
-                            <DeleteIcon />
-                        </DeleteButton>
-                    </ImageContainer>
-                ))}
-            </ImageList>
+            {!insidePreview && renderImageList()} {/* 드랍존 외부에 프리뷰 표시 */}
             {Button && (
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <MDButton onClick={onClickSubmitButton}>Save File</MDButton>
@@ -138,7 +161,7 @@ function Dropzone({ onClick, initialFiles, Button=true }) {
                 autoHideDuration={3000}
                 onClose={() => setSnackbarOpen(false)}
                 content={snackbarMessage}
-                title = "alert"
+                title="alert"
                 color='error'
             />
         </div>
