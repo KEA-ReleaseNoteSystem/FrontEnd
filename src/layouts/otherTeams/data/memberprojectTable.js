@@ -10,15 +10,15 @@ import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-// Images
-import defimg from "assets/images/default_avatar.jpg";
-import { useRecoilState } from 'recoil';
-import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
 
-const getProjectMemberData = async ( token) => {
+import defimg from "assets/images/default_avatar.jpg";
+
+const getGroupMemberData = async (token) => {
   try {
-    const response = await axios.get(`/api/group/members`, {
+    const response = await axios.get("/api/group/members", {
+
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     });
@@ -35,16 +35,19 @@ const getProjectMemberData = async ( token) => {
   }
 };
 
+ 
+
+
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
-  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  
   
   console.log(memberList);
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProjectMemberData(token);
+      const data = await getGroupMemberData(token);
       setMemberList(data);
     }
     fetchData();

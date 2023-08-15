@@ -136,7 +136,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
             <MDBox color={light ? "white" : "inherit"}>
+<<<<<<< HEAD
               <IconButton
+=======
+            <IconButton
+>>>>>>> origin/QAissueManage
                 size="small"
                 disableRipple
                 color="inherit"
@@ -147,7 +151,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
+<<<<<<< HEAD
               
+=======
+>>>>>>> origin/QAissueManage
               {renderMenu()}
             </MDBox>
           </MDBox>
