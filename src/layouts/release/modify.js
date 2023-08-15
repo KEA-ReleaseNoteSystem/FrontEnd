@@ -510,7 +510,7 @@ function ViewRelease() {
 
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect || !state} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
