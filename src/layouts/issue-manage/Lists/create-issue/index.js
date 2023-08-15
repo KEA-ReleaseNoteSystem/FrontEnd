@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import { Icon, IconButton, Menu, MenuItem, Input } from "@mui/material";
+import { Icon, IconButton, Menu, MenuItem, Input, Snackbar } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
@@ -31,8 +31,6 @@ function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    onChange(date);
   };
 
   return (
@@ -40,24 +38,32 @@ function MDDatePicker({ label, defaultValue, onChange }) {
       <MDInput
         type="text"
         label={label}
-        value={selectedDate.toDateString()}
+        value={getToday(selectedDate)} 
         fullWidth
         InputProps={{
           startAdornment: (
             <DatePicker
               selected={selectedDate}
               onChange={handleDateChange}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               showYearDropdown
               showMonthDropdown
-              dropdownMode="select"
               customInput={<CalendarTodayIcon />}
+              locale="ko"
             />
           ),
         }}
       />
     </MDBox>
   );
+}
+
+function getToday(date){
+  var year = date.getFullYear();
+  var month = ("0" + (1 + date.getMonth())).slice(-2);
+  var day = ("0" + date.getDate()).slice(-2);
+
+  return year + "-" + month + "-" + day;
 }
 
 function MDIssueType({ label, value, onChange }) {
@@ -119,7 +125,7 @@ function MDIssueType({ label, value, onChange }) {
   );
 }
 
-function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
+function MDMemberInCharge({ label, value, onChange, damdangjaId }) {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [selectMember, setSelectMember] = useState(value);
   const [membersData, setMembersData] = useState([]);
@@ -135,7 +141,7 @@ function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
         });
         const fetchedMembersData = membersResponse.data.data;
         console.log("fetchedMembersData: ", fetchedMembersData);
-        
+
         setMembersData(fetchedMembersData);
 
         const memberItems = fetchedMembersData.map((member) => (
@@ -144,8 +150,8 @@ function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
           </MenuItem>
         ));
 
-        console.log("memberItems",memberItems);
-  
+        console.log("memberItems", memberItems);
+
         setMemberList(memberItems);
       } catch (error) {
         console.error(error);
@@ -167,14 +173,14 @@ function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
 
   const handleName = (value) => {
     console.log("handleName: ", value);
-    setSelectMember(value.name);
+      setSelectMember(value.name);
     
     damdangjaId(value.memberId);
 
     handleClose();
   };
 
-  onChange(selectMember,memberId);  // ***
+  onChange(selectMember, memberId);  // ***
 
   return (
     <MDBox mb={2}>
@@ -193,7 +199,9 @@ function MDMemberInCharge({ label, value, onChange, damdangjaId}) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                {memberList}
+                <div style={{ maxHeight: 150, overflowY: 'auto' }}>
+                  {memberList}
+                </div>
               </Menu>
             </div>
           ),
@@ -213,22 +221,38 @@ function Overview() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [projects, setProjects] = useState([]);
-  const [issueType, setIssueType] = useState("타입을 선택해주세요"); // 선택된 이슈 타입을 저장하는 상태
-  const [writerName, setWriterName] = useState("담당자를 지정해주세요");
-  const [memberId,setMemberId] = useState();
+  const [issueType, setIssueType] = useState("타입을 선택해주세요(필수)"); // 선택된 이슈 타입을 저장하는 상태
+  const [writerName, setWriterName] = useState("담당자를 지정해주세요(필수)");
+  const [memberId, setMemberId] = useState();
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [showDropzone, setShowDropzone] = useState(false); // DropzoneArea의 표시 여부 상태
 
-  const [memberChargedId, setMemberChargedId ] = useState();
+  const [memberChargedId, setMemberChargedId] = useState();
   const [files, setFiles] = useState();
+
+  const [importance, setImportance] = useState(null); // 중요도를 저장하는 상태
+  
+  const handleImportanceChange = (event) => {
+    const inputValue = event.target.value;
+    const numericValue = Number(inputValue);
+    if (numericValue >= 0 && numericValue <= 100) {
+      setImportance(numericValue);
+    } else {
+      setImportance(null);
+    }
+  };
+
   const onClickSubmitButton = (files) => {
     setFiles(files);
     setOpen(false);
@@ -246,7 +270,7 @@ function Overview() {
     setIssueType(type);
   };
 
-  console.log("handleWriterChange",writerName);
+  console.log("handleWriterChange", writerName);
   const handleWriterChange = (name, id) => {
     setWriterName(name);
     setMemberId(id);
@@ -260,31 +284,30 @@ function Overview() {
   const handleOnClickAttachFile = () => {
     setShowDropzone(true); // 파일 첨부 버튼 클릭 시 DropzoneArea 표시
   };
-
+  const isAddButtonDisabled = !title || (issueType==="타입을 선택해주세요(필수)") || (writerName==="담당자를 지정해주세요(필수)");
   const getDamdangjaId = (damdangjaId) => {
     console.log('담당자 id:', damdangjaId);
     setMemberChargedId(damdangjaId);
     // 여기에서 자식 컴포넌트에서 가져온 값을 사용할 수 있습니다.
   };
-
+  const handleSnackbarClose = () => {
+    setIsSnackbarOpen(false);
+  };
   const handleOnClickCreateIssue = async () => {
     try {
-      console.log('*** 보낼 담당자 id: ', memberChargedId);
       const token = localStorage.getItem("ACCESS_TOKEN");
-      console.log("== hihi:", files);
       const formData = new FormData();
-      if(files != null){
+      if (files != null) {
         files.map(file => formData.append('image', file));
-      }else{
+      } else {
         formData.append('image', null)
       }
-      
 
       const jsonData = {
         title: title,
-        memberInCharge: writerName === "담당자를 지정해주세요" ? null : writerName,
+        memberInCharge: writerName === "담당자를 지정해주세요(필수)" ? null : writerName,
         memberInChargeId : Number(memberChargedId),
-
+        importance: importance,
         type: issueType,
         description: description,
         // date: String(selectedDate),
@@ -293,8 +316,6 @@ function Overview() {
       formData.append('jsonData', new Blob([JSON.stringify(jsonData)], {
         type: "application/json"
       }));
-
-      
 
       const response = axios.post(`api/project/${projectId}/issue`, formData,
         {
@@ -305,6 +326,8 @@ function Overview() {
         })
         .then(response => {
           console.log('Upload successful!', response.data);
+          setIsSnackbarOpen(true); // 스낵바 열기
+          setSnackbarMessage('이슈가 성공적으로 생성되었습니다.'); 
           window.location.reload();
         })
         .catch(error => {
@@ -345,7 +368,7 @@ function Overview() {
           </MDBox>
           <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
             <MDBox mb={2}>
-              <MDInput type="text" label="이슈 제목" onChange={handleChangeTitle} fullWidth />
+              <MDInput type="text" label="이슈 제목(필수)" onChange={handleChangeTitle} fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDMemberInCharge
@@ -362,6 +385,16 @@ function Overview() {
               />
             </MDBox>
             <MDBox mb={2}>
+              <MDInput
+                type="number"
+                value={importance !== null ? importance : ""}
+                label="중요도(선택)"
+                placeholder="[0-100]"
+                onChange={handleImportanceChange}
+                fullWidth
+              />
+            </MDBox>
+            <MDBox mb={2}>
               <MDDatePicker
                 label="생성일"
                 disabled
@@ -369,6 +402,7 @@ function Overview() {
                 onChange={handleDateChange}
               />
             </MDBox>
+            
             <MDBox mb={2}>
               <MDButton variant="contained" color="info" onClick={() => setOpen(true)}>
                 Add Image
@@ -389,13 +423,19 @@ function Overview() {
               <MDInput type="textarea" label="설명" onChange={handleDescription} rows={4} multiline fullWidth />
             </MDBox>
             <MDBox mt={4} mb={1} display="flex" justifyContent="center">
-              <MDButton variant="gradient" color="info" onClick={handleOnClickCreateIssue} onClose={handleClose}>
+              <MDButton variant="gradient" color="info" onClick={handleOnClickCreateIssue} onClose={handleClose} disabled={isAddButtonDisabled}>
                 추가
               </MDButton>
             </MDBox>
           </MDBox>
         </Grid>
       </Grid>
+      <Snackbar
+      open={isSnackbarOpen}
+      autoHideDuration={3000}
+      onClose={handleSnackbarClose}
+      message={snackbarMessage}
+    />
     </MDBox>
   );
 }

@@ -25,6 +25,8 @@ import MDProgress from 'components/MDProgress';
 import MDBadge from "components/MDBadge";
 import Dropzone from './components/Dropzone.jsx';
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
@@ -73,8 +75,9 @@ function ViewRelease() {
     const [progress, setProgress] = useState(0); //프로그레스바 전용
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
-    const [releaseDate, setReleaseDate] = useState('');
-    const [isVersionCorrect, setIsVersionCorrect] = useState(false);
+    const [releaseDate, setReleaseDate] = useState(new Date());
+    const [createDate, setCreateDate] = useState(new Date());
+    const [isVersionCorrect, setIsVersionCorrect] = useState(true);
     const [snackbarOpen, setSnackbarOpen]= useState(false);
     const [snackbarMessage, setSnackbarMessage]= useState(false);
     const navigate = useNavigate();
@@ -127,18 +130,31 @@ function ViewRelease() {
             setDescription(response.data.data.description);
             setState(response.data.data.status);
             setProgress(response.data.data.percent);
-            setReleaseDate(response.data.data.releaseDate);
+            setReleaseDate(new Date(response.data.data.releaseDate));
             setmemberInCharge(response.data.data.member && response.data.data.member.username);
             setFirstImgUrl(response.data.data.imgUrl_1);
             setSecondImgUrl(response.data.data.imgUrl_2);
             setThirdImgUrl(response.data.data.imgUrl_3);
-            console.log("** response: ", response.data);
+            setCreateDate(new Date(response.date.createdAt));
+            console.log(releaseDate);
         } catch (error) {
             console.error(error);
         }
     };
 
     const [dialogInitialFiles, setDialogInitialFiles] = useState([]);
+
+    function getToday(date) {
+        var year = date.getFullYear();
+        var month = ("0" + (1 + date.getMonth())).slice(-2);
+        var day = ("0" + date.getDate()).slice(-2);
+
+        return year + "-" + month + "-" + day;
+    }
+
+    const handleReleaseDateChange = (date) => {
+        setReleaseDate(date);
+      };
 
     useEffect(() => {
         setDialogInitialFiles([
@@ -147,8 +163,7 @@ function ViewRelease() {
             process.env.REACT_APP_KIC_OBJECT_STORAGE + releaseNoteData.imgUrl_3
         ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE + 'null')));
     }, [releaseNoteData]);
-    console.log("dialogInitialFiles", dialogInitialFiles);
-
+  
     // 이 릴리즈 노트에 속한 이슈 받아오기
     async function getIssueData(releaseId, token) {
         try {
@@ -223,7 +238,6 @@ function ViewRelease() {
     }
 
     useEffect(() => {
-        console.log("정보를 받아와보자.")
         getReleaseNoteData(releaseId, token);
         getIssueData(releaseId, token);
         getMembersData(projectId, token);
@@ -232,7 +246,6 @@ function ViewRelease() {
 
     //릴리스 작성하기 버튼
     const handleReleaseUpdateOnClick = (event) => {
-        console.log("릴리스 저장 버튼 클릭됨");
         putReleaseNoteData(token);
         alert('수정사항이 반영되었습니다!');
         navigate(-1);
@@ -510,7 +523,7 @@ function ViewRelease() {
 
                                 </Grid>
                                 <Grid item m={2} xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect || !state} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
+                                    <MDButton color="info" type="submit" sx={{ mt: -4, mb: 2 }} disabled={!isVersionCorrect} onClick={handleReleaseUpdateOnClick} /*component={Link} to={"/release"}*/>
                                         <h6>수정</h6>
                                     </MDButton>
                                 </Grid>
@@ -520,14 +533,46 @@ function ViewRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">생성 일자</MDTypography>
-                                                    <MDTypography variant="subtitle2" ml={1}>{releaseNoteData.createdAt && releaseNoteData.createdAt.slice(0, 10)}</MDTypography>
+                                                    <MDBox mt={1} mb={2}>
+                                                        <MDInput
+                                                            type="text"
+                                                            value={getToday(createDate)}
+                                                            InputProps={{
+                                                                startAdornment: (
+                                                                    <DatePicker
+                                                                        selected={createDate}
+                                                                        dateFormat="yyyy.MM.dd"
+                                                                        showYearDropdown
+                                                                        showMonthDropdown
+                                                                        customInput={<CalendarTodayIcon />}
+                                                                    />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </MDBox>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                                                    <MDInput variant="standard" defaultValue={releaseNoteData.releaseDate && releaseNoteData.releaseDate.slice(0, 10)}
-                                                        onChange={(e) => setReleaseDate(e.target.value)} multiline />
+                                                    <MDBox mt={1} mb={2}>
+                                                        <MDInput
+                                                            type="text"
+                                                            value={getToday(releaseDate)}
+                                                            InputProps={{
+                                                                startAdornment: (
+                                                                    <DatePicker
+                                                                        selected={releaseDate}
+                                                                        onChange={handleReleaseDateChange}
+                                                                        dateFormat="yyyy.MM.dd"
+                                                                        showYearDropdown
+                                                                        showMonthDropdown
+                                                                        customInput={<CalendarTodayIcon />}
+                                                                    />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </MDBox>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
