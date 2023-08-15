@@ -81,7 +81,15 @@ export default function App() {
   
   const [message, setMessage] = useState();
  
-  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  useEffect(() => {
+    setIsAuthenticated(true);
+    setIsAuthChecked(true); // Set to true after checking
+  }, []);
+
+  /*
   useEffect(() => {
     let retryCount = 0;
 
@@ -131,7 +139,7 @@ export default function App() {
       }
     };
 }, [projectId]);
-
+*/ 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {
@@ -198,14 +206,6 @@ export default function App() {
       </Icon>
     </MDBox>
   );
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
-  const token = localStorage.getItem("ACCESS_TOKEN");
-  useEffect(() => {
-    setIsAuthenticated(true);
-    setIsAuthChecked(true); // Set to true after checking
-  }, []);
 
 
   if (isAuthenticated === null) {

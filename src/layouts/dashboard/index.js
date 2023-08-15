@@ -152,7 +152,7 @@ function Dashboard(props) {
       <DashboardNavbar />
       <div style={{ position: "absolute", top: "10%", left: "2%", width: "95%" }}>
         <MDBox mt={2}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} mt={8}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3} mt={3}>
                 <ReportsBarChart
@@ -190,7 +190,6 @@ function Dashboard(props) {
           <OrdersOverview />
         </MDBox>
       </div>
-      <Footer />
     </DashboardLayout>
   );
 }

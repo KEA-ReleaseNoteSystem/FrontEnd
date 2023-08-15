@@ -203,7 +203,7 @@ function Projects() {
           </MDBox>
           {renderMenu}
         </MDBox>
-        <MDBox sx={{ overflowY: "scroll", maxHeight: "200px" }}>
+        <MDBox sx={{ overflowY: "scroll", maxHeight: "500px" }}>
           <DataTable
             table={{ columns, rows }}
             showTotalEntries={false}
