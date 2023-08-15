@@ -635,6 +635,7 @@ function ViewRelease() {
                                                     <Dropzone
                                                         onClick={onClickSubmitButton}
                                                         initialFiles={dialogInitialFiles}
+                                                        insidePreview={false}
                                                     />
                                                 </MDBox>
                                             </Grid>

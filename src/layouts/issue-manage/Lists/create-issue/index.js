@@ -412,6 +412,7 @@ function Overview() {
                   <Dropzone
                   onClick={onClickSubmitButton}
                   initialFiles={dialogInitialFiles}
+                  insidePreview={true}
               />
               
             </MDBox>

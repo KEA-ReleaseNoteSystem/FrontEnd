@@ -187,6 +187,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
               <Dropzone
                 onClick={handleDropzoneChange}
                 initialFiles={dialogInitialFiles}
+                insidePreview={false}
               />
           
               
