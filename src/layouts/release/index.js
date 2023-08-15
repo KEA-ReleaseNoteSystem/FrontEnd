@@ -35,8 +35,6 @@ function Release() {
     setView(event.target.value);
   };
 
-  const project = "Project name";
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   //릴리스 작성하기 버튼
@@ -84,7 +82,7 @@ function Release() {
                 justifyContent="center" 
               >
                 <MDTypography variant="h6" color="white">
-                  {project}
+                  릴리즈 노트 목록
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
