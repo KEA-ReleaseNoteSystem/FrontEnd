@@ -183,7 +183,6 @@ const ProjectBoard = () => {
           </Grid>
         </Grid>
       </MDBox>
-      <Footer />
     </DashboardLayout>
     </>
   );

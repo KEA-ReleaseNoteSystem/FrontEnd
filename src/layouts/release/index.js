@@ -48,8 +48,6 @@ function Release() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
-    
       <Select
           labelId="filter-select-label"
           id="view-select"

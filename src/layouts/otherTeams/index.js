@@ -121,7 +121,6 @@ function OtherTeams() {
         </Grid>
       </Grid>
     </MDBox>
-    <Footer />
   </DashboardLayout>
   );
 }
