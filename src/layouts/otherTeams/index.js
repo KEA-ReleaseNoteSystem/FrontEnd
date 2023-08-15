@@ -84,7 +84,7 @@ function OtherTeams() {
               <DataTable
                 table={{ columns, rows }}
                 isSorted={false}
-                entriesPerPage={false}
+                entriesPerPage={10}
                 showTotalEntries={false}
                 noEndBorder
               />
