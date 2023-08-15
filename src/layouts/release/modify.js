@@ -232,6 +232,7 @@ function ViewRelease() {
                 }
             );
             console.log("전송 완료");
+            return response.data.statusCode;
         } catch (error) {
             console.error(error);
         }
@@ -244,11 +245,21 @@ function ViewRelease() {
         getOtherIssueData(projectId, token);
     }, []);
 
-    //릴리스 작성하기 버튼
-    const handleReleaseUpdateOnClick = (event) => {
-        putReleaseNoteData(token);
-        alert('수정사항이 반영되었습니다!');
-        navigate(-1);
+    //릴리스 수정하기 버튼
+    const handleReleaseUpdateOnClick = async (event) => {
+        console.log("릴리즈 저장 버튼 클릭됨");
+        
+        const resultStatusCode = await putReleaseNoteData(token);  
+            
+        console.log("responseMessage",resultStatusCode == 445)
+        if(resultStatusCode == 443){
+            alert('해당 버전의 릴리즈 노트가 이미 존재합니다.');
+        } else if(resultStatusCode == 445){
+            alert('유효하지 않은 버전입니다. 적절한 상위 버전이 존재하는지 확인하세요.');
+        } else {
+            alert('수정사항이 반영되었습니다!');
+            navigate(-1);
+        }
     };
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
