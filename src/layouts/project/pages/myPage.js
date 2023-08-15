@@ -11,13 +11,13 @@ import MDAvatar from "components/MDAvatar";
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
 // import Divider from "assets/theme/components/divider";
-import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
+import ProfileInfoCard from "layouts/project/components/profile.js";
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
 // Data
-import Header from "layouts/profile/components/Header";
+import Header from "layouts/project/components/Header";
 
 import { React, useState, useEffect } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
+
 import axios from "axios";
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
@@ -167,20 +167,22 @@ function MyPage() {
                   team: memberInfo.groupName,
                   position: memberInfo.position,
                   email: memberInfo.email,
-                  GroupCode: memberInfo.groupCode,
+                  GroupCode: memberInfo.groupCode,              
                 }}
+                handleCopy = {handleCopy}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
               />
+             
               <Divider orientation="vertical" sx={{ mx: 0 }} />
-              <CopyToClipboard text={memberInfo.groupCode} onCopy={handleCopy}>
-              <MDButton>그룹 코드 복사　　  </MDButton>
-            </CopyToClipboard>
+              
             </Grid>
           </Grid>
 
         </MDBox>
       </Header>
+
+      
       <Card>
         {rows.length > 0 ? (
           <>

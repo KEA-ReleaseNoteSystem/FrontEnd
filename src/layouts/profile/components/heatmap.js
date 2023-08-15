@@ -168,7 +168,7 @@ const CalendarHeatmap = (issuescore) => {
 
         position: 'absolute',
         left: '0', // 왼쪽에 배치
-        top: '45%', // 세로 중앙 정렬
+        top: '58%', // 세로 중앙 정렬
         transform: 'translateY(-50%)', // 세로 중앙 정렬을 위해 translateY 사용
         marginLeft: '3%',
 
@@ -188,14 +188,14 @@ const CalendarHeatmap = (issuescore) => {
     return (
         <>
 
-            <div style={{ flexDirection: 'column', marginLeft: "8%" }}>
+            <div style={{ flexDirection: 'column', marginLeft: "9%" }}>
                 <img id='batch' src={levelImageSrc} alt="Level" style={levelImageStyle} />
                 <MDTypography variant="caption" color="black" style={{ textAlign: 'center' }}>{level}</MDTypography>
                 <BadgeCollection badgeCount={4} level={level} />
             </div>
 
 
-            <Grid container justifyContent="center" sx={{ marginLeft: "8%" }} >
+            <Grid container justifyContent="center" sx={{ marginLeft: "10%" }} >
 
 
                 <Grid item xs={1}><MDTypography variant="body2">Jan</MDTypography></Grid>
