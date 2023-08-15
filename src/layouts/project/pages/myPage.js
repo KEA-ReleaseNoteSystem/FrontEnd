@@ -11,10 +11,10 @@ import MDAvatar from "components/MDAvatar";
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
 // import Divider from "assets/theme/components/divider";
-import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
+import ProfileInfoCard from "../components/ProfileInfoCard";
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
 // Data
-import Header from "layouts/profile/components/Header";
+import Header from "layouts/project/components/Header";
 
 import { React, useState, useEffect } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -35,7 +35,7 @@ function MyPage() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [selectedMemberName, setSelectedMemberName] = useState(null);
   const [copied, setCopied] = useState(false);
-  
+
   const handleCopy = () => {
     setCopied(true);
     alert("그룹 코드가 클립보드에 복사되었습니다.");
@@ -49,16 +49,17 @@ function MyPage() {
       setImage(defimg);
     };
     return (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {name}
-        </MDTypography>
-        <MDTypography variant="caption">{nickname}</MDTypography>
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm" />
+        <MDBox ml={2} lineHeight={1}>
+          <MDTypography display="block" variant="button" fontWeight="medium">
+            {name}
+          </MDTypography>
+          <MDTypography variant="caption">{nickname}</MDTypography>
+        </MDBox>
       </MDBox>
-    </MDBox>
-  )};
+    )
+  };
 
   const Job = ({ title }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -77,7 +78,7 @@ function MyPage() {
   ];
 
   const rows = groupMember.map((member, index) => {
-    const showButton = member.authority !== "GM"; 
+    const showButton = member.authority !== "GM";
     return {
       author: (
         <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} nickname={member.nickname} />
@@ -152,34 +153,38 @@ function MyPage() {
         routes={routes}
         sticky
       />
-      <MDBox sx={{ mb: 2, mt: 11 }} />
-      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
-        <MDBox mt={5} mb={3}>
-          <Grid container spacing={1} justifyContent="center">
-            <Grid item xs={12} sx={{ display: "flex" }}>
-              <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
-              <ProfileInfoCard
-                title="profile information"
-                description={memberInfo.introduce}
-                info={{
-                  fullName: memberInfo.name,
-                  nickname: memberInfo.nickname,
-                  team: memberInfo.groupName,
-                  position: memberInfo.position,
-                  email: memberInfo.email,
-                  GroupCode: memberInfo.groupCode,
-                }}
-                action={{ route: "", tooltip: "Edit Profile" }}
-                shadow={false}
-              />
-              <Divider orientation="vertical" sx={{ mx: 0 }} />
-              <CopyToClipboard text={memberInfo.groupCode} onCopy={handleCopy}>
-              <MDButton>그룹 코드 복사　　  </MDButton>
-            </CopyToClipboard>
+      <MDBox sx={{mb: 2, mt: 11}} />
+      <Header info={{ nickname: memberInfo.nickname }} memberId={memberInfo.id}>
+       <Grid container justifyContent="center">
+        <Grid item xs={12} md={8}>
+          <MDBox sx={{ mb: 2, mt: 11}}>
+            <Grid container spacing={1} justifyContent="center">
+              <Grid item xs={12} sx={{ display: "flex" }}>
+                <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
+                <ProfileInfoCard
+                  title="profile information"
+                  description={memberInfo.introduce}
+                  info={{
+                    fullName: memberInfo.name,
+                    nickname: memberInfo.nickname,
+                    team: memberInfo.groupName,
+                    position: memberInfo.position,
+                    email: memberInfo.email,
+                    GroupCode: memberInfo.groupCode,
+                  }}
+                  action={{ route: "", tooltip: "Edit Profile" }}
+                  shadow={false}
+                />
+                <Divider orientation="vertical" sx={{ mx: 0 }} />
+                <CopyToClipboard text={memberInfo.groupCode} onCopy={handleCopy}>
+                  <MDButton>그룹 코드 복사</MDButton>
+                </CopyToClipboard>
+              </Grid>
             </Grid>
-          </Grid>
+          </MDBox>
+        </Grid>
+      </Grid>
 
-        </MDBox>
       </Header>
       <Card>
         {rows.length > 0 ? (
