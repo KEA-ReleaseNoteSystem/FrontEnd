@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 import { React, useState, useRef ,useEffect } from "react";
 import axios from "axios";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 // react-routers components
 import { Link } from "react-router-dom";
@@ -61,7 +62,7 @@ const customModalStyles = {
   }
 };
 
-function ProfileInfoCard({ title, description, info, social, action, shadow ,memberId}) {
+function ProfileInfoCard({ title, description, info, social, action, shadow ,memberId,handleCopy}) {
   const labels = [];
   const values = [];
   const { socialMediaColors } = colors;
@@ -181,6 +182,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
       <MDTypography variant="button" fontWeight="regular" color="text">
         &nbsp;{values[key]}
       </MDTypography>
+      
     </MDBox>
   ));
 
@@ -235,7 +237,10 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
                     </div>
        
           {renderItems}
-      
+          <CopyToClipboard text={info.groupCode} onCopy={handleCopy} style={{marginLeft : "20%"}}>
+            <MDButton>그룹 코드 복사</MDButton>
+            </CopyToClipboard>
+          
         </MDBox>
       </MDBox>
     </Card>

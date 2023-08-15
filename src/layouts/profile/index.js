@@ -91,30 +91,32 @@ function Overview() {
                   shadow={false}
                 />
 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                
-                <Card sx={{ height: "80%", width: "calc(100% - 350px)", backgroundColor: "#f9fbfb", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
-                
-                  <Grid mt={2.2} ml={2} container justifyContent="center" >
-                    <Grid id = 'test' item xs={12} sx={{ display: "flex" }}>
-
-                      <MDTypography variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
-                    </Grid>
-
-                    <MDBox>
-                      {/* <div style={{ overflowX: 'auto' }}> */}
-                      <CalendarHeatmap issueScore={memberInfo.exp} />
-                      {/* </div> */}
-                    </MDBox>
-
-                  </Grid>
-                  
-                </Card>
+             
                 
               </Grid>
             </Grid>
           </MDBox>
 
+             
+            
+              <br/>
+          <Card sx={{  width: "calc(100% - 350px)", backgroundColor: "#f9fbfb", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
+                
+                <Grid mt={2.2} ml={2} mb={5} container justifyContent="center" >
+                  <Grid id = 'test' item xs={12} sx={{ display: "flex",height: "50px", }}>
+
+                    <MDTypography variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
+                  </Grid>
+
+                  <MDBox>
+                    {/* <div style={{ overflowX: 'auto' }}> */}
+                    <CalendarHeatmap issueScore={memberInfo.exp} />
+                    {/* </div> */}
+                  </MDBox>
+
+                </Grid>
+                
+              </Card>
           <br />
           <Card>
             <MDBox pt={2} px={2} lineHeight={1.25}>

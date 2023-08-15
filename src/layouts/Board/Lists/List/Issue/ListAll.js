@@ -71,6 +71,7 @@ const getPriorityColor = (priority) => {
     <Title>#{issue.issueNum} {issue.title}
         
     </Title>
+    <div style={{ marginTop: '-20px' }}>
     <MDBadge
             badgeContent={issue.status}
             color={getStatusColor(issue.status)}
@@ -88,6 +89,7 @@ const getPriorityColor = (priority) => {
     </Bottom> */}
     <br/>
     &nbsp;&nbsp;<MDTypography variant="caption" fontWeight="light">담당자: {issue.memberIdInCharge.name}</MDTypography>
+    </div>
 </Issue>
       
     

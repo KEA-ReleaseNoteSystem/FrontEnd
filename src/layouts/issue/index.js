@@ -22,6 +22,7 @@ import IssueEditing from './IssueEditing';
 import MyTree from './MyTree';
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+
 import SearchIcon from '@mui/icons-material/Search';
 
 function IssueSearch() {
@@ -224,10 +225,27 @@ function IssueSearch() {
         }
       });
 
-      const updatedFieldsWithDate = {
-        ...updatedFields,
-        updatedAt: new Date().toISOString()
-      };
+      console.log("updatedFields",updatedFields);
+
+
+      let updatedFieldsWithDate;
+      if ('userName' in updatedFields) {
+        // userName이 있을 때 로컬 업데이트 로직
+        updatedFieldsWithDate = {
+          memberIdInCharge: {
+            ...issueDetail.memberIdInCharge,
+            name: updatedFields.userName
+          },
+          updatedAt: new Date().toISOString()
+        };
+      } else {
+        // userName이 없을 때 로컬 업데이트 로직
+        updatedFieldsWithDate = {
+          ...updatedFields,
+          updatedAt: new Date().toISOString()
+        };
+      }
+
 
 
       // 업데이트된 이슈를 반영하기 위해 fetchedIssues 배열에서 해당 이슈를 찾아 업데이트
@@ -241,6 +259,8 @@ function IssueSearch() {
         return issue;
       });
 
+
+      console.log("updataIssuseasd",updatedFieldsWithDate);
       // 업데이트된 이슈 목록을 설정
       setFetchedIssues(updatedIssues);
 
@@ -567,7 +587,7 @@ function IssueSearch() {
 
             <Grid item xs={5}>
               {isLoading ? null : <IssueEditing issue={issueDetail} updatedchildIssues={childIssues} updateIssue={updateIssue} deleteChild={deleteChild}
-               fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} submitIssue={submitIssue}/>}
+               fetchedMemo={fetchedMemo} projectId ={projectId} createChildIssue={createChildIssue} submitIssue={submitIssue} />}
             </Grid>
             <Grid item xs={4}>
 

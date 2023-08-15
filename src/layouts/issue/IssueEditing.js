@@ -10,6 +10,8 @@ import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+import ListChildIssue from 'layouts/Board/Lists/List/Issue/ListChild';
+import ListSelectedChildIssue from 'layouts/Board/Lists/List/Issue/ListChildBySelected';
 import axios from "axios";
 import Dropzone  from 'layouts/release/components/Dropzone.jsx'
 
@@ -45,6 +47,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const [currentIds, setCurrentIds] = useState([issue.id]);
   const [otherIssue, setOtherIssue] = useState([]);
   const [selectedIssues, setSelectedIssues] = useState([]);
+  const [selectedIssueIndices, setSelectedIssueIndices] = useState([]);
 
   const [dialogInitialFiles, setDialogInitialFiles] = useState([
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
@@ -67,14 +70,32 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const closeModal = () => {
     setCurrentIds([issue.id]);
     setActiveModal(null);
+    setSelectedIssueIndices([]);
   };
 
 
   const handleClick = (issue, issueIndex) => {
-    setSelectedIssueIndex(issueIndex);
-    setSelectedIssues(prevIssues => [...prevIssues, issue]);
+   
+    setSelectedIssueIndices(prevIndices => {
+        if (prevIndices.includes(issueIndex)) {
+            return prevIndices.filter(idx => idx !== issueIndex);
+        } else {
+            return [...prevIndices, issueIndex];
+        }
+    });
 
-  };
+ 
+    setSelectedIssues(prevIssues => {
+        const existingIssue = prevIssues.find(si => si.id === issue.id);
+        if (existingIssue) {
+           
+            return prevIssues.filter(si => si.id !== issue.id);
+        } else {
+      
+            return [...prevIssues, issue];
+        }
+    });
+};
 
   const handleAddIssues = () => {
     createChildIssue(selectedIssues);
@@ -111,8 +132,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
   useEffect(() => {
     setMemo(fetchedMemo);
-
-    // getChildIssues()
   }, [updateIssue]);
 
 
@@ -124,42 +143,11 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
 
   const handleDropzoneChange = (files) => {
-    console.log("handle",files);
+
     submitIssue(files, currentIds); 
   };
 
 
-  
-
-// const PreviewImages = () => {
-
-
-//   const handleDelete = (files) => {
-//     // Here, I'm assuming dialogInitialFiles is a state, so you would use a setState function like this:
-//     // setDialogInitialFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
-//     // If dialogInitialFiles isn't a state, adjust accordingly.
-//   };
-
-//   return (
-//     <div>
-//       {dialogInitialFiles.map((url, index) => (
-//         <Card key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-//           <div style={{ display: 'flex', alignItems: 'center' }}>
-//             <div style={{ margin: '10px', width: '50px', height: '50px', overflow: 'hidden', borderRadius: '50%' }}>
-//               <img src={url} alt={`Preview ${index}`} style={{ width: '100%', height: 'auto' }} />
-//             </div>
-//             <div style={{ marginLeft: '10px', fontSize: '14px' }}>{url.split('/').pop()}</div>
-//             <div style={{ flexGrow: 1, cursor: 'pointer', textAlign: 'right' }}>
-//             <button onClick={() => handleDelete(index)} style={{ marginRight: '10px' }}>Delete</button>
-//           </div>
-          
-//             {/* If you're using a UI library like Material-UI, replace the above button with a styled component. */}
-//           </div>
-//         </Card>
-//       ))}
-//     </div>
-//   );
-// };
 
   
 
@@ -200,14 +188,14 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                 onClick={handleDropzoneChange}
                 initialFiles={dialogInitialFiles}
               />
-              {/* <PreviewImages/> */}
+          
               
             </Card>
           </MDBox>
           <MDBox pt={2} px={2} mb={2}>
 
             <Card sx={{ backgroundColor: '#F0EDEE' }}>
-              <MDBox pt={2} px={2} pb={2}>
+              <MDBox pt={2} px={3} pb={2}>
                 {/* {!isChild ? (  */}
                 <Grid container spacing={0}>
                   <Grid item xs={8}>
@@ -215,10 +203,11 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                       하위 이슈 관리
                     </MDTypography>
                   </Grid>
-                  <Grid item xs={4}>
-                    <MDButton size="small" color="black" onClick={() => { openIssueAddModal(); getOtherIssue(currentIds); }}>
+                  <MDButton size="small" color="black" onClick={() => { openIssueAddModal(); getOtherIssue(currentIds); }}  style={{ marginLeft: '80px' }}>
                       <AddCircleOutlineIcon color="white" />&nbsp; 추가
                     </MDButton>
+                  <Grid item xs={4}>
+                  
                     <Modal
                       isOpen={activeModal === "addChildIssue"}
                       onRequestClose={closeModal}
@@ -240,45 +229,54 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
                             하위 이슈 추가
                           </MDTypography>
                         </MDBox>
-                        <MDBox pt={1} pl={1} pr={1}>
+                        <MDBox pt={1} pl={1} pr={1} style={{ overflowY: 'auto', maxHeight: '550px',minHeight:"550px"}}>
                           <MDTypography variant="caption" color="info" sx={{ ml: 1 }}>연결된 하위 이슈를 추가할 수 있습니다.</MDTypography>
                           {!otherIssue ? (
-                            <MDTypography>There are no issues</MDTypography>
+                              <MDTypography>There are no issues</MDTypography>
                           ) : (
-                            otherIssue.map((issue, index) => (
-                              <div
-                                key={issue.id}
-                                onClick={() => { handleClick(issue, index) }}
-                              >
-                                <ProjectBoardListIssue
-                                  issue={issue}
-                                  index={index}
-                                  selected={selectedIssueIndex === index}
-                                />
-                              </div>
-                            ))
+                              otherIssue.map((issue, index) => (
+                                  <div
+                                      key={issue.id}
+                                      onClick={() => { handleClick(issue, index) }}
+                                  >
+                                      <ListChildIssue
+                                          issue={issue}
+                                          index={index}
+                                          selected={selectedIssueIndices.includes(index)}
+                                        
+                                      />
+                                  </div>
+                              ))
                           )}
-                        </MDBox>
-                        <MDButton size="small" color="black" onClick={handleAddIssues}>
+                      </MDBox>
+                   
+                      </Card>
+                      <br/>
+                      <MDButton 
+                            size="small" 
+                            color="info" 
+                            onClick={handleAddIssues} 
+                            style={{ paddingLeft: '100px', paddingRight: '100px' }}
+                        >
                           <AddCircleOutlineIcon color="white" />&nbsp; 추가
                         </MDButton>
-                      </Card>
                     </Modal>
                   </Grid>
                   <Grid item xs={8} sx={{ m: 3 }}>
 
                     {!childIssues ? (
-                      <MDTypography>지정된 하위 이슈가 없습니다.</MDTypography>
+                      null
                     ) : (
                       childIssues.map((issue, index) => (
                         <div
                           key={issue.id}
-                          onClick={() => { handleDelete(issue, index) }}
+                         
                         >
-                          <ProjectBoardListIssue
+                          <ListSelectedChildIssue
                             issue={issue}
                             index={index}
                             selected={selectedIssueIndex === index}
+                            onDelete={handleDelete}
                           />
                         </div>
                       ))
