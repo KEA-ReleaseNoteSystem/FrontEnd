@@ -87,7 +87,6 @@ function Cover() {
   const isPasswordEmpty = password === "";
   const isPasswordUnderEight = password.length < 8;
 
-  console.log(`oauthEmail: ${oauthEmail}, isEmailEmpty: ${isEmailEmpty}, isEmailWrong: ${isEmailWrong}`);
 
   return (
     <BasicLayout image={bgImage}>

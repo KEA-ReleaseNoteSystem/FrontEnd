@@ -13,7 +13,7 @@ import team2 from "assets/images/team-2.jpg";
 
 
 export default function data({ groupMember }) {
-  console.log("sdafsadf", groupMember);
+  console.log("그룹 멤버", groupMember);
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" />
