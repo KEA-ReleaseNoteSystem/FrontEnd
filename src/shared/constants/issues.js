@@ -66,7 +66,7 @@ export const IssueTypeCopy = {
 
 export const IssueStatusCopy = {
   [IssueStatus.BACKLOG]: 'Backlog',
-  [IssueStatus.INPROGRESS]: 'In progress',
+  [IssueStatus.INPROGRESS]: 'Inprogress',
   [IssueStatus.DONE]: 'Done',
 };
 
