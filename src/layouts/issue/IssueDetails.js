@@ -23,7 +23,7 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
     // setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
     setStatus(issue ? issue.status : '')
     setIssueType(issue ? issue.issueType : '')
-  }, [issue.status || issue.issueType]);
+  }, [issue.status ,issue.issueType]);
 
 
 
