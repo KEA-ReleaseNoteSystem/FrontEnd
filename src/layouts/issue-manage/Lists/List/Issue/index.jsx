@@ -25,7 +25,7 @@ const customModalStyles = {
   },
   content: {
     width: '60%',
-    height: '80%',
+    height: '700px',
     top: '50%',
     left: '55%',
     transform: 'translate(-50%, -45%)',
@@ -37,7 +37,6 @@ const customModalStyles = {
     zIndex: '10001', // it should be higher than overlay's zIndex to appear on top
   }
 };
-
 
 // const addIssue = ({ projectUsers, issue, index }) => {
   const addIssue = ({ issue, index }) => {

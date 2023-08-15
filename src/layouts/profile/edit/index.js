@@ -62,6 +62,7 @@ function Overview(info, description) {
       } ) // 멤버 정보를 수정하는 API 엔드포인트를 적절히 변경해야 합니다.
       .then(response => {
         console.log(response);
+        window.location.reload();
       })
       .catch(error => {
         console.error('Error updating member info:', error);

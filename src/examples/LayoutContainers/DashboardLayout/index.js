@@ -47,6 +47,7 @@ function DashboardLayout({ children }) {
           transition: transitions.create(["margin-left", "margin-right"], {
             easing: transitions.easing.easeInOut,
             duration: transitions.duration.standard,
+            
           }),
         },
       })}

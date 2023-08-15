@@ -13,6 +13,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import Description from 'layouts/release/description';
 import { Select } from "@mui/material";
 
 import { Icon, IconButton, Menu, MenuItem, Input } from "@mui/material";
@@ -204,6 +205,18 @@ const NewProject = () => {
                   </FormControl>
                 </MDBox>
                 <MDBox mb={10}>
+                {/* <MDBox pt={2} px={2} mb={2}>
+                                <Card sx={{ backgroundColor: '#e9e9e9' }}>
+                                    <MDBox pt={2} px={2} pb={2}>
+                                        <MDTypography variant="body2" fontWeight="medium">
+                                            세부 설명
+                                        </MDTypography>
+                                        <MDBox pt={1} px={2}>
+                                            <Description />
+                                        </MDBox>
+                                    </MDBox>
+                                </Card>
+                            </MDBox> */}
                   <MDInput
                     type="textarea"
                     label="설명"
