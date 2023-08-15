@@ -292,7 +292,7 @@ function ViewRelease() {
             alert('유효하지 않은 버전입니다. 적절한 상위 버전이 존재하는지 확인하세요.');
         } else {
             alert('릴리즈노트가 생성되었습니다!');
-            // navigate(-1);
+            navigate(-1);
         }
     };
 
