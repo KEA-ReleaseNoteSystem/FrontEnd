@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom';
 import axios from "axios";
 
 // react-router-dom components
@@ -23,6 +25,8 @@ import googleLogin from "assets/images/google_login.png";
 import kakaoLogin from "assets/images/kakao_login.png";
 import naverLogin from "assets/images/naver_login.png";
 
+import MDSnackbar from '../components/MDSnackbar';
+
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
@@ -30,7 +34,9 @@ function Basic() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const token = localStorage.getItem('ACCESS_TOKEN');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [snackbarOpen, setSnackbarOpen]= useState(false);
+  const [snackbarMessage, setSnackbarMessage]= useState(false);
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
   
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -49,6 +55,7 @@ function Basic() {
       .then(response => {
         console.log('로그아웃');
         localStorage.removeItem("ACCESS_TOKEN");
+        setProjectId(null);
       })
       .catch(error => {
         // 삭제 실패 후 실행할 코드를 작성합니다.
@@ -67,7 +74,6 @@ function Basic() {
   
   const handleSubmit = () => {
     const errorStatusCodes = [401, 400, 404];
-    setIsSubmitting(true);
     // POST 요청을 보내는 부분
     axios.post("/api/member/login", {
       email: email,
@@ -86,7 +92,10 @@ function Basic() {
           )
         } 
         else if (errorStatusCodes.includes(response.data.statusCode)) {
-          navigate('/authentication/sign-in'); 
+          console.log("로그인 실패");
+          setSnackbarOpen(true); // MDSnackbar 열기
+          setSnackbarMessage(response.data.message);
+          
       }
 
         else
@@ -147,9 +156,17 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty || isSubmitting} onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth disabled={isEmailEmpty || isPasswordUnderEight || isEmailWrong || isPasswordEmpty } onClick={handleSubmit}>
                 로그인
               </MDButton>
+              <MDSnackbar
+          open={snackbarOpen}
+          autoHideDuration={1500}
+          onClose={() => setSnackbarOpen(false)}
+          content={snackbarMessage}
+          title = "Error"
+          color='error'
+      />
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">

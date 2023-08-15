@@ -214,7 +214,6 @@ export default function App() {
     }
   }, [isAuthenticated, token]);
 
-  console.log("layout", layout);
 
   return (
     
