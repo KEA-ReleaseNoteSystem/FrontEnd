@@ -38,23 +38,32 @@ function MDDatePicker({ label, defaultValue, onChange }) {
       <MDInput
         type="text"
         label={label}
-        value={selectedDate.toDateString()}
+        value={getToday(selectedDate)} 
         fullWidth
         InputProps={{
           startAdornment: (
             <DatePicker
               selected={selectedDate}
               onChange={handleDateChange}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               showYearDropdown
               showMonthDropdown
               customInput={<CalendarTodayIcon />}
+              locale="ko"
             />
           ),
         }}
       />
     </MDBox>
   );
+}
+
+function getToday(date){
+  var year = date.getFullYear();
+  var month = ("0" + (1 + date.getMonth())).slice(-2);
+  var day = ("0" + date.getDate()).slice(-2);
+
+  return year + "-" + month + "-" + day;
 }
 
 function MDIssueType({ label, value, onChange }) {

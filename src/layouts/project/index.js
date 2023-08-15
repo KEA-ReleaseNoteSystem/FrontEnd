@@ -79,7 +79,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
     const currentdate = new Date();
     
     if (!projectData) {
-        return <div>Loading...</div>;
+        return null;
     }
 
     const handleStatisticsClick = (projectData) => {

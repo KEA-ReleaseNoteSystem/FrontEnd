@@ -92,7 +92,7 @@ function Dropzone({ onClick, initialFiles, Button=true }) {
             setFiles(initialFiles);
             setImageUrls(initialFiles);
     }, [initialFiles]);
-    console.log(files);
+
 
     const deleteImage = (index) => {
         const newFiles = [...files];
