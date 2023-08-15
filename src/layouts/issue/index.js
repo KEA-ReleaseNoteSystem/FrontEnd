@@ -451,7 +451,7 @@ function IssueSearch() {
               </MenuItem>
             ))}
           </Select>
-
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <MDInput variant="standard" defaultValue={searchBar} onChange={handleSearchBarChange} style={{ paddingTop: '12px' }} />
 
           <IconButton onClick={handleOnClickSearchIssue}>
