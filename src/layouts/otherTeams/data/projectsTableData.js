@@ -18,20 +18,19 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 
-import { useRecoilState } from 'recoil';
-import { projectIdState } from '../../../examples/Sidenav/ProjectIdAtom.js';
+
 
 
 export default function data(selectedMemberId) {
   
 const [projectMembers, setProjectMembers] = useState([]);
-const [projectId, setProjectId] = useRecoilState(projectIdState);
+
 console.log("selectedMemberId",selectedMemberId)
 useEffect(() => {
   const getMemberProjectData = async () => {
     try {
-      console.log("urlurl",`/api/project/${projectId}/members/${selectedMemberId}`);
-      const response = await axios.get(`/api/project/${projectId}/members/${selectedMemberId}`
+      console.log("urlurl",`/api/project/members/${selectedMemberId}`);
+      const response = await axios.get(`/api/project/members/${selectedMemberId}`
       );
  
       if (response.data.data.length === 0) {
@@ -73,7 +72,7 @@ useEffect(() => {
     { Header: "프로젝트", accessor: "project", width: "30%", align: "left" },
     { Header: "상태", accessor: "status", align: "center" },
     { Header: "생성일자", accessor: "date", align: "center" },
-    { Header: "진행도", accessor: "completion", align: "center" },
+
   ];
 
   const rows = projectMembers.map((project) => ({
@@ -88,10 +87,11 @@ useEffect(() => {
         {String(project.createdAt).slice(0, 10)}
       </MDTypography>
     ),
-    completion: <Progress color={project.completion == 0 ? 'error' : project.completion == 100 ? 'success' : 'info'} value={project.completion} />,
+    
   }));
   return {
     columns,
     rows,
   };
 }
+

@@ -15,11 +15,11 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import memberprojectTable from "layouts/myteam/data/memberprojectTable";
-import projectsTableData from "layouts/myteam/data/projectsTableData";
+import memberprojectTable from "layouts/otherTeams/data/memberprojectTable";
+import projectsTableData from "layouts/otherTeams/data/projectsTableData";
 
 import { useRecoilState } from 'recoil';
-import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
+import { projectIdState } from 'examples/Sidenav/ProjectIdAtom.js';
 
 function OtherTeams() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
