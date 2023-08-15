@@ -164,15 +164,6 @@ const ProjectBoard = () => {
               </MDBox>
 
               <MDBox pt={3}>
-                <Filters
-                  // projectUsers={projectMock.users}
-                  //defaultFilters={filtersMock} // You should have this defined somewhere
-                  filters={filtersMock}
-                  mergeFilters={() => { }} // This should be a function that merges the filters
-                />
-              </MDBox>
-
-              <MDBox pt={3}>
                     <Lists
                       project={projectMock}
                       filters={filtersMock}
