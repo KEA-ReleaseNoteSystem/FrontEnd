@@ -54,7 +54,7 @@ const DeleteButton = styled('button')({
     },
 });
 
-function Dropzone({ onClick, initialFiles, Button=true ,insidePreview=true}) {
+function Dropzone({ onClick, initialFiles, Button=true ,insidePreview=false}) {
     const [files, setFiles] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const [snackbarOpen, setSnackbarOpen]= useState(false);
