@@ -14,10 +14,11 @@ import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 // Images
 import team2 from "assets/images/team-2.jpg";
 
-const getProjectMemberData = async (projectId, token) => {
+const getProjectMemberData = async (token) => {
   try {
-    const response = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
+    const response = await axios.get("/api/group/members", {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     });
@@ -33,15 +34,18 @@ const getProjectMemberData = async (projectId, token) => {
   }
 };
 
+ 
+
+
 export default function data(setSelectedMemberId) {
-  const [projectId, setProjectId] = useRecoilState(projectIdState);
+  
   const [memberList, setMemberList] = useState([]);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProjectMemberData(projectId, token);
+      const data = await getProjectMemberData(token);
       setMemberList(data);
     }
     fetchData();
