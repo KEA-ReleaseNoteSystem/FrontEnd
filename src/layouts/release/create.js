@@ -127,6 +127,8 @@ function ViewRelease() {
     const [description, setDescription] = useState('');
     const [releaseDate, setReleaseDate] = useState('');
     const [isVersionCorrect, setIsVersionCorrect] = useState(false);
+    const [responseMessage, setResponseMessage] = useState();
+    
  
     const onDrop = (acceptedFiles) => {
         const newImageUrls = acceptedFiles.map((file) => URL.createObjectURL(file));
@@ -243,6 +245,8 @@ function ViewRelease() {
                 }
             );
 
+            console.log("response release",response.data.statusCode);
+ 
             // const response = await axios.post(
             //     `/api/release/create`, {
             //     projectId: projectId,
@@ -263,7 +267,8 @@ function ViewRelease() {
             //     }
             // );
             console.log("전송 완료");
-            // console.log("")
+
+            return response.data.statusCode;
         } catch (error) {
             console.error(error);
         }
@@ -275,14 +280,20 @@ function ViewRelease() {
     }, []);
 
     //릴리스 작성하기 버튼
-    const handleRelaseUpdateOnClick = (event) => {
-        console.log("릴리스 저장 버튼 클릭됨");
-        // console.log("사진 데이터: ", event);
-
-        postReleaseNoteData(token);
-        alert('릴리즈노트가 생성되었습니다!');
-        navigate(-1);
-
+    const handleRelaseUpdateOnClick = async (event) => {
+        console.log("릴리즈 저장 버튼 클릭됨");
+        
+        const resultStatusCode = await postReleaseNoteData(token);  
+            
+        console.log("responseMessage",resultStatusCode == 445)
+        if(resultStatusCode == 443){
+            alert('해당 버전의 릴리즈 노트가 이미 존재합니다.');
+        } else if(resultStatusCode == 445){
+            alert('유효하지 않은 버전입니다. 적절한 상위 버전이 존재하는지 확인하세요.');
+        } else {
+            alert('릴리즈노트가 생성되었습니다!');
+            // navigate(-1);
+        }
     };
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
