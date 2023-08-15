@@ -42,7 +42,6 @@ const ManagementPage = () => {
                 console.error(error);
             }
 
-            //   응답한 설문 가져오는 요청
             try {
                 // 페이지가 마운트된 후에 서버로 GET 요청 보내기
                 const response2 = await axios.get('/api/otherProject', { //   생성한 설문 가져오는 요청
@@ -55,7 +54,6 @@ const ManagementPage = () => {
                     setGroupProjectData([]);
                 } else {
                     setGroupProjectData(response2.data.data); // 데이터를 상태로 설정합니다.
-                    console.log("응답한 설문 response.data: ", response2.data.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -78,10 +76,6 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
 
     const currentdate = new Date();
     
-    if (!projectData) {
-        return <div>Loading...</div>;
-    }
-
     const handleStatisticsClick = (projectData) => {
         setSelectedProject(projectData);
     };
@@ -106,7 +100,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
 
                 {currentPage === 1 && (
                     <div className="row g-3">
-                        {projectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
+                        {projectData && projectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
                             <div className="col-lg-3" key={project.id}>
                                 <Card id={project.id} title={project.name} pmname = {project.pmname} status = {project.status} date={project.updatedAt.slice(0, 10)} startdate={project.createdAt.slice(0, 10)}/>
                             </div>
@@ -116,7 +110,7 @@ const ManageProject = ({ projectData, groupProjectData, currentPage, setCurrentP
 
                 {currentPage === 2 && (
                     <div className="row g-3">
-                        {groupProjectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
+                        {groupProjectData && groupProjectData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
                             <div className="col-lg-3" key={project.id}>
                                 <CardResponse id={project.id} title={project.name} pmname = {project.pmname} status = {project.status} date={project.updatedAt.slice(0, 10)}/>
                             </div>
