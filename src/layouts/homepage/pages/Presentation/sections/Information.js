@@ -41,7 +41,7 @@ function Information() {
                 description="with KEA"
                 action={{
                   type: "internal",
-                  route: "/sections/page-sections/page-headers",
+                  route: "/authentication/sign-in",
                   label: "바로 시작하기",
                 }}
               />
