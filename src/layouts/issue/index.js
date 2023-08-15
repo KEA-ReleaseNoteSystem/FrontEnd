@@ -397,6 +397,7 @@ function IssueSearch() {
     setFirstfilter("");
     setSecfilter("");
     setThridfilter("");
+    setFilter([]);
     filterIssue(`/api/project/${projectId}/issues?`);
   }
 
