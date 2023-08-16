@@ -83,13 +83,8 @@ function Basic() {
       .then((response) => {
         console.log(response)
         localStorage.setItem("ACCESS_TOKEN", response.data.data);
-        if (response.data.statusCode === 401) {
-          navigate('/authentication/rejoin', {
-            state: {
-              email: email
-            }
-          }
-          )
+        if (response.data.statusCode === 401 ||  response.data.statusCode === 500) {
+          navigate(`/authentication/rejoin?email=${email}`);
         } 
         else if (errorStatusCodes.includes(response.data.statusCode)) {
           console.log("로그인 실패");
