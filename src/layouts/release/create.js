@@ -653,6 +653,8 @@ function ViewRelease() {
                         borderRadius="lg"
                         coloredShadow="info"
                     >
+
+
                         <MDTypography variant="h6" color="white">
                             릴리즈 노트에 추가할 이슈 목록
                         </MDTypography>
