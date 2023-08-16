@@ -55,6 +55,8 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_3
   ].filter(url => url !== "" && url !== process.env.REACT_APP_KIC_OBJECT_STORAGE && url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+null&& url !== (process.env.REACT_APP_KIC_OBJECT_STORAGE)+undefined));
 
+
+
   useEffect(() => {
     setDialogInitialFiles([
       process.env.REACT_APP_KIC_OBJECT_STORAGE + issue.imgUrl_1,
@@ -109,7 +111,6 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
     setChildIssues(prevChildIssues => prevChildIssues.filter(item => item.id !== issue.id));
   };
 
-
   
 
 
@@ -148,7 +149,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
 
   const handleDropzoneChange = (files) => {
 
-    submitIssue(files, currentIds); 
+    submitIssue(files, currentIds,token); 
   };
 
 

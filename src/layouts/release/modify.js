@@ -390,6 +390,7 @@ function ViewRelease() {
             .post(`/api/releaseNote/${releaseId}/images`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`
               },
             })
             .then((response) => {
