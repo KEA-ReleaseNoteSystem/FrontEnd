@@ -25,7 +25,6 @@ import Footer from "examples/Footer";
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
-const token = localStorage.getItem('ACCESS_TOKEN');
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -118,6 +117,7 @@ const fetchProjectMock = () => {
 
 
 const ProjectBoard = () => {
+  const token = localStorage.getItem('ACCESS_TOKEN');
   const [projectMock, setProjectMock] = useState();
   const [projectId, setProjectId] = useRecoilState(projectIdState);
 

@@ -28,6 +28,7 @@ import routes from "routes";
 
 import EventSource from 'eventsource-polyfill';
 
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
 
 // Material Dashboard 2 React contexts
@@ -82,18 +83,21 @@ export default function App() {
   
 
 
-useEffect(() => {
+  useEffect(() => {
     let retryCount = 0;
     let sse;
 
     const maxRetries = 10;
     const retryInterval = 5000; // 5 seconds
+    
+    const EventSource = NativeEventSource || EventSourcePolyfill;
+
 
     const initializeSSE = () => {
         const headers = {
             'Authorization': `Bearer ${token}`
         };
-
+        console.log("token=", token);
         sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
 
         console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
@@ -121,8 +125,14 @@ useEffect(() => {
         };
     };
 
+    // Only initialize SSE if both projectId and token are present
     if (projectId && token) {
         initializeSSE();
+    } else {
+        // If the token is not present, close any existing connection
+        if (sse) {
+            sse.close();
+        }
     }
 
     return () => {
