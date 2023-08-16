@@ -153,7 +153,7 @@ function MyPage() {
         sticky
       />
       <MDBox sx={{ mb: 2, mt: 11 }} />
-      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
+      <Header info={{ nickname: memberInfo.nickname }}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} sx={{ display: "flex" }}>
@@ -170,6 +170,7 @@ function MyPage() {
                   GroupCode: memberInfo.groupCode,              
                 }}
                 handleCopy = {handleCopy}
+                memberId = {memberInfo.id}
                 action={{ route: "", tooltip: "Edit Profile" }}
                 shadow={false}
               />
