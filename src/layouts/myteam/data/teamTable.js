@@ -46,6 +46,7 @@ export default function data() {
     async function fetchData() {
       const data = await getProjectMemberData(projectId, token);
       setMemberList(data);
+      console.log(data);
     }
     fetchData();
     const intervalId = setInterval(fetchData, 10000);
@@ -55,7 +56,7 @@ export default function data() {
     clearInterval(intervalId);
   };
   }, []);
-
+  
   const Author = ({ image, name, nickname }) => {
     const [avimage, setImage] = useState(image);
     const handleImageError = () => {
@@ -88,10 +89,10 @@ export default function data() {
     { Header: "이슈 해결 점수", accessor: "exp", align: "center" },
     { Header: "가입일", accessor: "createdAt", align: "center" },
   ];
-
+  
   const rows = memberList.map((member) => ({
     author: (
-      <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id } name={member.name} email={member.email} />
+      <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.memberId } name={member.name} email={member.email} />
     ),
     function: <Job title={member.role} description={member.position} />,
     status: (
@@ -102,6 +103,7 @@ export default function data() {
           variant="gradient"
           size="sm"
         />
+        {console.log(member.id)}
       </MDBox>
     ),
     createdAt: (

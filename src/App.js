@@ -219,7 +219,6 @@ export default function App() {
       console.log("로그인 유지 요청 성공.");
     } catch (error) {
       console.error("로그인 유지 요청 실패:", error);
-      alert(token);
     }
   };
 

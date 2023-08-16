@@ -115,7 +115,7 @@ function MDIssueType({ label, value, onChange }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleBug}>Bug</MenuItem>
-                <MenuItem onClick={handleFeat}>Test</MenuItem>
+                <MenuItem onClick={handleFeat}>Task</MenuItem>
                 <MenuItem onClick={handleImprove}>Story</MenuItem>
               </Menu>
             </div>
