@@ -67,11 +67,10 @@ export default function App() {
   
   const [message, setMessage] = useState();
  
-  const [isAuthenticated, setIsAuthenticated] = useState([]);
-  const [isAuthChecked, setIsAuthChecked] = useState([]); // New state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
   useEffect(() => { 
- 
     if(token){
     setIsAuthenticated(true);
     setIsAuthChecked(true); // Set to true after checking
@@ -103,7 +102,7 @@ export default function App() {
                   console.log(event.data.includes("message"));
                   setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
               };
-  
+
               sse.onerror = (error) => {
                   console.error("SSE failed:", error);
   
@@ -211,7 +210,8 @@ export default function App() {
 
   const keepSessionAlive = async () => {
     try {
-      await axios.post("/api/keepAlive",{
+    
+      await axios.post("/api/keepAlive",{},{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -219,11 +219,13 @@ export default function App() {
       console.log("로그인 유지 요청 성공.");
     } catch (error) {
       console.error("로그인 유지 요청 실패:", error);
+      alert(token);
     }
   };
 
   useEffect(() => {
     if (isAuthenticated === true) {
+      console.log(token);
       // 로그인 상태일 때만 setInterval로 주기적으로 keepSessionAlive 함수 호출
       const intervalId = setInterval(keepSessionAlive, 3 * 60 * 1000); // 3분마다 호출
       return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
@@ -259,11 +261,7 @@ export default function App() {
         <Route
           path="/release/:releaseId"
           element={
-            isAuthenticated ? (
               <ViewRelease />
-            ) : (
-              <Navigate to="/authentication/sign-in" replace={true} />
-            )
           }
         />
       </Routes>
