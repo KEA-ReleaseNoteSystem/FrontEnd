@@ -41,7 +41,7 @@ import { RecoilRoot ,useRecoilState} from "recoil";
 import { projectIdState } from 'examples/Sidenav/ProjectIdAtom';
 import Notification from "layouts/notifications/noticicateAlert"
 
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 
 export default function App() {
@@ -65,10 +65,15 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
-  useEffect(() => {
+  useEffect(() => { 
+    console.log(token);
+    if(token){
     setIsAuthenticated(true);
     setIsAuthChecked(true); // Set to true after checking
-  }, []);
+    }else{
+      setIsAuthChecked(true);
+    }
+  }, [token]);
 
   /*
   useEffect(() => {

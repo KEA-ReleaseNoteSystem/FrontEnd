@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import toast from 'shared/utils/toast';
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
 import { ConfirmModal } from 'shared/components';

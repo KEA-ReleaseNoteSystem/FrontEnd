@@ -10,7 +10,7 @@ import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import Dropzone  from 'layouts/release/components/Dropzone.jsx'
 
 const customModalStyles = {

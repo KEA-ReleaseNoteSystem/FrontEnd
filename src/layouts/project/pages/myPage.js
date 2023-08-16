@@ -18,7 +18,7 @@ import Header from "layouts/project/components/Header";
 
 import { React, useState, useEffect } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

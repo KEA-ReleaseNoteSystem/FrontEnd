@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRecoilState } from 'recoil';

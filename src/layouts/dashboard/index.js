@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 import React from 'react';
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import { useState, useEffect } from "react";
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
