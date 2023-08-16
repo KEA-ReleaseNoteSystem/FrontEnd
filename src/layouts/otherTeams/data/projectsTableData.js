@@ -50,8 +50,7 @@ useEffect(() => {
 
 
   const Project = ({ image, name }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" variant="rounded" />
+    <MDBox display="flex" alignItems="left" lineHeight={1}>
       <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
         {name}
       </MDTypography>

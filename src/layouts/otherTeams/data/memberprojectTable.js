@@ -11,11 +11,13 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 
 
+
 import defimg from "assets/images/default_avatar.jpg";
 
 const getGroupMemberData = async (token) => {
   try {
     const response = await axios.get("/api/group/members", {
+
 
       headers: {
         'Content-Type': 'application/json',
@@ -35,8 +37,6 @@ const getGroupMemberData = async (token) => {
   }
 };
 
- 
-
 
 export default function data(setSelectedMemberId) {
   const [memberList, setMemberList] = useState([]);
@@ -47,7 +47,10 @@ export default function data(setSelectedMemberId) {
 
   useEffect(() => {
     async function fetchData() {
+
+      
       const data = await getGroupMemberData(token);
+
       setMemberList(data);
     }
     fetchData();
