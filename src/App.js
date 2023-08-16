@@ -66,8 +66,8 @@ export default function App() {
   
   const [message, setMessage] = useState();
  
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
+  const [isAuthenticated, setIsAuthenticated] = useState([]);
+  const [isAuthChecked, setIsAuthChecked] = useState([]); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
   useEffect(() => { 
  
