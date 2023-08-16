@@ -162,7 +162,6 @@ const ProjectBoard = () => {
                   Issue
                 </MDTypography>
               </MDBox>
-
               <MDBox pt={3}>
                     <Lists
                       project={projectMock}

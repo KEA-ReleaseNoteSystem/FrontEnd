@@ -15,10 +15,10 @@ import backgroundImage from "assets/images/bg-profile.jpeg";
 
 function Header({children}) {
   return (
-    <Grid container style={{ width: '1310px' }}>
+    <Grid  container >
     <MDBox position="relative" mb={5}>
       <MDBox
-        display="flex"
+  
         alignItems="center"
         position="relative"
         minHeight="18.75rem"
@@ -50,7 +50,7 @@ function Header({children}) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                {/* {info.nickname} */}     {/* <- 이게 문제. 주석처리하면 됨. */}
+        
               </MDTypography>
             </MDBox>
           </Grid>

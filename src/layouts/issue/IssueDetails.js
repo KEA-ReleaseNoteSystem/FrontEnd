@@ -16,14 +16,14 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
   const [memberInCharge, setmemberInCharge] = useState(memberCharge);
   const [mystatus, setStatus] = useState('');
   const [issueType, setIssueType] = useState('');
-
-
+  console.log("asdasd",issue)
+  console.log("membersDatamembersData",memberCharge);
 
   useEffect(() => {
-    // setmemberInCharge(issue ? issue.memberIdInCharge.nickname : '');
+    setmemberInCharge(issue ? issue.memberIdInCharge.name : '');
     setStatus(issue ? issue.status : '')
     setIssueType(issue ? issue.issueType : '')
-  }, [issue.status || issue.issueType]);
+  }, [issue.status ,issue.issueType]);
 
 
 
@@ -36,6 +36,8 @@ function IssueDetails({ issue, membersData, updateIssue, memberReport, memberCha
 
   const handleMemberInCharge = (event) => {
     setmemberInCharge(event.target.value);
+    updateIssue({ userName: event.target.value })
+
   };
 
 

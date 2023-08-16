@@ -21,7 +21,6 @@ import { Menu, MenuItem, IconButton } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import CircularProgress from "@mui/material/CircularProgress";
-
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -44,13 +43,13 @@ const customModalStyles = {
   },
   content: {
     width: '60%',
-    height: '80%',
+    height: '50%',
     top: '50%',
     left: '55%',
     transform: 'translate(-50%, -45%)',
     display: 'flex',
     flexDirection: 'column',
-    borderRadius: 20,
+    // borderRadius: 10,
     justifyContent: 'center',
     position: 'relative', // make sure it's a positioned element
     zIndex: '10001',// it should be higher than overlay's zIndex to appear on top
@@ -58,7 +57,6 @@ const customModalStyles = {
     borderColor: 'transparent'
   }
 };
-
 
 function MDDatePicker({ label, defaultValue, onChange }) {
   const [selectedDate, setSelectedDate] = useState(defaultValue);
@@ -98,7 +96,7 @@ const PM = ({ projectInfo }) => {
   const [isLoading, setIsLoading] = useState(false); // Added loading state
   const [groupMessage, setGroupMessage] = useState("");
   const [groupCodeMessage, setGroupCodeMessage] = useState("");
-  const { columns, rows } = teamTable({projectInfo});
+  const { columns, rows } = teamTable({ projectInfo });
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -156,6 +154,8 @@ const PM = ({ projectInfo }) => {
       });
   };
 
+  console.log("설명: ", projectInfo.description);
+
   const [formData, setFormData] = useState({
     id: projectInfo.id,
     name: projectInfo.name,
@@ -165,7 +165,7 @@ const PM = ({ projectInfo }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   console.log(projectInfo.id);
   console.log(projectInfo.name);
-  
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -189,163 +189,180 @@ const PM = ({ projectInfo }) => {
   };
 
   return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox mb={2} />
-      <MDBox pt={6} pb={3}>
-        <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Project Manage
-                </MDTypography>
-              </MDBox>
-              <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
-                <MDBox mb={2}>
-                  <MDInput type="text" label="프로젝트 이름" onChange={handleInputChange} name="name" defaultValue={projectInfo.name} fullWidth />
+    <>
+      <DashboardLayout>
+        <DashboardNavbar />
+        <MDBox mb={2} />
+        <MDBox pt={6} pb={3}>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <Card>
+                <MDBox
+                  mx={2}
+                  mt={-3}
+                  py={3}
+                  px={2}
+                  variant="gradient"
+                  bgColor="info"
+                  borderRadius="lg"
+                  coloredShadow="info"
+                >
+                  <MDTypography variant="h6" color="white">
+                    Project Manage
+                  </MDTypography>
                 </MDBox>
-                <MDBox mb={2}>
-                  <MDInput label="그룹" defaultValue={projectInfo.groupName} InputProps={{
-                    readOnly: true,
-                    onClick: handleGroupClick, // 클릭 이벤트 핸들러 추가
-                  }} fullWidth />
-                  {groupMessage && (
-                    <MDTypography variant="body2" color="error">
-                      {groupMessage}
-                    </MDTypography>
-                  )}
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDInput label="그룹 코드" defaultValue={projectInfo.groupCode} InputProps={{
-                    readOnly: true,
-                    onClick: handleGroupCodeClick, // 클릭 이벤트 핸들러 추가
-                  }} fullWidth />
-                  {groupCodeMessage && (
-                    <MDTypography variant="body2" color="error">
-                      {groupCodeMessage}
-                    </MDTypography>
-                  )}
-                </MDBox>
-                <MDBox mb={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="select-label">상태</InputLabel>
-                    <Select
-                      label="상태"
-                      defaultValue={projectInfo.status}
+                <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
+                  <MDBox mb={2}>
+                    <MDInput type="text" label="프로젝트 이름" onChange={handleInputChange} name="name" defaultValue={projectInfo.name} fullWidth />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput label="그룹" defaultValue={projectInfo.groupName} InputProps={{
+                      readOnly: true,
+                      onClick: handleGroupClick, // 클릭 이벤트 핸들러 추가
+                    }} fullWidth />
+                    {groupMessage && (
+                      <MDTypography variant="body2" color="error">
+                        {groupMessage}
+                      </MDTypography>
+                    )}
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput label="그룹 코드" defaultValue={projectInfo.groupCode} InputProps={{
+                      readOnly: true,
+                      onClick: handleGroupCodeClick, // 클릭 이벤트 핸들러 추가
+                    }} fullWidth />
+                    {groupCodeMessage && (
+                      <MDTypography variant="body2" color="error">
+                        {groupCodeMessage}
+                      </MDTypography>
+                    )}
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <FormControl fullWidth>
+                      <InputLabel id="select-label">상태</InputLabel>
+                      <Select
+                        label="상태"
+                        defaultValue={projectInfo.status}
+                        onChange={handleInputChange}
+                        fullWidth
+                        sx={{ height: "5.5vh" }}
+                        name="status"
+                      >
+                        <MenuItem value={"Stopped"}>중단됨</MenuItem>
+                        <MenuItem value={"In-progress"}>진행중</MenuItem>
+                        <MenuItem value={"Completed"}>완료됨</MenuItem>
+                        <MenuItem value={"Not-started"}>시작 전</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="textarea"
+                      label="설명"
+                      name="description"
+                      multiline
+                      defaultValue={projectInfo.description}
                       onChange={handleInputChange}
                       fullWidth
-                      sx={{ height: "5.5vh" }}
-                      name="status"
-                    >
-                      <MenuItem value={"Stopped"}>중단됨</MenuItem>
-                      <MenuItem value={"In-progress"}>진행중</MenuItem>
-                      <MenuItem value={"Completed"}>완료됨</MenuItem>
-                      <MenuItem value={"Not-started"}>시작 전</MenuItem>
-                    </Select>
-                  </FormControl>
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDDatePicker
+                      label="생성일"
+                      defaultValue={new Date(projectInfo.createAt)}
+                      onChange={null}
+                    />
+                  </MDBox>
+                  <MDBox mt={4} mb={1} display="flex" justifyContent="center">
+                    {isLoading ? (
+                      isLoading === "success" ? ( // Render success message if loading state is "success"
+                        <MDBox display="flex" alignItems="center">
+                          <CircularProgress color="info" size={30} />
+                          <MDTypography variant="body2" ml={2}>
+                            프로젝트 수정중...
+                          </MDTypography>
+                        </MDBox>
+                      ) : <MDBox display="flex" alignItems="center"></MDBox>
+                    ) : (
+                      <MDButton
+                        variant="gradient"
+                        color="info"
+                        disabled={!isFormValid}
+                        onClick={handleFormSubmit}
+                      >
+                        수정
+                      </MDButton>
+                    )}
+                  </MDBox>
                 </MDBox>
-                <MDBox mb={2}>
-                  <MDInput
-                    type="textarea"
-                    label="설명"
-                    name="description"
-                    defaultValue={projectInfo.description}
-                    onChange={handleInputChange}
-                    fullWidth
-                  />
-                </MDBox>
-                <MDBox mb={2}>
-                  <MDDatePicker
-                    label="생성일"
-                    defaultValue={new Date(projectInfo.createAt)}
-                    onChange={null}
-                  />
-                </MDBox>
-                <MDBox mt={4} mb={1} display="flex" justifyContent="center">
-                  {isLoading ? (
-                    isLoading === "success" ? ( // Render success message if loading state is "success"
-                      <MDBox display="flex" alignItems="center">
-                        <CircularProgress color="info" size={30} />
-                        <MDTypography variant="body2" ml={2}>
-                          프로젝트 수정중...
-                        </MDTypography>
-                      </MDBox>
-                    ) : <MDBox display="flex" alignItems="center"></MDBox>
-                  ) : (
-                    <MDButton
-                      variant="gradient"
-                      color="info"
-                      disabled={!isFormValid}
-                      onClick={handleFormSubmit}
-                    >
-                      수정
-                    </MDButton>
-                  )}
-                </MDBox>
-              </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
-      </MDBox>
-      <MDBox pt={2} px={2} lineHeight={1.25}>
-        <MDTypography variant="h6" fontWeight="medium">
-          Members
-        </MDTypography>
-        <MDBox mb={1}>
-        </MDBox>
-      </MDBox>
-      <MDBox p={2}>
-        <Grid container spacing={6}>
-          {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
-            <Grid item xs={12} md={6} xl={3} key={member.id}>
-              <DefaultProjectCard
-                image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id}
-                id={member.id}
-                projectId={projectInfo.id}
-                name={member.name}
-                nickname={member.nickname}
-                email={member.email}
-                position={member.position}
-                role={member.role}
-              />
+              </Card>
             </Grid>
-            
-          ))}
+          </Grid>
+        </MDBox>
+        <MDBox pt={2} px={2} lineHeight={1.25} display="flex" alignItems="center">
+          <MDTypography variant="h6" fontWeight="medium">
+            Members
+          </MDTypography>
+
+          <IconButton onClick={openAddMemberModal}>
+            <AddCircleOutlineIcon color="info" />
+          </IconButton>
+        </MDBox>
+
+        <MDBox p={2}>
 
 
-            <IconButton onClick={openAddMemberModal}>
-              <AddCircleOutlineIcon color="info" />
-            </IconButton>
+          <div style={{ overflowY: 'auto', maxHeight: '500px' }}>
+            <Grid container spacing={6} >
 
-          <Modal
-            isOpen={activeModal}
-            onRequestClose={closeAddMemberModal}
-            style={customModalStyles}
-          >
-                          <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {projectInfo.memberInfoDTOList && projectInfo.memberInfoDTOList.map(member => (
+                <Grid item xs={12} md={6} xl={3} key={member.id} >
 
-          </Modal>
-        </Grid>
-      </MDBox>
-    </DashboardLayout>
+                  <DefaultProjectCard
+                    image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id}
+                    id={member.id}
+                    projectId={projectInfo.id}
+                    name={member.name}
+                    nickname={member.nickname}
+                    email={member.email}
+                    position={member.position}
+                    role={member.role}
+                  />
+
+                </Grid>
+              ))}
+            </Grid>
+          </div>
+
+        </MDBox>
+
+
+
+
+
+        {/* </MDBox> */}
+
+      </DashboardLayout>
+
+      <div>
+        <Modal
+          isOpen={activeModal}
+          onRequestClose={closeAddMemberModal}
+          style={customModalStyles}
+          shouldCloseOnOverlayClick={true}
+        >
+
+          <DataTable
+            table={{ columns, rows }}
+            isSorted={false}
+            entriesPerPage={false}
+            showTotalEntries={false}
+            noEndBorder
+          />
+
+        </Modal>
+      </div>
+    </>
   );
 }
 function Overview() {

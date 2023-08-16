@@ -5,7 +5,7 @@ import MDTypography from 'components/MDTypography';
 
 import { IssueTypeIcon, IssuePriorityIcon } from 'shared/components';
 
-import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from './Styles';
+import {  Title, ChildIssueList } from './ChildStyles';
 
 const propTypes = {
   projectUsers: PropTypes.array.isRequired,
@@ -67,11 +67,10 @@ const getPriorityColor = (priority) => {
       </IssueLink>
        */} 
 
-<Issue selected={selected}>
+<ChildIssueList selected={selected}> 
     <Title>#{issue.issueNum} {issue.title}
         
     </Title>
-    <div style={{ marginTop: '-20px' }}>
     <MDBadge
             badgeContent={issue.status}
             color={getStatusColor(issue.status)}
@@ -85,12 +84,10 @@ const getPriorityColor = (priority) => {
             variant="gradient"
             size="sm"
         />
-    {/* <Bottom>
-    </Bottom> */}
-    <br/>
+
+    
     &nbsp;&nbsp;<MDTypography variant="caption" fontWeight="light">담당자: {issue.memberIdInCharge.name}</MDTypography>
-    </div>
-</Issue>
+</ChildIssueList>
       
     
     </div>

@@ -11,14 +11,19 @@ import MDAvatar from "components/MDAvatar";
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
 // import Divider from "assets/theme/components/divider";
-import ProfileInfoCard from "../components/ProfileInfoCard";
+
+import ProfileInfoCard from "layouts/project/components/profile.js";
+
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
 // Data
 import Header from "layouts/project/components/Header";
 
 import { React, useState, useEffect } from "react";
+
 import CopyToClipboard from "react-copy-to-clipboard";
 import axios from "interceptor/TokenCheck.js";
+
+
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -153,39 +158,38 @@ function MyPage() {
         routes={routes}
         sticky
       />
-      <MDBox sx={{mb: 2, mt: 11}} />
-      <Header info={{ nickname: memberInfo.nickname }} memberId={memberInfo.id}>
-       <Grid container justifyContent="center">
-        <Grid item xs={12} md={8}>
-          <MDBox sx={{ mb: 2, mt: 11}}>
-            <Grid container spacing={1} justifyContent="center">
-              <Grid item xs={12} sx={{ display: "flex" }}>
-                <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
-                <ProfileInfoCard
-                  title="profile information"
-                  description={memberInfo.introduce}
-                  info={{
-                    fullName: memberInfo.name,
-                    nickname: memberInfo.nickname,
-                    team: memberInfo.groupName,
-                    position: memberInfo.position,
-                    email: memberInfo.email,
-                    GroupCode: memberInfo.groupCode,
-                  }}
-                  action={{ route: "", tooltip: "Edit Profile" }}
-                  shadow={false}
-                />
-                <Divider orientation="vertical" sx={{ mx: 0 }} />
-                <CopyToClipboard text={memberInfo.groupCode} onCopy={handleCopy}>
-                  <MDButton>그룹 코드 복사</MDButton>
-                </CopyToClipboard>
-              </Grid>
+      <MDBox sx={{ mb: 2, mt: 11 }} />
+      <Header info={{ nickname: memberInfo.nickname }} memberId = {memberInfo.id}>
+        <MDBox mt={5} mb={3}>
+          <Grid container spacing={1} justifyContent="center">
+            <Grid item xs={12} sx={{ display: "flex" }}>
+              <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
+              <ProfileInfoCard
+                title="profile information"
+                description={memberInfo.introduce}
+                info={{
+                  fullName: memberInfo.name,
+                  nickname: memberInfo.nickname,
+                  team: memberInfo.groupName,
+                  position: memberInfo.position,
+                  email: memberInfo.email,
+                  GroupCode: memberInfo.groupCode,              
+                }}
+                handleCopy = {handleCopy}
+                action={{ route: "", tooltip: "Edit Profile" }}
+                shadow={false}
+              />
+             
+              <Divider orientation="vertical" sx={{ mx: 0 }} />
+
             </Grid>
           </MDBox>
         </Grid>
       </Grid>
 
       </Header>
+
+      
       <Card>
         {rows.length > 0 ? (
           <>

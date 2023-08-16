@@ -24,7 +24,7 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bgtmp.png";
+import bgImage from "assets/images/homepage/sign-in-background.png";
 import { Alert } from "react-bootstrap";
 import axios from "interceptor/TokenCheck.js";
 import { from } from "stylis";

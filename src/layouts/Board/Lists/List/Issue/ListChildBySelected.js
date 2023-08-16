@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MDBadge from 'components/MDBadge';
 import MDTypography from 'components/MDTypography';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IssueTypeIcon, IssuePriorityIcon } from 'shared/components';
 
-import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from './Styles';
+import { DeleteButton, ChildIssueList, Title, Bottom, Assignees, AssigneeAvatar } from './ChildSelectedStyles';
 
 const propTypes = {
   projectUsers: PropTypes.array.isRequired,
@@ -13,9 +13,11 @@ const propTypes = {
   index: PropTypes.number.isRequired,
 };
 
-const ProjectBoardListIssue = ({ projectUsers, issue, index,selected }) => {
+const ProjectBoardListIssue = ({ projectUsers, issue, index,selected,onDelete }) => {
 
-
+  const handleChildDelete = () => {
+    onDelete(issue, index); // 상위 컴포넌트의 handleDelete 함수를 호출
+  }
   // const assignees = issue.map(userId => projectUsers.find(user => user.id === userId));
 
   const getStatusColor = (status) => {
@@ -44,30 +46,9 @@ const getPriorityColor = (priority) => {
   return (
     
     <div>
-      {/* <IssueLink>
-        <Issue>
-          <Title>{issue.title}</Title>
-          <Bottom>
-            <div>
-              <IssueTypeIcon type={issue.status} />
-              <IssuePriorityIcon priority={issue.importance} top={-1} left={4} />
-            </div>
-            <Assignees>
-              {assignees.map(user => (
-                <AssigneeAvatar
-                  key={user.id}
-                  size={24}
-                  avatarUrl={user.avatarUrl}
-                  name={user.name}
-                />
-              ))}
-            </Assignees>
-          </Bottom>
-        </Issue>
-      </IssueLink>
-       */} 
+    
 
-<Issue selected={selected}>
+<ChildIssueList selected={selected}>
     <Title>#{issue.issueNum} {issue.title}
         
     </Title>
@@ -77,6 +58,7 @@ const getPriorityColor = (priority) => {
             color={getStatusColor(issue.status)}
             variant="gradient"
             size="sm"
+
         />
 
         <MDBadge
@@ -84,13 +66,18 @@ const getPriorityColor = (priority) => {
             color={getPriorityColor(issue.importance)}
             variant="gradient"
             size="sm"
+    
         />
-    {/* <Bottom>
-    </Bottom> */}
-    <br/>
-    &nbsp;&nbsp;<MDTypography variant="caption" fontWeight="light">담당자: {issue.memberIdInCharge.name}</MDTypography>
-    </div>
-</Issue>
+
+        &nbsp;&nbsp;<MDTypography variant="caption" fontWeight="light"   style={{ marginTop: '-100px' }}>담당자: {issue.memberIdInCharge.name}</MDTypography>
+        <DeleteButton onClick={handleChildDelete}>
+          <DeleteIcon />
+        </DeleteButton>
+        </div>
+    
+
+ 
+</ChildIssueList>
       
     
     </div>

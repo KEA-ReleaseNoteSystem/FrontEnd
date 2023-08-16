@@ -26,6 +26,8 @@ import themeDarkRTL from "assets/theme-dark/theme-rtl";
 // Material Dashboard 2 React routes
 import routes from "routes";
 
+
+
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
@@ -75,31 +77,29 @@ export default function App() {
     }
   }, [token]);
 
-  /*
+  
   useEffect(() => {
     let retryCount = 0;
 
+    // Ensure sse is declared in the upper scope for proper clean-up
     let sse;
 
     const maxRetries = 10;
     const retryInterval = 5000; // 5 seconds
 
-  
-
     const initializeSSE = () => {
-        const sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+       
+        sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`);
 
         console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
 
         sse.onmessage = (event) => {
-            // Handle the message event
             console.log("onmessage", event.data);
             console.log(event.data.includes("message"));
             setMessage(event.data.includes("message") ? JSON.parse(event.data) : null );
         };
 
         sse.onerror = (error) => {
-            // Handle any errors here
             console.error("SSE failed:", error);
 
             if (retryCount < maxRetries) {
@@ -116,7 +116,10 @@ export default function App() {
         };
     };
 
-    initializeSSE();
+    // Only initialize SSE if projectId exists (is truthy)
+    if (projectId && token) {
+        initializeSSE();
+    }
 
     // Clean-up function
     return () => {
@@ -125,7 +128,8 @@ export default function App() {
       }
     };
 }, [projectId]);
-*/ 
+
+
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {

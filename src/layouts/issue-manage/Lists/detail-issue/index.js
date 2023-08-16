@@ -29,7 +29,6 @@ import MDButton from "components/MDButton";
 
 
 
-
 function Overview(issue) {
   const navigate = useNavigate();
   const token = localStorage.getItem('ACCESS_TOKEN');
@@ -58,8 +57,8 @@ function Overview(issue) {
   }
 
   return (
-    <MDBox pb={3}>
-      <Grid>
+    <MDBox pb={3} py={2}>
+      <Grid >
         <Grid item xs={12}>
           <MDBox
             mx={2}
@@ -75,7 +74,7 @@ function Overview(issue) {
               Issue #{issue.issue.id}
             </MDTypography>
           </MDBox>
-          <MDBox component="form" role="form" mt={6} ml={3} mr={10}>
+          <MDBox component="form" role="form" mt={6} ml={3} mr={3}>
             <MDBox mb={2}>
               <MDInput type="text" label="제목" defaultValue={issue.issue.title} disabled fullWidth />
             </MDBox>

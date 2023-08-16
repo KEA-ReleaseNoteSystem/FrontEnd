@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { IssueLink, Issue, Title, Bottom, Assignees, AssigneeAvatar } from '../issue-manage/Lists/List/Issue/Styles.js';
+import DatePicker from 'react-datepicker';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -115,7 +117,7 @@ function ViewRelease() {
     const [files, setFiles] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState(false); 
+    const [snackbarMessage, setSnackbarMessage] = useState(false);
     const [statusNo, setStatusNo] = useState([0, 0, 0]); //백로그, 진행중, 완료인 이슈 개수 세기
     const [issueDetail, setIssueDetail] = useState([]); //이슈 각각 눌렀을 때 상세정보
     const [sendImages, setSendImages] = useState([]);
@@ -125,9 +127,24 @@ function ViewRelease() {
     const [progress, setProgress] = useState(0); //프로그레스바 전용
     const [brief, setBrief] = useState('');
     const [description, setDescription] = useState('');
-    const [releaseDate, setReleaseDate] = useState('');
+    const [releaseDate, setReleaseDate] = useState(new Date());
     const [isVersionCorrect, setIsVersionCorrect] = useState(false);
- 
+    const [responseMessage, setResponseMessage] = useState();
+    
+
+
+    function getToday(date) {
+        var year = date.getFullYear();
+        var month = ("0" + (1 + date.getMonth())).slice(-2);
+        var day = ("0" + date.getDate()).slice(-2);
+
+        return year + "-" + month + "-" + day;
+    }
+
+    const handleReleaseDateChange = (date) => {
+        setReleaseDate(date);
+      };
+
     const onDrop = (acceptedFiles) => {
         const newImageUrls = acceptedFiles.map((file) => URL.createObjectURL(file));
         const newFiles = [...files, ...acceptedFiles];
@@ -142,19 +159,19 @@ function ViewRelease() {
     };
 
     console.log(files);
-    
+
     const deleteImage = (index) => {
         const newFiles = [...files];
         const newImageUrls = [...imageUrls];
-    
+
         URL.revokeObjectURL(newImageUrls[index]);
         newImageUrls.splice(index, 1);
         newFiles.splice(index, 1);
-    
+
         setImageUrls(newImageUrls);
         setFiles(newFiles);
     };
-    
+
 
     const handleVersionChange = (e) => {
 
@@ -243,6 +260,8 @@ function ViewRelease() {
                 }
             );
 
+            console.log("response release",response.data.statusCode);
+ 
             // const response = await axios.post(
             //     `/api/release/create`, {
             //     projectId: projectId,
@@ -263,7 +282,8 @@ function ViewRelease() {
             //     }
             // );
             console.log("전송 완료");
-            // console.log("")
+
+            return response.data.statusCode;
         } catch (error) {
             console.error(error);
         }
@@ -275,14 +295,20 @@ function ViewRelease() {
     }, []);
 
     //릴리스 작성하기 버튼
-    const handleRelaseUpdateOnClick = (event) => {
-        console.log("릴리스 저장 버튼 클릭됨");
-        // console.log("사진 데이터: ", event);
-
-        postReleaseNoteData(token);
-        alert('릴리즈노트가 생성되었습니다!');
-        navigate(-1);
-
+    const handleRelaseUpdateOnClick = async (event) => {
+        console.log("릴리즈 저장 버튼 클릭됨");
+        
+        const resultStatusCode = await postReleaseNoteData(token);  
+            
+        console.log("responseMessage",resultStatusCode == 445)
+        if(resultStatusCode == 443){
+            alert('해당 버전의 릴리즈 노트가 이미 존재합니다.');
+        } else if(resultStatusCode == 445){
+            alert('유효하지 않은 버전입니다. 적절한 상위 버전이 존재하는지 확인하세요.');
+        } else {
+            alert('릴리즈노트가 생성되었습니다!');
+            navigate(-1);
+        }
     };
 
     const [menu1, setMenu1] = useState(null); // 상태 필터
@@ -411,7 +437,7 @@ function ViewRelease() {
         setActiveModal(null);
     }
 
-   
+
 
     return (
         <DashboardLayout>
@@ -539,7 +565,24 @@ function ViewRelease() {
                                             <Grid item xs={6}>
                                                 <MDBox pt={2} px={2}>
                                                     <MDTypography variant="h6">릴리즈 일자</MDTypography>
-                                                    <MDInput variant="standard" onChange={(e) => setReleaseDate(e.target.value)} defaultValue="2023-00-00" multiline />
+                                                    <MDBox mt={1} mb={2}>
+                                                        <MDInput
+                                                            type="text"
+                                                            value={getToday(releaseDate)}
+                                                            InputProps={{
+                                                                startAdornment: (
+                                                                    <DatePicker
+                                                                        selected={releaseDate}
+                                                                        onChange={handleReleaseDateChange}
+                                                                        dateFormat="yyyy.MM.dd"
+                                                                        showYearDropdown
+                                                                        showMonthDropdown
+                                                                        customInput={<CalendarTodayIcon />}
+                                                                    />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </MDBox>
                                                 </MDBox>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -610,6 +653,8 @@ function ViewRelease() {
                         borderRadius="lg"
                         coloredShadow="info"
                     >
+
+
                         <MDTypography variant="h6" color="white">
                             릴리즈 노트에 추가할 이슈 목록
                         </MDTypography>

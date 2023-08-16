@@ -32,8 +32,8 @@ const customModalStyles = {
   },
   content: {
     width: '60%',
-    height: '80%',
-    top: '50%',
+    height: '90%',
+    top: '49%',
     left: '55%',
     transform: 'translate(-50%, -45%)',
     display: 'flex',
