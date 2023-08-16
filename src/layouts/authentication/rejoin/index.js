@@ -25,10 +25,9 @@ function Cover() {
   const searchParams = new URLSearchParams(location.search);
   const oauthEmail = searchParams.get("email");
   const oauthName = searchParams.get('username');
-  const joinEmail = location.state?.email;
-  console.log(joinEmail);
-  console.log("oauth", oauthEmail);
-  const [email, setEmail] = useState(joinEmail);
+  const emailFromQuery = searchParams.get("email");
+  const [email, setEmail] = useState(emailFromQuery);
+
   useEffect(() => {
     if(oauthEmail !== "" && oauthName !== "" && oauthEmail!=null) {
       console.log("111");
