@@ -26,6 +26,7 @@ export default function data(selectedMemberId) {
 const [projectMembers, setProjectMembers] = useState([]);
 const token = localStorage.getItem('ACCESS_TOKEN');
 console.log("selectedMemberId",selectedMemberId)
+console.log("aaa",token);
 useEffect(() => {
   const getMemberProjectData = async () => {
     try {
@@ -46,8 +47,10 @@ useEffect(() => {
       setProjectMembers([]);
     }
   };
-
+  
+  if(selectedMemberId){
   getMemberProjectData();
+}
 }, [selectedMemberId]);
 
 
