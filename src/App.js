@@ -225,7 +225,6 @@ export default function App() {
 
   useEffect(() => {
     if (isAuthenticated === true) {
-      console.log(token);
       // 로그인 상태일 때만 setInterval로 주기적으로 keepSessionAlive 함수 호출
       const intervalId = setInterval(keepSessionAlive, 3 * 60 * 1000); // 3분마다 호출
       return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
