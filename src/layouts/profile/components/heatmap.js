@@ -151,8 +151,8 @@ const CalendarHeatmap = (issuescore) => {
 
     const tooltipStyle = {
         position: 'absolute',
-        top: hoveredDate ? `${hoveredCellTop - 490}px` : '-9999px', // hide tooltip if not hovered
-        left: hoveredDate ? `${hoveredCellLeft - (655 + hoveredCellWidth)}px` : '0',
+        top: hoveredDate ? `${hoveredCellTop - 800}px` : '-9999px', // hide tooltip if not hovered
+        left: hoveredDate ? `${hoveredCellLeft - (400 + hoveredCellWidth)}px` : '0',
         transform: 'translate(-50%, -100%)',
         backgroundColor: 'black',
         color: 'white',
@@ -168,10 +168,9 @@ const CalendarHeatmap = (issuescore) => {
 
         position: 'absolute',
         left: '0', // 왼쪽에 배치
-        top: '58%', // 세로 중앙 정렬
+        top: '50%', // 세로 중앙 정렬
         transform: 'translateY(-50%)', // 세로 중앙 정렬을 위해 translateY 사용
-        marginLeft: '3%',
-
+        marginLeft: '9%'
     };
 
 

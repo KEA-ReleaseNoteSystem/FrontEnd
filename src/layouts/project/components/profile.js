@@ -237,7 +237,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
                     </div>
        
           {renderItems}
-          <CopyToClipboard text={info.groupCode} onCopy={handleCopy} style={{marginLeft : "20%"}}>
+          <CopyToClipboard text={info.GroupCode} onCopy={handleCopy} style={{marginLeft : "20%"}}>
             <MDButton>그룹 코드 복사</MDButton>
             </CopyToClipboard>
           

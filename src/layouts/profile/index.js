@@ -73,7 +73,7 @@ function Overview() {
         
 
           <MDBox mt={5}  >
-            <Grid container style={{ width: '1310px' }}>
+            <Grid container fullWidth>
               <Grid item xs={12} md={12} xl={12} sx={{ display: "flex" }}>
                 <ProfileInfoCard
                   title="profile information"
@@ -90,9 +90,6 @@ function Overview() {
                   action={{ route: "", tooltip: "Edit Profile" }}
                   shadow={false}
                 />
-
-             
-                
               </Grid>
             </Grid>
           </MDBox>
@@ -100,15 +97,15 @@ function Overview() {
              
             
               <br/>
-          <Card sx={{  width: "calc(100% - 350px)", backgroundColor: "#f9fbfb", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
+          <Card sx={{ width: "100%", backgroundColor: "#f9fbfb", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
                 
-                <Grid mt={2.2} ml={2} mb={5} container justifyContent="center" >
-                  <Grid id = 'test' item xs={12} sx={{ display: "flex",height: "50px", }}>
+                <Grid mt={2.2} ml={2} mb={5} pb={5}container justifyContent="center" >
+                  <Grid id = 'test' item xs={12} sx={{ pb:'5', display: "flex",height: "50px", }}>
 
                     <MDTypography variant="body2" fontWeight="medium" ml={1}>{currentYear}년의 기여 표</MDTypography>
                   </Grid>
 
-                  <MDBox>
+                  <MDBox ml={10}>
                     {/* <div style={{ overflowX: 'auto' }}> */}
                     <CalendarHeatmap issueScore={memberInfo.exp} />
                     {/* </div> */}
