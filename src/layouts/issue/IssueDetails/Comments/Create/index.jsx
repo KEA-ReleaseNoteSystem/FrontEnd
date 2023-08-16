@@ -8,6 +8,9 @@ import toast from 'shared/utils/toast';
 import BodyForm from '../BodyForm';
 import ProTip from './ProTip';
 import { Create, UserAvatar, Right, FakeTextarea } from './Styles';
+import { RecoilRoot ,useRecoilState} from "recoil";
+import { projectIdState } from 'examples/Sidenav/ProjectIdAtom';
+
 
 const propTypes = {
   issueId: PropTypes.number.isRequired,
@@ -21,6 +24,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issue, fetchedMemo, setMemo })
   const [body, setBody] = useState('');
   const [memoLength, setMemoLength] = useState(fetchedMemo.id);
   const { currentUser } = 1;
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
 
   const token = localStorage.getItem('ACCESS_TOKEN');
 
@@ -32,7 +36,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issue, fetchedMemo, setMemo })
     try {
       setCreating(true);
       var now = new Date().toISOString();
-      let result = await Axios.post(`/api/memo/1/${issue.id}`, {
+      let result = await Axios.post(`/api/memo/${projectId}/${issue.id}`, {
         issueId: issue.id,
         content: body,
         createdAt: now

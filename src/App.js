@@ -26,6 +26,8 @@ import themeDarkRTL from "assets/theme-dark/theme-rtl";
 // Material Dashboard 2 React routes
 import routes from "routes";
 
+import EventSource from 'eventsource-polyfill';
+
 
 
 // Material Dashboard 2 React contexts
@@ -68,7 +70,7 @@ export default function App() {
   const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
   useEffect(() => { 
-    console.log(token);
+ 
     if(token){
     setIsAuthenticated(true);
     setIsAuthChecked(true); // Set to true after checking
@@ -78,56 +80,58 @@ export default function App() {
   }, [token]);
 
   
-  useEffect(() => {
-    let retryCount = 0;
 
-    // Ensure sse is declared in the upper scope for proper clean-up
-    let sse;
 
-    const maxRetries = 10;
-    const retryInterval = 5000; // 5 seconds
+// useEffect(() => {
+//     let retryCount = 0;
+//     let sse;
 
-    const initializeSSE = () => {
-       
-        sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+//     const maxRetries = 10;
+//     const retryInterval = 5000; // 5 seconds
 
-        console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+//     const initializeSSE = () => {
+//         const headers = {
+//             'Authorization': `Bearer ${token}`
+//         };
 
-        sse.onmessage = (event) => {
-            console.log("onmessage", event.data);
-            console.log(event.data.includes("message"));
-            setMessage(event.data.includes("message") ? JSON.parse(event.data) : null );
-        };
+//         sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
 
-        sse.onerror = (error) => {
-            console.error("SSE failed:", error);
+//         console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
 
-            if (retryCount < maxRetries) {
-                console.log(`Retrying in ${retryInterval / 1000} seconds...`);
-                setTimeout(() => {
-                    initializeSSE();
-                    retryCount++;
-                }, retryInterval);
-            } else {
-                console.error("Max retries reached. Not reconnecting.");
-            }
+//         sse.onmessage = (event) => {
+//             console.log("onmessage", event.data);
+//             console.log(event.data.includes("message"));
+//             setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
+//         };
 
-            sse.close();
-        };
-    };
+//         sse.onerror = (error) => {
+//             console.error("SSE failed:", error);
 
-    // Only initialize SSE if projectId exists (is truthy)
-    if (projectId && token) {
-        initializeSSE();
-    }
+//             if (retryCount < maxRetries) {
+//                 console.log(`Retrying in ${retryInterval / 1000} seconds...`);
+//                 setTimeout(() => {
+//                     initializeSSE();
+//                     retryCount++;
+//                 }, retryInterval);
+//             } else {
+//                 console.error("Max retries reached. Not reconnecting.");
+//             }
 
-    // Clean-up function
-    return () => {
-      if (sse) {
-        sse.close();
-      }
-    };
-}, [projectId]);
+//             sse.close();
+//         };
+//     };
+
+//     if (projectId && token) {
+//         initializeSSE();
+//     }
+
+//     return () => {
+//         if (sse) {
+//             sse.close();
+//         }
+//     };
+// }, [projectId, token]);
+
 
 
   // Open sidenav when mouse enter on mini sidenav

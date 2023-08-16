@@ -31,7 +31,6 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import teamTable from "layouts/myteam/data/teamTable";
-import projectsTableData from "layouts/myteam/data/projectsTableData";
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
@@ -39,7 +38,7 @@ import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom.js';
 function Tables() {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   const { columns, rows } = teamTable();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
+  
   const [ projectName, setProjectName ] = useState("");
 
   const token = localStorage.getItem('ACCESS_TOKEN');

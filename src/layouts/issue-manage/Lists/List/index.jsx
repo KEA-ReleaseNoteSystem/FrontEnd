@@ -49,6 +49,7 @@ const ProjectBoardList = ({ status, project, filters, currentUserId }) => {
 
   const [issue, setIssue] = useState(null);
   const [activeModal, setActiveModal] = useState("");
+  const token = localStorage.getItem('ACCESS_TOKEN');
 
   const openIssueAddModal = () => {
     setActiveModal("createIssue");

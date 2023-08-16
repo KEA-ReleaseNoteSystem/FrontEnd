@@ -25,6 +25,7 @@ import Footer from "examples/Footer";
 
 import { useRecoilState } from 'recoil';
 import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+const token = localStorage.getItem('ACCESS_TOKEN');
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -123,7 +124,11 @@ const ProjectBoard = () => {
   console.log("projectId", projectId);
 
   const getAPI = async () => {
-    const response = await axios.get(`/api/project/${projectId}/issues/management`);
+    const response = await axios.get(`/api/project/${projectId}/issues/management`  ,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }})
+
     console.log('== response == : ', response.data);
     setProjectMock(response.data.data);
   }

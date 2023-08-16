@@ -11,7 +11,7 @@ import Modal from 'react-modal';
 import IssueDetail from '../../detail-issue';
 import MDBadge from "components/MDBadge";
 
-
+const token = localStorage.getItem('ACCESS_TOKEN');
 const propTypes = {
   // projectUsers: PropTypes.array.isRequired,
   issue: PropTypes.object.isRequired,
@@ -25,8 +25,8 @@ const customModalStyles = {
   },
   content: {
     width: '60%',
-    height: '700px',
-    top: '50%',
+    height: '90%',
+    top: '49%',
     left: '55%',
     transform: 'translate(-50%, -45%)',
     display: 'flex',

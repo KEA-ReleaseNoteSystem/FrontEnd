@@ -15,7 +15,6 @@ Coded by www.creative-tim.com
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "interceptor/TokenCheck.js";
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // @mui material components
@@ -33,17 +32,6 @@ function Overview(issue) {
   const navigate = useNavigate();
   const token = localStorage.getItem('ACCESS_TOKEN');
 
-  useEffect(() => {
-    axios.get('/api/projects') // API 엔드포인트를 적절히 변경해야 합니다.
-      .then(response => {
-        setProjects(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
-      });
-  }, []);
-
-  console.log("테스트: ", issue);
 
 
   const handleOnClickDeleteIssue = async () => {

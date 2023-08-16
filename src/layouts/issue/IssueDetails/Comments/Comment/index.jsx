@@ -1,14 +1,15 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-// import api from 'shared/utils/api';
-import toast from 'shared/utils/toast';
+
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
-import { ConfirmModal } from 'shared/components';
 import Axios from 'axios';
 import BodyForm from '../BodyForm';
 
+import { RecoilRoot ,useRecoilState} from "recoil";
+import { projectIdState } from 'examples/Sidenav/ProjectIdAtom';
 
+  
 import {
   Comment,
   UserAvatar,
@@ -30,6 +31,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
   const [isDeleted, setDeleted] = useState(false); // 상태 추가
   const [body, setBody] = useState(comment.memo_content);
   const token = localStorage.getItem('ACCESS_TOKEN');
+  const [projectId, setProjectId] = useRecoilState(projectIdState);
 
 
 
@@ -37,21 +39,33 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
     try {
       console.log("comment.issueId", comment.issueId);
       console.log("comment.id", comment.id);
-      let result = await Axios.delete(`/api/memo/1/${comment.issueId}/${comment.id}`);
-      setDeleted(true); // 삭제 상태로 설정
+      
+    const result = await Axios.delete(`/api/memo/${encodeURIComponent(projectId)}/${comment.issueId}/${comment.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      
+  
+      // Assuming you want to setDeleted only if the deletion is successful
+      if (result.status === 200) {
+        setDeleted(true); // Set the deleted state
+      }
     } catch (error) {
       console.error('Error making the request:', error.message);
       console.error('Full error object:', error);
-      toast.error(error);
+
     }
   };
+  
 
 
   const handleCommentUpdate = async () => {
     try {
       setUpdating(true);
       var now = new Date().toISOString();
-      let result = await Axios.patch(`/api/memo/1/${comment.issueId}/${comment.id}`, {
+      let result = await Axios.patch(`/api/memo/${encodeURIComponent(projectId)}/${comment.issueId}/${comment.id}`, {
         memoId : comment.id,
         content: body,
         updatedAt: now
@@ -65,7 +79,7 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchedMemo }) => {
     } catch (error) {
       console.error('Error making the request:', error.message);
       console.error('Full error object:', error);
-      toast.error(error);
+
     }
   };
 

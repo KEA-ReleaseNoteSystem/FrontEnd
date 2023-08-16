@@ -12,6 +12,7 @@ import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 function MyTree({ issue }) {
   console.log("tree issue :",issue)
+  const token = localStorage.getItem('ACCESS_TOKEN');
   const [projectId, setProjectId] = useRecoilState(projectIdState);
   const [data, setData] = useState({
     name: 'Root',
@@ -39,7 +40,11 @@ function MyTree({ issue }) {
   useEffect(() => {
     const getTree = async () => {
       try {
-        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/issues/tree/${issue.id}`);
+        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/issues/tree/${issue.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setData(response.data);
         setTranslate({ x: 220, y: 150 });
         console.log("data",data)

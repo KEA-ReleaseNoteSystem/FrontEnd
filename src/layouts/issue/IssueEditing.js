@@ -9,13 +9,9 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
-import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
-
 import axios from "interceptor/TokenCheck.js";
-
 import ListChildIssue from 'layouts/Board/Lists/List/Issue/ListChild';
 import ListSelectedChildIssue from 'layouts/Board/Lists/List/Issue/ListChildBySelected';
-
 import Dropzone  from 'layouts/release/components/Dropzone.jsx'
 
 const customModalStyles = {
@@ -43,6 +39,7 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   console.log("issue", issue);
   console.log("issue1", issue.imgUrl_1);
   console.log("issue2", issue.imgUrl_2);
+  const token = localStorage.getItem('ACCESS_TOKEN');
   const [Memo, setMemo] = useState(fetchedMemo);
   const [childIssues, setChildIssues] = useState(updatedchildIssues);
   const [activeModal, setActiveModal] = useState("");
@@ -119,7 +116,11 @@ function IssueEditing({ issue, updatedchildIssues, updateIssue, deleteChild, fet
   const getOtherIssue = async (excludeissues) => {
     try {
 
-      const response = await axios.get(`/api/${projectId}/issues?exclude=${excludeissues.join(',')}`);
+      const response = await axios.get(`/api/${projectId}/issues?exclude=${excludeissues.join(',')}` ,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setOtherIssue(response.data.data);
 

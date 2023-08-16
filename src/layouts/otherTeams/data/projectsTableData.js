@@ -30,8 +30,11 @@ useEffect(() => {
   const getMemberProjectData = async () => {
     try {
       console.log("urlurl",`/api/project/members/${selectedMemberId}`);
-      const response = await axios.get(`/api/project/members/${selectedMemberId}`
-      );
+      const response = await axios.get(`/api/project/members/${selectedMemberId}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }})
+      
  
       if (response.data.data.length === 0) {
         setProjectMembers([]);

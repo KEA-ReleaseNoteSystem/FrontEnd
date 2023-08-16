@@ -16,19 +16,9 @@ const ProjectBoardIssueDetailsDescription = ( {issue,updateIssue} ) => {
   const [title, setTitle] = useState(issue.title);
   const [description, setDescription] = useState(issue.description);
   const [isEditing, setEditing] = useState(false);
-  
- 
-  // const handleUpdate = async () => {
-  //   setEditing(false);
-  //   console.log(`DS 변경 ${issue.id}`);
-  //   setDescription(description);
 
-  //   // const response = await axios.put(`/api/project/${1}/issues/${issueDetail.id}`,{
-  //     const response = await axios.put(`/api/${Number(1)}/issues/${issue.id}`,{
-  //     title : null, 
-  //     description : description
-  //   });
-  // };
+ 
+
 
 
   useEffect(() => {

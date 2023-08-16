@@ -7,34 +7,28 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import MDProgress from 'components/MDProgress';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
 import MDInput from 'components/MDInput';
-import Description from 'layouts/issue/IssueDetails/Description';
-import Comments from 'layouts/issue/IssueDetails/Comments';
-import { Icon, IconButton, Menu, MenuItem } from "@mui/material";
+import {  IconButton, MenuItem } from "@mui/material";
 import axios from 'axios';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { IssueSearchBar, IssueSearchBarCopy, IssueStatus, IssueStatusCopy, IssueType, IssueTypeCopy } from "shared/constants/issues"
 import Button from '@mui/material/Button';
+import { useRecoilState } from 'recoil';
+import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
+import SearchIcon from '@mui/icons-material/Search';
 import IssueDetails from './IssueDetails';
 import IssueEditing from './IssueEditing';
 import MyTree from './MyTree';
-import { useRecoilState } from 'recoil';
-import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
-
-import SearchIcon from '@mui/icons-material/Search';
 
 function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [projectId, setProjectId] = useRecoilState(projectIdState);
-  const token = localStorage.getItem('ACCESS_TOKEN');
   const [issueDetail, setIssueDetail] = useState([]);
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
   const [filter, setFilter] = useState("");
-
   const [searchBar, setSearchBar] = useState();
   const [searchFilter, setSearchFilter] = useState();
   const [firstfilter, setFirstfilter] = useState("");
@@ -42,7 +36,8 @@ function IssueSearch() {
   const [thirdfilter, setThridfilter] = useState("");
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(0);
   const [childIssues,setChildIssues] = useState();
-
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  
 
   
 
@@ -100,6 +95,7 @@ function IssueSearch() {
             parentIssueId: issueDetail.id,
             childIssueId: childIssue.id,
             createdAt: now,
+            
           },
           {
             headers: {
@@ -125,10 +121,9 @@ function IssueSearch() {
       }));
       const updatedChildIssues = [...issueDetail.childIssue, ...results];
       updateChildIssues(updatedChildIssues);
-      console.log('fetchedIssues', fetchedIssues);
+
     } catch (error) {
-      console.error('Error making the request:', error.message);
-      console.error('Full error object:', error);
+ 
     }
   };
 
@@ -141,12 +136,13 @@ function IssueSearch() {
 
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
         const issuesResponse = await axios.get(`/api/${encodeURIComponent(projectId)}/issues`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
-        });
+        })
         
         setFetchedIssues(issuesResponse.data.data);
 
@@ -168,23 +164,31 @@ function IssueSearch() {
     fetchData();
   }, [projectId, token]);
 
+
+
   useEffect(() => {
     const fetchMemo = async () => {
-      try {
-        console.log(`Fetching memo for projectId=${projectId}, issueId=${issueDetail.id}`);
-        const response = await axios.get(`/api/memo/${projectId}/${issueDetail.id}`);
-        console.log('Response:', response.data.data);
-        setFetchedMemo(response.data.data);
+          
+   
+        try {
+            const response = await axios.get(`/api/memo/${encodeURIComponent(projectId)}/${encodeURIComponent(issueDetail.id)}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Response:', response.data.data);
+            setFetchedMemo(response.data.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
 
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-
-    fetchMemo();
-
-  }, [!issueDetail ? null : issueDetail.id]);
+     };
+  
+  
+     if (issueDetail !== undefined) {
+        fetchMemo();
+    }
+}, [issueDetail]);
 
   const handleOnClickSearchIssue = async () => {
     try {
@@ -274,10 +278,10 @@ function IssueSearch() {
     }
   };
 
-  
+ 
 
 
-  const submitIssue = async (files, currentIds) => {
+  const submitIssue = async (files, currentIds,token) => {
     try {
         // 1. 이미지 업로드 부분
         const formData = new FormData();
@@ -286,6 +290,7 @@ function IssueSearch() {
         const uploadResponse = await axios.post(`api/issue/${currentIds}/images`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
       
             },
         });
