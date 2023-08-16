@@ -25,7 +25,7 @@ function IssueSearch() {
   const [fetchedIssues, setFetchedIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [projectId, setProjectId] = useRecoilState(projectIdState);
-  const [issueDetail, setIssueDetail] = useState([]);
+  const [issueDetail, setIssueDetail] = useState(undefined);
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
   const [filter, setFilter] = useState("");
