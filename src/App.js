@@ -82,55 +82,55 @@ export default function App() {
   
 
 
-// useEffect(() => {
-//     let retryCount = 0;
-//     let sse;
+useEffect(() => {
+    let retryCount = 0;
+    let sse;
 
-//     const maxRetries = 10;
-//     const retryInterval = 5000; // 5 seconds
+    const maxRetries = 10;
+    const retryInterval = 5000; // 5 seconds
 
-//     const initializeSSE = () => {
-//         const headers = {
-//             'Authorization': `Bearer ${token}`
-//         };
+    const initializeSSE = () => {
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
 
-//         sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
+        sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
 
-//         console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+        console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
 
-//         sse.onmessage = (event) => {
-//             console.log("onmessage", event.data);
-//             console.log(event.data.includes("message"));
-//             setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
-//         };
+        sse.onmessage = (event) => {
+            console.log("onmessage", event.data);
+            console.log(event.data.includes("message"));
+            setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
+        };
 
-//         sse.onerror = (error) => {
-//             console.error("SSE failed:", error);
+        sse.onerror = (error) => {
+            console.error("SSE failed:", error);
 
-//             if (retryCount < maxRetries) {
-//                 console.log(`Retrying in ${retryInterval / 1000} seconds...`);
-//                 setTimeout(() => {
-//                     initializeSSE();
-//                     retryCount++;
-//                 }, retryInterval);
-//             } else {
-//                 console.error("Max retries reached. Not reconnecting.");
-//             }
+            if (retryCount < maxRetries) {
+                console.log(`Retrying in ${retryInterval / 1000} seconds...`);
+                setTimeout(() => {
+                    initializeSSE();
+                    retryCount++;
+                }, retryInterval);
+            } else {
+                console.error("Max retries reached. Not reconnecting.");
+            }
 
-//             sse.close();
-//         };
-//     };
+            sse.close();
+        };
+    };
 
-//     if (projectId && token) {
-//         initializeSSE();
-//     }
+    if (projectId && token) {
+        initializeSSE();
+    }
 
-//     return () => {
-//         if (sse) {
-//             sse.close();
-//         }
-//     };
-// }, [projectId, token]);
+    return () => {
+        if (sse) {
+            sse.close();
+        }
+    };
+}, [projectId, token]);
 
 
 

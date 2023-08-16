@@ -24,7 +24,7 @@ import logoInvesion from "assets/images/small-logos/logo-invision.svg";
 export default function data(selectedMemberId) {
   
 const [projectMembers, setProjectMembers] = useState([]);
-
+const token = localStorage.getItem('ACCESS_TOKEN');
 console.log("selectedMemberId",selectedMemberId)
 useEffect(() => {
   const getMemberProjectData = async () => {
