@@ -26,13 +26,16 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 function ProjectStatusSelector({ label, value, onChange }) {
   const [selectedStatus, setSelectedStatus] = useState("프로젝트 상태를 설정해주세요.");
+  const [selectedLabel, setSelectedLabel] = useState("프로젝트 상태를 설정해주세요.");
   const [anchorEl, setAnchorEl] = useState(null);
 
   const statuses = [
-    { label: "중단됨", value: "중단됨" },
-    { label: "진행중", value: "진행중" },
-    { label: "완료됨", value: "완료됨" },
+    { label: "중단됨", value: "Stopped" },
+    { label: "진행중", value: "In-progress" },
+    { label: "완료됨", value: "Completed" },
+    { label: "시작전", value: "Not-started" },
   ];
+
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,8 +45,9 @@ function ProjectStatusSelector({ label, value, onChange }) {
     setAnchorEl(null);
   };
 
-  const handleStatusChange = (statusValue) => {
+  const handleStatusChange = (statusValue, statusLabel) => {
     setSelectedStatus(statusValue);
+    setSelectedLabel(statusLabel)
     onChange(statusValue);  // Call parent's onChange with the new status value
     handleClose();
   };
@@ -52,7 +56,7 @@ function ProjectStatusSelector({ label, value, onChange }) {
     <MDBox mb={2}>
       <MDInput
         label={label}
-        value={selectedStatus}
+        value={selectedLabel}
         fullWidth
         InputProps={{
           startAdornment: (
@@ -66,7 +70,7 @@ function ProjectStatusSelector({ label, value, onChange }) {
                 onClose={handleClose}
               >
                 {statuses.map((status) => (
-                  <MenuItem key={status.value} onClick={() => handleStatusChange(status.value)}>
+                  <MenuItem key={status.value} onClick={() => handleStatusChange(status.value, status.label)}>
                     {status.label}
                   </MenuItem>
                 ))}
