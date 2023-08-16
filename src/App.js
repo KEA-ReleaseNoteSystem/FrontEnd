@@ -82,65 +82,58 @@ export default function App() {
 
   
 
-
   useEffect(() => {
-    let retryCount = 0;
-    let sse;
-
-    const maxRetries = 10;
-    const retryInterval = 5000; // 5 seconds
-    
-    const EventSource = NativeEventSource || EventSourcePolyfill;
-
-
-    const initializeSSE = () => {
-        const headers = {
-            'Authorization': `Bearer ${token}`
-        };
-        console.log("token=", token);
-        sse = new EventSource(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
-
-        console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
-
-        sse.onmessage = (event) => {
-            console.log("onmessage", event.data);
-            console.log(event.data.includes("message"));
-            setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
-        };
-
-        sse.onerror = (error) => {
-            console.error("SSE failed:", error);
-
-            if (retryCount < maxRetries) {
-                console.log(`Retrying in ${retryInterval / 1000} seconds...`);
-                setTimeout(() => {
-                    initializeSSE();
-                    retryCount++;
-                }, retryInterval);
-            } else {
-                console.error("Max retries reached. Not reconnecting.");
-            }
-
-            sse.close();
-        };
-    };
-
-    // Only initialize SSE if both projectId and token are present
-    if (projectId && token) {
-        initializeSSE();
-    } else {
-        // If the token is not present, close any existing connection
-        if (sse) {
-            sse.close();
-        }
-    }
-
-    return () => {
-        if (sse) {
-            sse.close();
-        }
-    };
-}, [projectId, token]);
+          let retryCount = 0;
+          let sse;
+  
+          const maxRetries = 10;
+          const retryInterval = 5000; // 5 seconds
+  
+          const initializeSSE = () => {
+              const headers = {
+                  'Authorization': `Bearer ${token}`
+              };
+  
+              sse = new EventSourcePolyfill(`/api/project/${encodeURIComponent(projectId)}/notification-stream`, { headers });
+  
+              console.log("sse url: ", `/api/project/${encodeURIComponent(projectId)}/notification-stream`);
+  
+              sse.onmessage = (event) => {
+                  console.log("onmessage", event.data);
+                  console.log(event.data.includes("message"));
+                  setMessage(event.data.includes("message") ? JSON.parse(event.data) : null);
+              };
+  
+              sse.onerror = (error) => {
+                  console.error("SSE failed:", error);
+  
+                  if (retryCount < maxRetries) {
+                      console.log(`Retrying in ${retryInterval / 1000} seconds...`);
+                      setTimeout(() => {
+                          initializeSSE();
+                          retryCount++;
+                      }, retryInterval);
+                  } else {
+                      console.error("Max retries reached. Not reconnecting.");
+                  }
+  
+                  sse.close();
+              };
+          };
+  
+          if (projectId && token) {
+              initializeSSE();
+          }
+  
+          return () => {
+              if (sse) {
+                  sse.close();
+              }
+          };
+      }, [projectId, token]);
+  
+      // Rest of your component
+  
 
 
 
