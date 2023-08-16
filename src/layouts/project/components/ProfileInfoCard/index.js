@@ -193,8 +193,8 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
 
 
   return (
-    <Card sx={{ height: "100%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "100%" }}>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
+    <Card sx={{ height: "100%", boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)", width: "100%"}}>
+      <MDBox display="flex" justifyContent="center" alignItems="center" pt={2} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}
         </MDTypography>
@@ -233,7 +233,6 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
                 onChange={onChange}
                 ref={fileInput} />
                     </div>
-       
           {renderItems}
       
         </MDBox>

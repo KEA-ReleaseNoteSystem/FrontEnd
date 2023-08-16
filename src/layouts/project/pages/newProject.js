@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
 import NavigationBar from "../components/NavigationBar";

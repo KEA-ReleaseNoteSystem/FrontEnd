@@ -26,7 +26,7 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/homepage/sign-in-background.png";
 import { Alert } from "react-bootstrap";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 import { from } from "stylis";
 
 function JoinGroup() {

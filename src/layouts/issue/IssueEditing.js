@@ -10,9 +10,12 @@ import Description from 'layouts/issue/IssueDetails/Description';
 import Comments from 'layouts/issue/IssueDetails/Comments';
 import Modal from 'react-modal';
 import ProjectBoardListIssue from 'layouts/Board/Lists/List/Issue/ListAll';
+
+import axios from "interceptor/TokenCheck.js";
+
 import ListChildIssue from 'layouts/Board/Lists/List/Issue/ListChild';
 import ListSelectedChildIssue from 'layouts/Board/Lists/List/Issue/ListChildBySelected';
-import axios from "axios";
+
 import Dropzone  from 'layouts/release/components/Dropzone.jsx'
 
 const customModalStyles = {

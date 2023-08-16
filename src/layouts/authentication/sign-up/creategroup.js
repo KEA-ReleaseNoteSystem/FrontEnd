@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 // react-router-dom components
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";

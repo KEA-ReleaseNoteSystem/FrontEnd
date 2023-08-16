@@ -1,7 +1,7 @@
 // react-router-dom components
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -87,7 +87,6 @@ function Cover() {
   const isPasswordEmpty = password === "";
   const isPasswordUnderEight = password.length < 8;
 
-  console.log(`oauthEmail: ${oauthEmail}, isEmailEmpty: ${isEmailEmpty}, isEmailWrong: ${isEmailWrong}`);
 
   return (
     <BasicLayout image={bgImage}>

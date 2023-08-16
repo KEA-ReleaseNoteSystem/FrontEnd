@@ -1,7 +1,7 @@
 // react-router-dom components
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 // @mui material components
 import Card from "@mui/material/Card";

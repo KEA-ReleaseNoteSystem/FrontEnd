@@ -11,14 +11,19 @@ import MDAvatar from "components/MDAvatar";
 // Material Dashboard 2 React example components
 import DataTable from "../../../examples/Tables/DataTable";
 // import Divider from "assets/theme/components/divider";
+
 import ProfileInfoCard from "layouts/project/components/profile.js";
+
 import PageLayout from "../../../examples/LayoutContainers/PageLayout";
 // Data
 import Header from "layouts/project/components/Header";
 
 import { React, useState, useEffect } from "react";
 
-import axios from "axios";
+import CopyToClipboard from "react-copy-to-clipboard";
+import axios from "interceptor/TokenCheck.js";
+
+
 import '../data/button.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -35,7 +40,7 @@ function MyPage() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [selectedMemberName, setSelectedMemberName] = useState(null);
   const [copied, setCopied] = useState(false);
-  
+
   const handleCopy = () => {
     setCopied(true);
     alert("그룹 코드가 클립보드에 복사되었습니다.");
@@ -49,16 +54,17 @@ function MyPage() {
       setImage(defimg);
     };
     return (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm"/>
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {name}
-        </MDTypography>
-        <MDTypography variant="caption">{nickname}</MDTypography>
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDAvatar src={avimage} onError={handleImageError} name={name} size="sm" />
+        <MDBox ml={2} lineHeight={1}>
+          <MDTypography display="block" variant="button" fontWeight="medium">
+            {name}
+          </MDTypography>
+          <MDTypography variant="caption">{nickname}</MDTypography>
+        </MDBox>
       </MDBox>
-    </MDBox>
-  )};
+    )
+  };
 
   const Job = ({ title }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -77,7 +83,7 @@ function MyPage() {
   ];
 
   const rows = groupMember.map((member, index) => {
-    const showButton = member.authority !== "GM"; 
+    const showButton = member.authority !== "GM";
     return {
       author: (
         <Author image={"https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + member.id} name={member.name} nickname={member.nickname} />
@@ -175,11 +181,12 @@ function MyPage() {
               />
              
               <Divider orientation="vertical" sx={{ mx: 0 }} />
-              
-            </Grid>
-          </Grid>
 
-        </MDBox>
+            </Grid>
+          </MDBox>
+        </Grid>
+      </Grid>
+
       </Header>
 
       

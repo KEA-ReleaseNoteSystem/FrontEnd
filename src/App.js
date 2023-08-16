@@ -43,7 +43,7 @@ import { RecoilRoot ,useRecoilState} from "recoil";
 import { projectIdState } from 'examples/Sidenav/ProjectIdAtom';
 import Notification from "layouts/notifications/noticicateAlert"
 
-import axios from "axios";
+import axios from "interceptor/TokenCheck.js";
 
 
 export default function App() {
@@ -67,10 +67,15 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false); // New state
   const token = localStorage.getItem("ACCESS_TOKEN");
-  useEffect(() => {
+  useEffect(() => { 
+    console.log(token);
+    if(token){
     setIsAuthenticated(true);
     setIsAuthChecked(true); // Set to true after checking
-  }, []);
+    }else{
+      setIsAuthChecked(true);
+    }
+  }, [token]);
 
   
   useEffect(() => {
@@ -239,7 +244,7 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
-      {isAuthChecked ? (  // 인증 확인이 완료된 경우에만 라우트 렌더링
+  
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/home" />} />
@@ -255,9 +260,7 @@ export default function App() {
           }
         />
       </Routes>
-    ) : (
-      <div>로딩중...</div>  // 로딩 스피너나 다른 UI 표시
-    )}
+
     </ThemeProvider>
    
   );

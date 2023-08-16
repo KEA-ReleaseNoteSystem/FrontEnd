@@ -65,7 +65,7 @@ function Header({ children }) {
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
-    <MDBox position="relative" mb={5}>
+    <MDBox position="relative" mb={5} >
       <MDBox
         display="flex"
         alignItems="center"

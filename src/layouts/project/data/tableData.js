@@ -31,7 +31,7 @@ const getReleaseNoteData = async (id, token) => {
 };
 
 export default function Data({id}) {
-  console.log("aaaa",id);
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReleaseId, setSelectedReleaseId] = useState(null);
   const [releaseList, setReleaseList] = useState([]);
@@ -56,7 +56,7 @@ export default function Data({id}) {
   useEffect(() => {
     async function fetchData() {
       const data = await getReleaseNoteData(id, token);
-      console.log("++ Data: ", data);
+    
       setReleaseList(data);
     }
     fetchData();
