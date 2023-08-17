@@ -13,7 +13,7 @@ import { projectIdState } from '../../examples/Sidenav/ProjectIdAtom';
 
 
 function releaseTree() {
-  
+  const token = localStorage.getItem('ACCESS_TOKEN');
   const navigate = useNavigate();
   const [isLoading,setIsLoading] = useState(true);
   const [projectId, setProjectId] = useRecoilState(projectIdState);
@@ -35,7 +35,12 @@ const handleNodeTextClick = (event, id,active) => {
   useEffect(() => {
     const getTree = async () => {
       try {
-        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/releases/tree`);
+        const response = await axios.get(`/api/${encodeURIComponent(projectId)}/releases/tree`
+        ,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         {response.data.data == null ? setIsLoading(true): setIsLoading(false)};
         const id = null ;
         // 빈 루트 노드를 만듭니다
