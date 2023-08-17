@@ -29,7 +29,7 @@ function IssueSearch() {
   const [fetchedMemo, setFetchedMemo] = useState([]);
   const [membersData, setMembersData] = useState([]); //프로젝트에 속한 멤버들 정보
   const [filter, setFilter] = useState("");
-  const [searchBar, setSearchBar] = useState();
+  const [searchBar, setSearchBar] = useState([]);
   const [searchFilter, setSearchFilter] = useState();
   const [firstfilter, setFirstfilter] = useState("");
   const [secfilter, setSecfilter] = useState("");
@@ -203,10 +203,12 @@ function IssueSearch() {
       const membersResponse = await axios.get(`/api/project/${encodeURIComponent(projectId)}/members`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log(membersResponse.data.data);
       setMembersData(membersResponse.data.data);
+      if(issuesResponse.data.data[0]){
       setIssueDetail(issuesResponse.data.data[0]);
       setChildIssues(issuesResponse.data.data[0].childIssue);
-
+      }
       console.log("issuesResponse.data.data[0]", issuesResponse.data.data[0]);
 
       setIsLoading(!issuesResponse.data.data[0]);
@@ -391,7 +393,7 @@ function IssueSearch() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      
       // 필터링된 이슈 목록 설정
       setFetchedIssues(response.data.data);
       setSelectedIssueIndex(0);
@@ -596,7 +598,8 @@ function IssueSearch() {
             </Grid>
             <Grid item xs={4}>
 
-              {isLoading ? null : <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
+              {isLoading ? null : 
+              <IssueDetails issue={issueDetail}  membersData={membersData} updateIssue={updateIssue} 
               memberReport={issueDetail.memberReport.name} memberCharge={issueDetail.memberIdInCharge.name} />}
               {isLoading ? null : <MyTree issue={issueDetail} />}
 

@@ -73,7 +73,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
   const [tabValue, setTabValue] = useState(0);
   const fileInput = useRef(null)
   const token = localStorage.getItem('ACCESS_TOKEN');
-
+  const [imageUrl, setImageUrl] = useState(defimg);
 
   const openProfileEditModal = () => {
     setActiveModal(true);
@@ -106,27 +106,30 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
 
   const onChange = (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
       const newProfileImg = new FormData();
       newProfileImg.append("profileImg", e.target.files[0]);
       setProfileImg(newProfileImg);
-    } else { //업로드 취소할 시
+  
+      // Update both image state and imageUrl state
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+          setImageUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } else { // Upload canceled
       setImage(defimg);
+      setImageUrl(defimg);
       setProfileImg(new FormData());
-      return
+      return;
     }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result)
-      }
-    }
-    reader.readAsDataURL(e.target.files[0])
-  }
+  };
 
   useEffect(() => {
     setImage("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
+    setImageUrl("https://objectstorage.kr-gov-central-1.kakaoicloud-kr-gov.com/v1/ff71cfd6bffa41b5ba1c19d02635640f/releasy/profile%2F" + memberId);
     console.log("memberId" , memberId);
   }, [memberId]);
 
@@ -223,7 +226,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow ,mem
         </MDBox>
         <MDBox>
         <div style={containerStyle}>
-        <MDAvatar src={image} onError= {handleImageError} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
+        <MDAvatar src={imageUrl} onError={handleImageError} alt="profile-image" size="xl" shadow="sm" onClick={() => { fileInput.current.click() }} />
             <MDButton onClick={handleSubmit} sx={{ height: "18px" , marginTop:"4%"}}>등록</MDButton><br/>
               <input
                 type='file'

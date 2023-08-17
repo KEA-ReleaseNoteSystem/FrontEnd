@@ -52,8 +52,7 @@ function MyTree({ issue }) {
         console.error('Error:', error);
       }
     };
-
-    
+      if(token)
       getTree();
    // Reset the refresh state after fetching the data
     }, [issue]);
